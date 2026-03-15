@@ -112,7 +112,7 @@ The schema is managed manually via SQL files in `docs/`. The application uses `d
 | File | Purpose |
 |------|---------|
 | `docs/schema.sql` | Creates all 7 tables, triggers, and constraints |
-| `docs/seed.sql` | Inserts the SKILLED_WORKER visa type with 11 procedures |
+| `docs/seed.sql` | Inserts 3 visa types (SKILLED_WORKER, FAMILY_REUNIFICATION, STUDENT) with 17 procedures |
 
 Apply to any target database:
 ```bash
@@ -183,9 +183,10 @@ norintegrate/
 │       └── config/          MCP server configuration
 │
 ├── docs/
-│   ├── adr/                 10 Architecture Decision Records
+│   ├── adr/                 Architecture Decision Records
 │   ├── schema.sql           PostgreSQL DDL
-│   └── seed.sql             Reference data (SKILLED_WORKER visa)
+│   ├── api-spec/            OpenAPI specification
+│   └── seed.sql             Reference data (3 visa types, 17 procedures)
 │
 ├── docker/
 │   ├── api.Dockerfile       Multi-stage build for norintegrate-api
@@ -281,3 +282,4 @@ Each workflow runs `spotlessCheck` and `build` (which includes all tests) on `ub
 | [ADR-009](docs/adr/ADR-009-monorepo-with-path-filtered-cicd.md) | Monorepo with path-filtered CI |
 | [ADR-010](docs/adr/ADR-010-repository-pattern-for-data-source-abstraction.md) | Repository pattern for SSB Klass API |
 | [ADR-011](docs/adr/ADR-011-integration-testing-strategy.md) | Integration testing with Testcontainers |
+| [ADR-012](docs/adr/ADR-012-infrastructure-repository-separation.md) | Infrastructure in separate repository |

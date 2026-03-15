@@ -25,7 +25,6 @@ Both share domain logic through a common module.
 | Gradle | Kotlin DSL | Multi-project build |
 | Docker | Multi-stage | One Dockerfile per deployable module |
 | GitHub Actions | Path-filtered | Separate workflows per module |
-| Terraform | 1.x | Plan-only (not deployed) |
 
 ---
 
@@ -36,8 +35,6 @@ norintegrate/
 ├── norintegrate-common/    ← Shared domain (library, not deployed)
 ├── norintegrate-api/       ← REST API (deployed independently)
 ├── norintegrate-mcp/       ← MCP Server (deployed independently)
-├── infra/                  ← Terraform
-├── k8s/                    ← Kubernetes manifests
 ├── docker/                 ← Dockerfiles
 ├── docs/
 │   ├── adr/                ← Architecture Decision Records (English)

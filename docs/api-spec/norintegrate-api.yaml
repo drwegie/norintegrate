@@ -1,0 +1,683 @@
+openapi: 3.1.0
+info:
+  title: NorIntegrate API
+  description: Settlement support platform for immigrants in Norway
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8080
+    description: Local development
+
+security: []
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: OAuth 2.0 JWT token (Google or GitHub provider)
+
+  schemas:
+    ChecklistResponse:
+      type: object
+      required: [visaTypeId, items]
+      properties:
+        visaTypeId:
+          type: string
+          example: SKILLED_WORKER
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/ChecklistItemResponse"
+
+    ChecklistItemResponse:
+      type: object
+      required: [procedureId, title, authority, isNext]
+      properties:
+        procedureId:
+          type: integer
+          format: int64
+          example: 1
+        title:
+          type: string
+          example: Get D-nummer
+        authority:
+          type: string
+          example: Skatteetaten
+        estimatedDays:
+          type: integer
+          format: int32
+          nullable: true
+          example: 14
+        isNext:
+          type: boolean
+          example: true
+
+    VisaTypeResponse:
+      type: object
+      required: [id, name, description]
+      properties:
+        id:
+          type: string
+          example: SKILLED_WORKER
+        name:
+          type: string
+          example: Skilled Worker
+        description:
+          type: string
+          example: For skilled workers with a job offer in Norway
+
+    ProcedureResponse:
+      type: object
+      required: [id, title, description, authority]
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        title:
+          type: string
+          example: Get D-nummer
+        description:
+          type: string
+          example: Apply for a D-nummer at the tax office
+        authority:
+          type: string
+          example: Skatteetaten
+        estimatedDays:
+          type: integer
+          format: int32
+          nullable: true
+          example: 14
+
+    DocumentRequirementResponse:
+      type: object
+      required: [id, documentName, description, mandatory]
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        documentName:
+          type: string
+          example: Valid passport
+        description:
+          type: string
+          example: A valid passport with at least 6 months remaining
+        mandatory:
+          type: boolean
+          example: true
+
+    MunicipalityResponse:
+      type: object
+      required: [code, name]
+      properties:
+        code:
+          type: string
+          example: "0301"
+        name:
+          type: string
+          example: Oslo
+
+    UserProgressResponse:
+      type: object
+      required: [procedureId, procedureTitle, completed]
+      properties:
+        procedureId:
+          type: integer
+          format: int64
+          example: 1
+        procedureTitle:
+          type: string
+          example: Get D-nummer
+        completed:
+          type: boolean
+          example: true
+        completedAt:
+          type: string
+          format: date-time
+          nullable: true
+          example: "2026-03-15T10:30:00+01:00"
+
+    CreateProcedureRequest:
+      type: object
+      required: [title, description, authority]
+      properties:
+        title:
+          type: string
+          example: Get D-nummer
+        description:
+          type: string
+          example: Apply for a D-nummer at the tax office
+        authority:
+          type: string
+          example: Skatteetaten
+        estimatedDays:
+          type: integer
+          format: int32
+          nullable: true
+          example: 14
+
+    UpdateProcedureRequest:
+      type: object
+      required: [title, description, authority]
+      properties:
+        title:
+          type: string
+          example: Get D-nummer
+        description:
+          type: string
+          example: Apply for a D-nummer at the tax office
+        authority:
+          type: string
+          example: Skatteetaten
+        estimatedDays:
+          type: integer
+          format: int32
+          nullable: true
+          example: 14
+
+    AddDependencyRequest:
+      type: object
+      required: [prerequisiteId, dependentId]
+      properties:
+        prerequisiteId:
+          type: integer
+          format: int64
+          example: 1
+        dependentId:
+          type: integer
+          format: int64
+          example: 2
+
+    ErrorResponse:
+      type: object
+      required: [status, error, message, timestamp]
+      properties:
+        status:
+          type: integer
+          format: int32
+          example: 404
+        error:
+          type: string
+          example: Not Found
+        message:
+          type: string
+          example: Procedure not found with id 99
+        timestamp:
+          type: string
+          format: date-time
+          example: "2026-03-15T10:30:00Z"
+
+paths:
+  /api/v1/checklist/{visaTypeId}:
+    get:
+      tags: [Checklist]
+      summary: Get checklist for a visa type
+      description: >-
+        Returns an ordered checklist of procedures for the given visa type.
+        Optionally accepts a comma-separated list of already-completed procedure IDs
+        to filter the list and identify the next recommended step.
+      operationId: getChecklist
+      parameters:
+        - name: visaTypeId
+          in: path
+          required: true
+          schema:
+            type: string
+          example: SKILLED_WORKER
+        - name: completed
+          in: query
+          required: false
+          description: Comma-separated list of completed procedure IDs
+          schema:
+            type: string
+            default: ""
+          example: "1,3"
+      responses:
+        "200":
+          description: Checklist retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ChecklistResponse"
+        "400":
+          description: Invalid completed ID format
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "404":
+          description: Visa type not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/v1/visa-types:
+    get:
+      tags: [Visa Types]
+      summary: List all visa types
+      operationId: findAllVisaTypes
+      responses:
+        "200":
+          description: List of visa types
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/VisaTypeResponse"
+
+  /api/v1/visa-types/{id}:
+    get:
+      tags: [Visa Types]
+      summary: Get a visa type by ID
+      operationId: findVisaTypeById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+          example: SKILLED_WORKER
+      responses:
+        "200":
+          description: Visa type found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VisaTypeResponse"
+        "404":
+          description: Visa type not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/v1/procedures:
+    get:
+      tags: [Procedures]
+      summary: List all procedures
+      operationId: findAllProcedures
+      responses:
+        "200":
+          description: List of procedures
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ProcedureResponse"
+
+  /api/v1/procedures/{id}:
+    get:
+      tags: [Procedures]
+      summary: Get a procedure by ID
+      operationId: findProcedureById
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          example: 1
+      responses:
+        "200":
+          description: Procedure found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProcedureResponse"
+        "404":
+          description: Procedure not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/v1/procedures/{id}/documents:
+    get:
+      tags: [Procedures]
+      summary: Get document requirements for a procedure
+      operationId: getDocumentRequirements
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          example: 1
+      responses:
+        "200":
+          description: List of document requirements
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/DocumentRequirementResponse"
+        "404":
+          description: Procedure not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/v1/municipalities:
+    get:
+      tags: [Municipalities]
+      summary: Search municipalities by name
+      description: >-
+        Searches Norwegian municipalities via the SSB Klass API.
+        The query parameter must be at least 2 characters.
+      operationId: searchMunicipalities
+      parameters:
+        - name: query
+          in: query
+          required: true
+          description: Search term (minimum 2 characters)
+          schema:
+            type: string
+            minLength: 2
+          example: Oslo
+      responses:
+        "200":
+          description: List of matching municipalities
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/MunicipalityResponse"
+        "400":
+          description: Query parameter missing or too short
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/v1/municipalities/{code}:
+    get:
+      tags: [Municipalities]
+      summary: Get a municipality by code
+      operationId: findMunicipalityByCode
+      parameters:
+        - name: code
+          in: path
+          required: true
+          schema:
+            type: string
+          example: "0301"
+      responses:
+        "200":
+          description: Municipality found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MunicipalityResponse"
+        "404":
+          description: Municipality not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/v1/admin/procedures:
+    post:
+      tags: [Admin]
+      summary: Create a new procedure
+      operationId: createProcedure
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateProcedureRequest"
+      responses:
+        "201":
+          description: Procedure created
+          headers:
+            Location:
+              description: URI of the created procedure
+              schema:
+                type: string
+                example: /api/v1/procedures/5
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProcedureResponse"
+        "401":
+          description: Authentication required
+        "400":
+          description: Invalid request body
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/v1/admin/procedures/{id}:
+    put:
+      tags: [Admin]
+      summary: Update an existing procedure
+      operationId: updateProcedure
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          example: 1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateProcedureRequest"
+      responses:
+        "200":
+          description: Procedure updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProcedureResponse"
+        "401":
+          description: Authentication required
+        "404":
+          description: Procedure not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    delete:
+      tags: [Admin]
+      summary: Delete a procedure
+      operationId: deleteProcedure
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          example: 1
+      responses:
+        "204":
+          description: Procedure deleted
+        "401":
+          description: Authentication required
+        "404":
+          description: Procedure not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/v1/admin/procedures/{id}/dependencies:
+    post:
+      tags: [Admin]
+      summary: Add a dependency between procedures
+      operationId: addDependency
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Procedure ID (context for the dependency)
+          schema:
+            type: integer
+            format: int64
+          example: 2
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AddDependencyRequest"
+      responses:
+        "201":
+          description: Dependency added
+        "401":
+          description: Authentication required
+        "422":
+          description: Cyclic dependency detected
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/v1/admin/procedures/{prerequisiteId}/dependencies/{dependentId}:
+    delete:
+      tags: [Admin]
+      summary: Remove a dependency between procedures
+      operationId: removeDependency
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: prerequisiteId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          example: 1
+        - name: dependentId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          example: 2
+      responses:
+        "204":
+          description: Dependency removed
+        "401":
+          description: Authentication required
+        "404":
+          description: Dependency not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/v1/progress:
+    get:
+      tags: [Progress]
+      summary: Get current user's progress
+      operationId: getProgress
+      security:
+        - bearerAuth: []
+      responses:
+        "200":
+          description: List of user progress entries
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/UserProgressResponse"
+        "401":
+          description: Authentication required
+
+  /api/v1/progress/{procedureId}/complete:
+    post:
+      tags: [Progress]
+      summary: Mark a procedure as complete
+      operationId: markComplete
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: procedureId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          example: 1
+      responses:
+        "200":
+          description: Procedure marked as complete
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserProgressResponse"
+        "401":
+          description: Authentication required
+        "404":
+          description: Procedure not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+    delete:
+      tags: [Progress]
+      summary: Mark a procedure as incomplete
+      operationId: markIncomplete
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: procedureId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+          example: 1
+      responses:
+        "204":
+          description: Procedure marked as incomplete
+        "401":
+          description: Authentication required
+        "404":
+          description: Procedure not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
+  /api/v1/account:
+    delete:
+      tags: [Account]
+      summary: Delete current user's account
+      description: >-
+        Permanently deletes the authenticated user's account and all associated
+        progress data. This action cannot be undone.
+      operationId: deleteAccount
+      security:
+        - bearerAuth: []
+      responses:
+        "204":
+          description: Account deleted
+        "401":
+          description: Authentication required

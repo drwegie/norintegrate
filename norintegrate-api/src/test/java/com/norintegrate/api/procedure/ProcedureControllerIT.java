@@ -15,7 +15,7 @@ class ProcedureControllerIT extends AbstractIntegrationTest {
         .perform(get("/api/v1/procedures"))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$").isArray())
-        .andExpect(jsonPath("$.length()").value(11));
+        .andExpect(jsonPath("$.length()").value(17));
   }
 
   @Test
