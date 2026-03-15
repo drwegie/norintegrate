@@ -1,5 +1,5 @@
 # Stage 1: Builder
-FROM gradle:8.14.4-jdk25 AS builder
+FROM gradle:jdk25 AS builder
 
 WORKDIR /workspace
 

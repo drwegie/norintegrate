@@ -57,7 +57,12 @@ docker-compose up
 
 The API will be available at `http://localhost:8080`. Swagger UI is at `http://localhost:8080/swagger-ui.html`.
 
-> **First run note:** Docker Compose does not apply the database schema automatically. See [Database Setup](#database-setup) below.
+On first start, PostgreSQL automatically applies `docs/schema.sql` and `docs/seed.sql` via the `docker-entrypoint-initdb.d` mechanism. To re-initialize with a fresh database:
+
+```bash
+docker compose down -v   # removes the data volume
+docker compose up        # schema + seed re-applied on fresh volume
+```
 
 ---
 
@@ -68,15 +73,10 @@ This is the recommended workflow during active development.
 ### 1. Start the database
 
 ```bash
-docker-compose up postgres -d
+docker compose up postgres -d
 ```
 
-### 2. Apply the database schema
-
-```bash
-psql -h localhost -U norintegrate -d norintegrate -f docs/schema.sql
-psql -h localhost -U norintegrate -d norintegrate -f docs/seed.sql
-```
+Schema and seed data are applied automatically on first start (via init volumes in `docker-compose.yml`). To re-apply from scratch, run `docker compose down -v` first.
 
 Default credentials: `norintegrate / norintegrate` (as configured in `docker-compose.yml`).
 
@@ -135,9 +135,13 @@ Integration tests require Docker (for Testcontainers). A PostgreSQL 16 container
 
 # Run with code style check
 ./gradlew :norintegrate-api:spotlessCheck :norintegrate-api:test
+
+# Generate coverage report for norintegrate-common (≥80% enforced)
+./gradlew :norintegrate-common:jacocoTestReport
 ```
 
 Test reports are written to `norintegrate-api/build/reports/tests/test/index.html`.
+Coverage reports (HTML) are at `norintegrate-common/build/reports/jacoco/test/html/index.html`.
 
 ---
 
@@ -194,7 +198,8 @@ norintegrate/
 │
 ├── .github/workflows/
 │   ├── api.yml              Path-filtered CI for norintegrate-api
-│   ├── common.yml           Path-filtered CI for norintegrate-common
+│   ├── common.yml           Path-filtered CI for norintegrate-common (+ coverage)
+│   ├── docker.yml           Docker build verification
 │   └── mcp.yml              Path-filtered CI for norintegrate-mcp
 │
 └── docker-compose.yml       Local development stack
@@ -261,9 +266,10 @@ Each module has a dedicated GitHub Actions workflow triggered only when its rele
 |----------|----------------------|
 | `api.yml` | `norintegrate-api/`, `norintegrate-common/`, root `build.gradle.kts` |
 | `common.yml` | `norintegrate-common/`, root `build.gradle.kts`, `settings.gradle.kts` |
+| `docker.yml` | `docker/`, `docker-compose.yml`, `**/build.gradle.kts`, `**/src/**` |
 | `mcp.yml` | `norintegrate-mcp/`, `norintegrate-common/`, root `build.gradle.kts` |
 
-Each workflow runs `spotlessCheck` and `build` (which includes all tests) on `ubuntu-latest` with Java 25 (Temurin).
+Each module workflow runs `spotlessCheck` and `build` (which includes all tests) on `ubuntu-latest` with Java 25 (Temurin). The `common.yml` workflow also generates and uploads a JaCoCo coverage report. The `docker.yml` workflow verifies Docker images build successfully.
 
 ---
 

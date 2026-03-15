@@ -1,0 +1,33 @@
+name: Docker Build Verification
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'docker/**'
+      - 'docker-compose.yml'
+      - '**/build.gradle.kts'
+      - '**/src/**'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'docker/**'
+      - 'docker-compose.yml'
+      - '**/build.gradle.kts'
+      - '**/src/**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build Docker images
+        run: docker compose build
+
+      - name: Verify images exist
+        run: docker compose images

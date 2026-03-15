@@ -45,3 +45,13 @@ jobs:
 
       - name: Build norintegrate-common
         run: ./gradlew :norintegrate-common:spotlessCheck :norintegrate-common:build
+
+      - name: Generate JaCoCo coverage report
+        run: ./gradlew :norintegrate-common:jacocoTestReport
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: jacoco-coverage-report
+          path: norintegrate-common/build/reports/jacoco/test/html/
+          retention-days: 14

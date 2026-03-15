@@ -13,6 +13,15 @@ subprojects {
     apply(plugin = "java")
     apply(plugin = "io.spring.dependency-management")
     apply(plugin = "com.diffplug.spotless")
+    apply(plugin = "jacoco")
+
+    tasks.withType<JacocoReport> {
+        dependsOn(tasks.withType<Test>())
+        reports {
+            xml.required = true
+            html.required = true
+        }
+    }
 
     configure<com.diffplug.gradle.spotless.SpotlessExtension> {
         java {
