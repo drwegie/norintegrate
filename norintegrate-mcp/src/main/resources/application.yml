@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: norintegrate-mcp
+  datasource:
+    url: jdbc:postgresql://localhost:5432/norintegrate
+    username: ${DB_USERNAME:norintegrate}
+    password: ${DB_PASSWORD:norintegrate}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+  ai:
+    mcp:
+      server:
+        name: norintegrate-mcp
+        version: 1.0.0
+
+server:
+  port: 8081
+
+norintegrate:
+  ssb:
+    base-url: https://data.ssb.no/api/klass/v1

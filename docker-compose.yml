@@ -1,0 +1,55 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: norintegrate
+      POSTGRES_USER: norintegrate
+      POSTGRES_PASSWORD: norintegrate
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U norintegrate -d norintegrate"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  api:
+    build:
+      context: .
+      dockerfile: docker/api.Dockerfile
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/norintegrate
+      DB_USERNAME: ${DB_USERNAME:-norintegrate}
+      DB_PASSWORD: ${DB_PASSWORD:-norintegrate}
+      JWT_ISSUER_URI: ${JWT_ISSUER_URI:-https://accounts.google.com}
+    env_file:
+      - path: .env
+        required: false
+
+  mcp:
+    build:
+      context: .
+      dockerfile: docker/mcp.Dockerfile
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/norintegrate
+      DB_USERNAME: ${DB_USERNAME:-norintegrate}
+      DB_PASSWORD: ${DB_PASSWORD:-norintegrate}
+    env_file:
+      - path: .env
+        required: false
+
+volumes:
+  postgres_data:

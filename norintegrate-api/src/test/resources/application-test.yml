@@ -1,0 +1,15 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: none
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:db/schema.sql
+      data-locations: classpath:db/seed.sql
+      separator: ";;"
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: https://test.example.com

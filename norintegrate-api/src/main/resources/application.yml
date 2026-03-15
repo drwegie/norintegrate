@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: norintegrate-api
+  datasource:
+    url: jdbc:postgresql://localhost:5432/norintegrate
+    username: ${DB_USERNAME:norintegrate}
+    password: ${DB_PASSWORD:norintegrate}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${JWT_ISSUER_URI}
+
+server:
+  port: 8080
+
+norintegrate:
+  ssb:
+    base-url: https://data.ssb.no/api/klass/v1
