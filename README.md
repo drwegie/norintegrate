@@ -12,10 +12,11 @@ This project demonstrates a full migration from Java 8 + Spring 3 to Java 25 + S
 norintegrate/
 ├── norintegrate-common/   ← Shared domain: entities, services, repositories (not deployed)
 ├── norintegrate-api/      ← REST API for human users          (port 8080)
-└── norintegrate-mcp/      ← MCP server for AI agents          (port 8081)
+├── norintegrate-mcp/      ← MCP server for AI agents          (port 8081)
+└── norintegrate-web/      ← Next.js frontend                  (port 3000)
 ```
 
-Both deployable modules depend on `norintegrate-common` and never depend on each other. The database is PostgreSQL 16 — the sole persistence layer.
+Both deployable modules depend on `norintegrate-common` and never depend on each other. A Next.js frontend (`norintegrate-web/`) communicates with the API over HTTP. The database is PostgreSQL 16 — the sole persistence layer.
 
 ---
 
@@ -24,6 +25,7 @@ Both deployable modules depend on `norintegrate-common` and never depend on each
 | Tool | Version | Notes |
 |------|---------|-------|
 | Java | 25 (LTS) | Temurin distribution recommended |
+| Node.js | 22 (LTS) | Required for the frontend (`norintegrate-web/`) |
 | Docker | any recent | Required for local Postgres and integration tests |
 | Gradle | 9.4.0 | Provided by the wrapper — no install needed |
 
@@ -55,7 +57,7 @@ cp .env.example .env
 docker-compose up
 ```
 
-The API will be available at `http://localhost:8080`. Swagger UI is at `http://localhost:8080/swagger-ui.html`.
+The API will be available at `http://localhost:8080`, the frontend at `http://localhost:3000`, and Swagger UI at `http://localhost:8080/swagger-ui.html`.
 
 On first start, PostgreSQL automatically applies `docs/schema.sql` and `docs/seed.sql` via the `docker-entrypoint-initdb.d` mechanism. To re-initialize with a fresh database:
 
@@ -162,6 +164,42 @@ Code is formatted with [Google Java Format](https://github.com/google/google-jav
 
 ---
 
+## Frontend Development
+
+The frontend is a standalone Next.js 15 project in `norintegrate-web/`.
+
+```bash
+cd norintegrate-web
+npm install
+npm run dev
+```
+
+The dev server runs at `http://localhost:3000` and expects the API at `http://localhost:8080`.
+
+**Google OAuth:** To enable sign-in, create a Google OAuth 2.0 client and set `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, and `NEXTAUTH_SECRET` in your `.env` file. See `.env.example` for details.
+
+---
+
+## Monitoring
+
+Prometheus + Grafana are available via a Docker Compose profile:
+
+```bash
+docker compose --profile monitoring up
+```
+
+| Service | URL | Description |
+|---------|-----|-------------|
+| Prometheus | `http://localhost:9090` | Metrics collection and querying |
+| Grafana | `http://localhost:3001` | Dashboards (login: admin/admin) |
+| API metrics | `http://localhost:8080/actuator/prometheus` | Raw Prometheus metrics |
+| MCP metrics | `http://localhost:8081/actuator/prometheus` | Raw Prometheus metrics |
+| Health check | `http://localhost:8080/actuator/health` | Application health status |
+
+Grafana is pre-configured with Prometheus as the default data source.
+
+---
+
 ## Project Structure
 
 ```
@@ -189,6 +227,11 @@ norintegrate/
 │       ├── tool/            Integration guide, procedure detail, municipality search tools
 │       └── config/          MCP server configuration
 │
+├── norintegrate-web/            Next.js 15 frontend (Node.js project)
+│   ├── app/                     App Router pages and layouts
+│   ├── components/              React components
+│   └── lib/                     API client and Auth.js config
+│
 ├── docs/
 │   ├── adr/                 Architecture Decision Records
 │   ├── schema.sql           PostgreSQL DDL
@@ -197,13 +240,17 @@ norintegrate/
 │
 ├── docker/
 │   ├── api.Dockerfile       Multi-stage build for norintegrate-api
-│   └── mcp.Dockerfile       Multi-stage build for norintegrate-mcp
+│   ├── mcp.Dockerfile       Multi-stage build for norintegrate-mcp
+│   ├── web.Dockerfile       Multi-stage build for norintegrate-web
+│   ├── prometheus.yml       Prometheus scrape configuration
+│   └── grafana/             Grafana provisioning (datasources)
 │
 ├── .github/workflows/
 │   ├── api.yml              Path-filtered CI for norintegrate-api
 │   ├── common.yml           Path-filtered CI for norintegrate-common (+ coverage)
 │   ├── docker.yml           Docker build verification
-│   └── mcp.yml              Path-filtered CI for norintegrate-mcp
+│   ├── mcp.yml              Path-filtered CI for norintegrate-mcp
+│   └── web.yml              Path-filtered CI for norintegrate-web
 │
 └── docker-compose.yml       Local development stack
 ```
@@ -256,8 +303,12 @@ Full interactive documentation is available via Swagger UI at `/swagger-ui.html`
 | `JWT_ISSUER_URI` | — | Yes | OAuth 2.0 issuer URL (e.g. `https://accounts.google.com`) |
 | `DB_USERNAME` | `norintegrate` | No | PostgreSQL username |
 | `DB_PASSWORD` | `norintegrate` | No | PostgreSQL password |
+| `GOOGLE_CLIENT_ID` | — | For frontend | Google OAuth 2.0 client ID |
+| `GOOGLE_CLIENT_SECRET` | — | For frontend | Google OAuth 2.0 client secret |
+| `NEXTAUTH_SECRET` | — | For frontend | Auth.js session secret (`openssl rand -base64 32`) |
+| `CORS_ALLOWED_ORIGINS` | `http://localhost:3000` | No | Comma-separated list of allowed CORS origins |
 
-Copy `.env.example` to `.env` and fill in `JWT_ISSUER_URI` before running.
+Copy `.env.example` to `.env` and fill in `JWT_ISSUER_URI` before running. For frontend OAuth, also set the `GOOGLE_*` and `NEXTAUTH_SECRET` variables.
 
 ---
 
@@ -271,6 +322,7 @@ Each module has a dedicated GitHub Actions workflow triggered only when its rele
 | `common.yml` | `norintegrate-common/`, root `build.gradle.kts`, `settings.gradle.kts` |
 | `docker.yml` | `docker/`, `docker-compose.yml`, `**/build.gradle.kts`, `**/src/**` |
 | `mcp.yml` | `norintegrate-mcp/`, `norintegrate-common/`, root `build.gradle.kts` |
+| `web.yml` | `norintegrate-web/` |
 
 Each module workflow runs `spotlessCheck` and `build` (which includes all tests) on `ubuntu-latest` with Java 25 (Temurin). The `common.yml` workflow also generates and uploads a JaCoCo coverage report. The `docker.yml` workflow verifies Docker images build successfully.
 
@@ -291,3 +343,5 @@ Each module workflow runs `spotlessCheck` and `build` (which includes all tests)
 | [ADR-009](docs/adr/ADR-009-monorepo-with-path-filtered-cicd.md) | Monorepo with path-filtered CI |
 | [ADR-010](docs/adr/ADR-010-repository-pattern-for-data-source-abstraction.md) | Repository pattern for SSB Klass API |
 | [ADR-011](docs/adr/ADR-011-integration-testing-strategy.md) | Integration testing with Testcontainers |
+| [ADR-012](docs/adr/ADR-012-frontend-technology-choice.md) | Next.js with Auth.js for frontend |
+| [ADR-013](docs/adr/ADR-013-observability-with-actuator-prometheus-grafana.md) | Observability with Actuator + Prometheus + Grafana |

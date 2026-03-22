@@ -1,15 +1,14 @@
 # CLAUDE.md — NorIntegrate Project Rules
 
-This file defines the rules and design decisions for the NorIntegrate project.
-Claude Code must follow these rules when generating or modifying code.
+This file defines the project-wide rules. Each module has its own `CLAUDE.md` with module-specific details.
 
 ---
 
 ## Project Overview
 
 NorIntegrate is a platform that helps immigrants navigate the settlement process in Norway.
-It provides a REST API for human users and an MCP server for AI agents.
-Both share domain logic through a common module.
+It provides a REST API for human users, an MCP server for AI agents, and a Next.js frontend.
+Backend modules share domain logic through a common library.
 
 ---
 
@@ -20,9 +19,10 @@ Both share domain logic through a common module.
 | Java | 25 (LTS) | Use records, pattern matching, text blocks, var |
 | Spring Boot | 4.0.x | Spring Framework 7 base |
 | Spring AI | Latest stable | MCP server integration |
-| Spring Security | OAuth 2.0 | Google + GitHub providers |
+| Spring Security | OAuth 2.0 | Google provider |
 | PostgreSQL | 16+ | Only database |
-| Gradle | Kotlin DSL | Multi-project build |
+| Gradle | Kotlin DSL | Multi-project build (Java modules only) |
+| Next.js | 15 | App Router, TypeScript, Tailwind CSS 4 |
 | Docker | Multi-stage | One Dockerfile per deployable module |
 | GitHub Actions | Path-filtered | Separate workflows per module |
 
@@ -35,16 +35,19 @@ norintegrate/
 ├── norintegrate-common/    ← Shared domain (library, not deployed)
 ├── norintegrate-api/       ← REST API (deployed independently)
 ├── norintegrate-mcp/       ← MCP Server (deployed independently)
-├── docker/                 ← Dockerfiles
+├── norintegrate-web/       ← Next.js frontend (Node.js project, not Gradle)
+├── docker/                 ← Dockerfiles + monitoring config
 ├── docs/
 │   ├── adr/                ← Architecture Decision Records (English)
 │   └── api-spec/           ← OpenAPI YAML
 ├── .github/workflows/
 ├── build.gradle.kts
 ├── settings.gradle.kts
-├── CLAUDE.md               ← This file
+├── CLAUDE.md               ← This file (project-wide rules)
 └── README.md               ← English
 ```
+
+Each module has its own `CLAUDE.md` with package design, code style, and testing rules.
 
 ### Dependency Rules
 
@@ -52,46 +55,7 @@ norintegrate/
 - `norintegrate-api` depends on `norintegrate-common`
 - `norintegrate-mcp` depends on `norintegrate-common`
 - `norintegrate-api` and `norintegrate-mcp` NEVER depend on each other
-
----
-
-## Package Design (Domain-Based)
-
-All modules use package-by-feature, NOT package-by-layer.
-
-### norintegrate-common
-
-```
-com.norintegrate.common
-├── checklist/       ← ChecklistTemplate, ChecklistService, DependencyResolver
-├── procedure/       ← Procedure, ProcedureDependency, DocumentRequirement, ProcedureService
-├── visa/            ← VisaType, VisaTypeService
-├── progress/        ← AppUser, UserProgress, ProgressService
-└── municipality/    ← MunicipalityInfo (record), SsbKlassClient, MunicipalityService
-```
-
-### norintegrate-api
-
-```
-com.norintegrate.api
-├── checklist/       ← ChecklistController, ChecklistResponse
-├── procedure/       ← ProcedureController, ProcedureAdminController, DTOs
-├── visa/            ← VisaTypeController, VisaTypeResponse
-├── progress/        ← ProgressController, AccountController, DTOs
-├── municipality/    ← MunicipalityController, MunicipalityResponse
-├── config/          ← SecurityConfig, OpenApiConfig, WebConfig
-├── exception/       ← GlobalExceptionHandler, custom exceptions
-└── NorintegateApiApplication.java
-```
-
-### norintegrate-mcp
-
-```
-com.norintegrate.mcp
-├── tool/            ← IntegrationGuideTool, ProcedureDetailTool, MunicipalitySearchTool
-├── config/          ← McpServerConfig, McpSecurityConfig
-└── NorintegrateMcpApplication.java
-```
+- `norintegrate-web` is a standalone Node.js project — communicates with `norintegrate-api` over HTTP
 
 ---
 
@@ -121,44 +85,6 @@ com.norintegrate.mcp
 
 ---
 
-## Code Style Rules
-
-### Java
-
-- DTOs are ALWAYS Java records (never classes with getters/setters)
-- Entities are JPA @Entity classes (records cannot be JPA entities)
-- Use `var` when the type is obvious from the right side
-- Use pattern matching in switch where applicable
-- Use text blocks for multi-line strings
-- No Lombok — Java records and IDE generation are sufficient
-- No Spring Batch — documented in ADR-005 as unnecessary for this scope
-
-### API Design
-
-- All endpoints under `/api/v1/`
-- Admin endpoints under `/api/v1/admin/`
-- Public endpoints: no authentication required
-- Progress endpoints: OAuth 2.0 JWT required
-- Consistent error format via GlobalExceptionHandler
-- Cursor-based pagination where applicable
-
-### External API Calls
-
-- SSB Klass API: call directly via RestClient, NO caching, NO local storage
-- Never store data that is available from a stable external API
-
-### Testing
-
-- Unit tests for all services in common module
-- `@SpringBootTest(webEnvironment = MOCK)` + Testcontainers for controller integration tests (see ADR-011)
-- Singleton PostgreSQL container shared across all test classes via `@DynamicPropertySource`
-- `@Transactional` on `AbstractIntegrationTest` — every test rolls back, no manual cleanup needed
-- `SecurityMockMvcRequestPostProcessors.jwt()` for authenticated endpoint tests
-- Test packages mirror main source packages
-- Target: ≥ 80% coverage on common module
-
----
-
 ## What NOT to Do
 
 - Do NOT add Spring Batch (ADR-005)
@@ -170,17 +96,6 @@ com.norintegrate.mcp
 - Do NOT store passwords or personal information beyond email
 - Do NOT create a norintegrate-batch module
 - Do NOT use WidthType.PERCENTAGE in any docx generation
-
----
-
-## Key Algorithm: DependencyResolver
-
-Implements Kahn's algorithm for topological sort on the procedure DAG.
-
-Input: visa type, optional set of completed procedure IDs
-Output: ordered list of remaining procedures, with next recommended step(s)
-
-Must detect and reject cyclic dependencies with CyclicDependencyException.
 
 ---
 
@@ -201,6 +116,8 @@ All ADRs live in `docs/adr/`. Use Michael Nygard's template (Status, Context, De
 | ADR-009 | Monorepo with Path-Filtered CI/CD | Done |
 | ADR-010 | Repository Pattern for Data Source Abstraction | Done |
 | ADR-011 | Integration Testing Strategy | Done |
+| ADR-012 | Frontend Technology Choice — Next.js with Auth.js | Done |
+| ADR-013 | Observability with Actuator, Prometheus, and Grafana | Done |
 
 When a new architectural decision is made, add a row here and create the file in `docs/adr/` before marking the task complete.
 

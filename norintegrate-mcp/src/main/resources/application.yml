@@ -23,3 +23,12 @@ server:
 norintegrate:
   ssb:
     base-url: https://data.ssb.no/api/klass/v1
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus,metrics
+  endpoint:
+    health:
+      show-details: when-authorized

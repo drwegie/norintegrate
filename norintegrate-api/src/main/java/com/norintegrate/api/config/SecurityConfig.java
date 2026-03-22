@@ -33,6 +33,8 @@ public class SecurityConfig {
                     .authenticated()
                     .requestMatchers("/api/v1/account/**")
                     .authenticated()
+                    .requestMatchers("/actuator/health", "/actuator/info", "/actuator/prometheus")
+                    .permitAll()
                     .anyRequest()
                     .authenticated())
         .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> {}));
