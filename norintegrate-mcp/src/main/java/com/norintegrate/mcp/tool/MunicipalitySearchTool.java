@@ -2,6 +2,8 @@ package com.norintegrate.mcp.tool;
 
 import com.norintegrate.common.municipality.MunicipalityService;
 import java.util.List;
+import org.springframework.ai.tool.annotation.Tool;
+import org.springframework.ai.tool.annotation.ToolParam;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -13,8 +15,14 @@ public class MunicipalitySearchTool {
     this.municipalityService = municipalityService;
   }
 
-  // TODO: add @Tool annotation when Spring AI 2.x is GA
-  public List<MunicipalityResult> searchMunicipality(String query) {
+  @Tool(
+      name = "searchMunicipality",
+      description =
+          "Search for Norwegian municipalities by name to find municipality codes and official"
+              + " names from Statistics Norway (SSB)")
+  public List<MunicipalityResult> searchMunicipality(
+      @ToolParam(description = "The municipality name or partial name to search for")
+          String query) {
     if (query == null || query.isBlank()) {
       throw new IllegalArgumentException("query must not be blank");
     }

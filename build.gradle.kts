@@ -38,13 +38,14 @@ subprojects {
 
     repositories {
         mavenCentral()
+        maven { url = uri("https://repo.spring.io/milestone") } // TODO: Remove once Spring AI 2.0 GA is released
     }
 
     configure<io.spring.gradle.dependencymanagement.dsl.DependencyManagementExtension> {
         imports {
             mavenBom("org.springframework.boot:spring-boot-dependencies:4.0.3")
             mavenBom("org.testcontainers:testcontainers-bom:2.0.3")
-            // TODO: add Spring AI BOM when 2.x GA is released (Spring Boot 4 compatible)
+            mavenBom("org.springframework.ai:spring-ai-bom:2.0.0-M3")
         }
     }
 

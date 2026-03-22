@@ -130,6 +130,9 @@ Integration tests require Docker (for Testcontainers). A PostgreSQL 16 container
 # Run all tests for the API module
 ./gradlew :norintegrate-api:test
 
+# Run all tests for the MCP module (includes E2E MCP protocol tests)
+./gradlew :norintegrate-mcp:test
+
 # Run all tests across all modules
 ./gradlew test
 
@@ -288,4 +291,3 @@ Each module workflow runs `spotlessCheck` and `build` (which includes all tests)
 | [ADR-009](docs/adr/ADR-009-monorepo-with-path-filtered-cicd.md) | Monorepo with path-filtered CI |
 | [ADR-010](docs/adr/ADR-010-repository-pattern-for-data-source-abstraction.md) | Repository pattern for SSB Klass API |
 | [ADR-011](docs/adr/ADR-011-integration-testing-strategy.md) | Integration testing with Testcontainers |
-| [ADR-012](docs/adr/ADR-012-infrastructure-repository-separation.md) | Infrastructure in separate repository |

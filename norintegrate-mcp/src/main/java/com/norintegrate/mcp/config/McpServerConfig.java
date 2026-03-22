@@ -1,9 +1,23 @@
 package com.norintegrate.mcp.config;
 
+import com.norintegrate.mcp.tool.IntegrationGuideTool;
+import com.norintegrate.mcp.tool.MunicipalitySearchTool;
+import com.norintegrate.mcp.tool.ProcedureDetailTool;
+import org.springframework.ai.tool.ToolCallbackProvider;
+import org.springframework.ai.tool.method.MethodToolCallbackProvider;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-// TODO: register tool beans as MCP tools when Spring AI 2.x is GA
-// Placeholder @Configuration class — will wire IntegrationGuideTool,
-// ProcedureDetailTool, MunicipalitySearchTool into the MCP server tool registry.
 @Configuration
-public class McpServerConfig {}
+public class McpServerConfig {
+
+  @Bean
+  public ToolCallbackProvider toolCallbackProvider(
+      IntegrationGuideTool integrationGuideTool,
+      ProcedureDetailTool procedureDetailTool,
+      MunicipalitySearchTool municipalitySearchTool) {
+    return MethodToolCallbackProvider.builder()
+        .toolObjects(integrationGuideTool, procedureDetailTool, municipalitySearchTool)
+        .build();
+  }
+}

@@ -14,6 +14,8 @@ spring:
       server:
         name: norintegrate-mcp
         version: 1.0.0
+        type: SYNC
+        sse-message-endpoint: /mcp/messages
 
 server:
   port: 8081

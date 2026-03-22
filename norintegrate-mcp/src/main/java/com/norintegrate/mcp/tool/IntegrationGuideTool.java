@@ -4,6 +4,8 @@ import com.norintegrate.common.checklist.ChecklistService;
 import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Collectors;
+import org.springframework.ai.tool.annotation.Tool;
+import org.springframework.ai.tool.annotation.ToolParam;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -15,8 +17,19 @@ public class IntegrationGuideTool {
     this.checklistService = checklistService;
   }
 
-  // TODO: add @Tool annotation when Spring AI 2.x is GA
-  public IntegrationGuideResult getIntegrationGuide(String visaTypeId, String completedIds) {
+  @Tool(
+      name = "getIntegrationGuide",
+      description =
+          "Get a personalized integration checklist for immigrants based on visa type, showing"
+              + " remaining procedures in dependency order with the recommended next steps"
+              + " highlighted")
+  public IntegrationGuideResult getIntegrationGuide(
+      @ToolParam(description = "The visa type identifier, e.g. 'SKILLED_WORKER'") String visaTypeId,
+      @ToolParam(
+              description =
+                  "Comma-separated list of already completed procedure IDs, or empty if none",
+              required = false)
+          String completedIds) {
     if (visaTypeId == null || visaTypeId.isBlank()) {
       throw new IllegalArgumentException("visaTypeId must not be blank");
     }
