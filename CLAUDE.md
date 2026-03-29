@@ -20,7 +20,7 @@ Backend modules share domain logic through a common library.
 | Spring Boot | 4.0.x | Spring Framework 7 base |
 | Spring AI | Latest stable | MCP server integration |
 | Spring Security | OAuth 2.0 | Google provider |
-| PostgreSQL | 16+ | Only database |
+| PostgreSQL | 18+ | Only database |
 | Gradle | Kotlin DSL | Multi-project build (Java modules only) |
 | Next.js | 15 | App Router, TypeScript, Tailwind CSS 4 |
 | Docker | Multi-stage | One Dockerfile per deployable module |
@@ -96,6 +96,7 @@ Each module has its own `CLAUDE.md` with package design, code style, and testing
 - Do NOT store passwords or personal information beyond email
 - Do NOT create a norintegrate-batch module
 - Do NOT use WidthType.PERCENTAGE in any docx generation
+- Do NOT integrate ID-porten/BankID (ADR-014) — requires organizational registration with Digdir
 
 ---
 
@@ -118,6 +119,7 @@ All ADRs live in `docs/adr/`. Use Michael Nygard's template (Status, Context, De
 | ADR-011 | Integration Testing Strategy | Done |
 | ADR-012 | Frontend Technology Choice — Next.js with Auth.js | Done |
 | ADR-013 | Observability with Actuator, Prometheus, and Grafana | Done |
+| ADR-014 | Decision Not to Integrate ID-porten/BankID | Done |
 
 When a new architectural decision is made, add a row here and create the file in `docs/adr/` before marking the task complete.
 
