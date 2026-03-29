@@ -2,26 +2,25 @@ import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, it, expect, vi } from "vitest";
 import { ChecklistItem } from "@/components/ChecklistItem";
-import type { ChecklistStep } from "@/lib/api";
+import type { ChecklistItemResponse } from "@/lib/api";
 
-function makeStep(overrides: Partial<ChecklistStep> = {}): ChecklistStep {
+function makeStep(
+  overrides: Partial<ChecklistItemResponse> = {}
+): ChecklistItemResponse {
   return {
-    displayOrder: 1,
-    isNextStep: false,
-    procedure: {
-      id: 10,
-      name: "Get D-nummer",
-      description: "Apply for a temporary identification number",
-      estimatedDays: 14,
-      officialUrl: null,
-      documents: [],
-    },
+    procedureId: 10,
+    title: "Get D-nummer",
+    description: null,
+    authority: "Skatteetaten",
+    estimatedDays: 14,
+    isNext: false,
+    documents: [],
     ...overrides,
   };
 }
 
 describe("ChecklistItem", () => {
-  it("renders procedure name and description", () => {
+  it("renders procedure title and authority", () => {
     render(
       <ChecklistItem
         step={makeStep()}
@@ -31,15 +30,13 @@ describe("ChecklistItem", () => {
       />
     );
     expect(screen.getByText("Get D-nummer")).toBeInTheDocument();
-    expect(
-      screen.getByText("Apply for a temporary identification number")
-    ).toBeInTheDocument();
+    expect(screen.getByText("Skatteetaten")).toBeInTheDocument();
   });
 
-  it("shows 'Next step' badge when isNextStep is true and not completed", () => {
+  it("shows 'Next step' badge when isNext is true and not completed", () => {
     render(
       <ChecklistItem
-        step={makeStep({ isNextStep: true })}
+        step={makeStep({ isNext: true })}
         completed={false}
         canToggle={false}
         onToggle={vi.fn()}
@@ -51,7 +48,7 @@ describe("ChecklistItem", () => {
   it("does NOT show 'Next step' badge when completed", () => {
     render(
       <ChecklistItem
-        step={makeStep({ isNextStep: true })}
+        step={makeStep({ isNext: true })}
         completed={true}
         canToggle={true}
         onToggle={vi.fn()}
@@ -72,16 +69,15 @@ describe("ChecklistItem", () => {
     expect(screen.getByRole("checkbox")).toBeInTheDocument();
   });
 
-  it("shows the display order number when canToggle is false", () => {
+  it("shows a bullet when canToggle is false", () => {
     render(
       <ChecklistItem
-        step={makeStep({ displayOrder: 3 })}
+        step={makeStep()}
         completed={false}
         canToggle={false}
         onToggle={vi.fn()}
       />
     );
-    expect(screen.getByText("3")).toBeInTheDocument();
     expect(screen.queryByRole("checkbox")).not.toBeInTheDocument();
   });
 
@@ -100,27 +96,16 @@ describe("ChecklistItem", () => {
     expect(onToggle).toHaveBeenCalledWith(10, false);
   });
 
-  it("shows 'Official information' link when officialUrl is set", () => {
+  it("shows estimated days when set", () => {
     render(
       <ChecklistItem
-        step={makeStep({
-          procedure: {
-            id: 10,
-            name: "Get D-nummer",
-            description: "Apply for a temporary identification number",
-            estimatedDays: 14,
-            officialUrl: "https://udi.no/d-nummer",
-            documents: [],
-          },
-        })}
+        step={makeStep({ estimatedDays: 14 })}
         completed={false}
         canToggle={false}
         onToggle={vi.fn()}
       />
     );
-    const link = screen.getByText("Official information");
-    expect(link).toBeInTheDocument();
-    expect(link).toHaveAttribute("href", "https://udi.no/d-nummer");
+    expect(screen.getByText("Estimated: 14 days")).toBeInTheDocument();
   });
 
   it("applies line-through styling to completed items", () => {
@@ -134,5 +119,59 @@ describe("ChecklistItem", () => {
     );
     const heading = screen.getByText("Get D-nummer");
     expect(heading).toHaveClass("line-through");
+  });
+
+  it("expands to show description on click", async () => {
+    const user = userEvent.setup();
+    render(
+      <ChecklistItem
+        step={makeStep({ description: "Visit Skatteetaten to register." })}
+        completed={false}
+        canToggle={false}
+        onToggle={vi.fn()}
+      />
+    );
+    expect(screen.queryByText("Visit Skatteetaten to register.")).not.toBeInTheDocument();
+    await user.click(screen.getByText("Get D-nummer"));
+    expect(screen.getByText("Visit Skatteetaten to register.")).toBeInTheDocument();
+  });
+
+  it("expands to show documents on click", async () => {
+    const user = userEvent.setup();
+    render(
+      <ChecklistItem
+        step={makeStep({
+          documents: [
+            { documentName: "Passport copy", mandatory: true },
+            { documentName: "Photo", mandatory: false },
+          ],
+        })}
+        completed={false}
+        canToggle={false}
+        onToggle={vi.fn()}
+      />
+    );
+    expect(screen.queryByText("Passport copy")).not.toBeInTheDocument();
+    await user.click(screen.getByText("Get D-nummer"));
+    expect(screen.getByText("Passport copy")).toBeInTheDocument();
+    expect(screen.getByText("Mandatory")).toBeInTheDocument();
+    expect(screen.getByText("Photo")).toBeInTheDocument();
+    expect(screen.getByText("Optional")).toBeInTheDocument();
+  });
+
+  it("checkbox click does not toggle expand", async () => {
+    const onToggle = vi.fn();
+    const user = userEvent.setup();
+    render(
+      <ChecklistItem
+        step={makeStep({ description: "Some details here." })}
+        completed={false}
+        canToggle={true}
+        onToggle={onToggle}
+      />
+    );
+    await user.click(screen.getByRole("checkbox"));
+    expect(onToggle).toHaveBeenCalledWith(10, false);
+    expect(screen.queryByText("Some details here.")).not.toBeInTheDocument();
   });
 });
