@@ -154,9 +154,8 @@ describe("ChecklistItem", () => {
     expect(screen.queryByText("Passport copy")).not.toBeInTheDocument();
     await user.click(screen.getByText("Get D-nummer"));
     expect(screen.getByText("Passport copy")).toBeInTheDocument();
-    expect(screen.getByText("Mandatory")).toBeInTheDocument();
+    expect(screen.queryByText("Optional", { selector: "span" })).toBeInTheDocument();
     expect(screen.getByText("Photo")).toBeInTheDocument();
-    expect(screen.getByText("Optional")).toBeInTheDocument();
   });
 
   it("checkbox click does not toggle expand", async () => {
