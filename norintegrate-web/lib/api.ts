@@ -6,31 +6,30 @@ export interface VisaType {
   description: string;
 }
 
-export interface Procedure {
-  id: number;
-  name: string;
-  description: string;
+export interface ChecklistDocumentResponse {
+  documentName: string;
+  mandatory: boolean;
+}
+
+export interface ChecklistItemResponse {
+  procedureId: number;
+  title: string;
+  description: string | null;
+  authority: string;
   estimatedDays: number | null;
-  officialUrl: string | null;
-  documents: DocumentRequirement[];
+  isNext: boolean;
+  documents: ChecklistDocumentResponse[];
 }
 
-export interface DocumentRequirement {
-  id: number;
-  name: string;
-  description: string;
-  url: string | null;
-}
-
-export interface ChecklistStep {
-  procedure: Procedure;
-  displayOrder: number;
-  isNextStep: boolean;
+export interface ChecklistResponse {
+  visaTypeId: string;
+  items: ChecklistItemResponse[];
 }
 
 export interface UserProgress {
   procedureId: number;
-  completedAt: string;
+  completed: boolean;
+  completedAt: string | null;
 }
 
 async function apiFetch<T>(path: string, idToken?: string): Promise<T> {
@@ -51,8 +50,16 @@ export function getVisaTypes(): Promise<VisaType[]> {
   return apiFetch("/api/v1/visa-types");
 }
 
-export function getChecklist(visaTypeId: string): Promise<ChecklistStep[]> {
-  return apiFetch(`/api/v1/checklist/${visaTypeId}`);
+export async function getChecklist(
+  visaTypeId: string,
+  completedIds?: number[]
+): Promise<ChecklistItemResponse[]> {
+  const params =
+    completedIds && completedIds.length > 0 ? `?completed=${completedIds.join(",")}` : "";
+  const res = await apiFetch<ChecklistResponse>(
+    `/api/v1/checklist/${visaTypeId}${params}`
+  );
+  return res.items;
 }
 
 export function getProgress(idToken: string): Promise<UserProgress[]> {

@@ -32,24 +32,24 @@ describe("getVisaTypes", () => {
 });
 
 describe("getChecklist", () => {
-  it("calls the correct URL with visaTypeId", async () => {
-    const data = [{ procedure: { id: 1 }, displayOrder: 1, isNextStep: true }];
+  it("calls the correct URL with visaTypeId and returns items", async () => {
+    const items = [{ procedureId: 1, title: "Get D-nummer", description: null, authority: "Skatteetaten", estimatedDays: 14, isNext: true, documents: [] }];
     mockFetch.mockResolvedValue({
       ok: true,
-      json: () => Promise.resolve(data),
+      json: () => Promise.resolve({ visaTypeId: "FAMILY_IMMIGRATION", items }),
     });
     const result = await getChecklist("FAMILY_IMMIGRATION");
     expect(mockFetch).toHaveBeenCalledWith(
       "http://localhost:8080/api/v1/checklist/FAMILY_IMMIGRATION",
       expect.any(Object)
     );
-    expect(result).toEqual(data);
+    expect(result).toEqual(items);
   });
 });
 
 describe("getProgress", () => {
   it("sends Authorization header with Bearer token", async () => {
-    const data = [{ procedureId: 1, completedAt: "2024-01-01T00:00:00Z" }];
+    const data = [{ procedureId: 1, completed: true, completedAt: "2024-01-01T00:00:00Z" }];
     mockFetch.mockResolvedValue({
       ok: true,
       json: () => Promise.resolve(data),
