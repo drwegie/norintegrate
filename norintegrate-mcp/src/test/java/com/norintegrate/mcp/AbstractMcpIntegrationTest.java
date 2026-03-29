@@ -15,7 +15,7 @@ import org.testcontainers.containers.PostgreSQLContainer;
 @Transactional
 public abstract class AbstractMcpIntegrationTest {
 
-  static final PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:16-alpine");
+  static final PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:18-alpine");
 
   static {
     postgres.start();

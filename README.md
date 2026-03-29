@@ -16,7 +16,7 @@ norintegrate/
 └── norintegrate-web/      ← Next.js frontend                  (port 3000)
 ```
 
-Both deployable modules depend on `norintegrate-common` and never depend on each other. A Next.js frontend (`norintegrate-web/`) communicates with the API over HTTP. The database is PostgreSQL 16 — the sole persistence layer.
+Both deployable modules depend on `norintegrate-common` and never depend on each other. A Next.js frontend (`norintegrate-web/`) communicates with the API over HTTP. The database is PostgreSQL 18 — the sole persistence layer.
 
 ---
 
@@ -126,7 +126,7 @@ psql -h <host> -U <user> -d <dbname> -f docs/seed.sql
 
 ## Running Tests
 
-Integration tests require Docker (for Testcontainers). A PostgreSQL 16 container is started automatically and shared across all test classes.
+Integration tests require Docker (for Testcontainers). A PostgreSQL 18 container is started automatically and shared across all test classes.
 
 ```bash
 # Run all tests for the API module
@@ -335,7 +335,7 @@ Each module workflow runs `spotlessCheck` and `build` (which includes all tests)
 | [ADR-001](docs/adr/ADR-001-java-8-to-java-25-lts-migration.md) | Java 8 → Java 25 LTS |
 | [ADR-002](docs/adr/ADR-002-spring-boot-3-to-spring-boot-4.md) | Spring Boot 3 → Spring Boot 4 |
 | [ADR-003](docs/adr/ADR-003-rest-api-and-mcp-server-separation.md) | REST API and MCP server as separate modules |
-| [ADR-004](docs/adr/ADR-004-oracle-to-postgresql-migration.md) | Oracle → PostgreSQL 16 |
+| [ADR-004](docs/adr/ADR-004-oracle-to-postgresql-migration.md) | Oracle → PostgreSQL 18 |
 | [ADR-005](docs/adr/ADR-005-decision-not-to-use-spring-batch.md) | No Spring Batch |
 | [ADR-006](docs/adr/ADR-006-jenkins-to-github-actions-cicd-migration.md) | Jenkins → GitHub Actions |
 | [ADR-007](docs/adr/ADR-007-terraform-infrastructure-strategy.md) | Terraform for infrastructure (plan-only) |

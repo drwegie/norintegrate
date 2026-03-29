@@ -9,7 +9,7 @@ The team's prior database experience is with Oracle Database — a feature-rich,
 
 For NorIntegrate, Oracle was evaluated but rejected on the following grounds:
 
-- **Cost**: Oracle Database licensing is expensive and inappropriate for an open-source or personal project. PostgreSQL 16+ is fully open source under the PostgreSQL License.
+- **Cost**: Oracle Database licensing is expensive and inappropriate for an open-source or personal project. PostgreSQL 18+ is fully open source under the PostgreSQL License.
 - **UUID support**: PostgreSQL provides `gen_random_uuid()` natively (no extension needed in PG 13+), generating RFC 4122 v4 UUIDs. Oracle requires a manual workaround (`SYS_GUID()` returns RAW(16), not a formatted UUID string). NorIntegrate uses UUIDs as the primary key for `app_user`.
 - **JSONB**: PostgreSQL's `JSONB` type stores structured JSON with binary indexing, supporting containment and key-exists operators. While not heavily used in the initial schema, it provides a clean extension path without a schema migration.
 - **Identity columns**: PostgreSQL 10+ supports `GENERATED ALWAYS AS IDENTITY`, which is the SQL standard equivalent of Oracle's sequences-plus-triggers pattern and is cleaner than `SERIAL`. All bigint PKs in NorIntegrate use this.
@@ -18,7 +18,7 @@ For NorIntegrate, Oracle was evaluated but rejected on the following grounds:
 
 ## Decision
 
-Use PostgreSQL 16+ as the sole database. The JDBC URL, Flyway configuration, and Testcontainers setup all target PostgreSQL. No Oracle-specific SQL syntax is used anywhere.
+Use PostgreSQL 18+ as the sole database. The JDBC URL, Flyway configuration, and Testcontainers setup all target PostgreSQL. No Oracle-specific SQL syntax is used anywhere.
 
 ## Consequences
 
