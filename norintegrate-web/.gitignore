@@ -3,3 +3,7 @@ node_modules/
 out/
 .env*.local
 npm-debug.log*
+
+# Playwright
+test-results/
+playwright-report/

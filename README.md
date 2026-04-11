@@ -346,3 +346,4 @@ Each module workflow runs `spotlessCheck` and `build` (which includes all tests)
 | [ADR-012](docs/adr/ADR-012-frontend-technology-choice.md) | Next.js with Auth.js for frontend |
 | [ADR-013](docs/adr/ADR-013-observability-with-actuator-prometheus-grafana.md) | Observability with Actuator + Prometheus + Grafana |
 | [ADR-014](docs/adr/ADR-014-decision-not-to-integrate-idporten.md) | No ID-porten/BankID (requires Digdir registration) |
+| [ADR-015](docs/adr/ADR-015-three-layer-frontend-testing-strategy.md) | Three-layer frontend testing (Vitest + Playwright) |

@@ -38,7 +38,8 @@ norintegrate-web/
 ├── lib/
 │   ├── api.ts                  Typed fetch wrappers for NorIntegrate API
 │   └── auth.ts                 Auth.js config (Google provider)
-└── __tests__/                  Vitest + React Testing Library
+├── __tests__/                  Vitest unit + integration tests
+└── e2e/                        Playwright E2E tests
 ```
 
 ---
@@ -66,12 +67,18 @@ GitHub OAuth is not supported — GitHub returns opaque access tokens, not JWTs.
 
 ## Testing
 
-- **Framework:** Vitest + jsdom
-- **Libraries:** React Testing Library, @testing-library/jest-dom
-- **Location:** `__tests__/` directory
-- **Run:** `npm test` (single run) or `npm run test:watch` (watch mode)
-- Component tests mock `next-auth/react`
-- API tests mock global `fetch`
+Three-layer test strategy:
+
+| Layer | Tool | Location | Command | Needs live API? |
+|-------|------|----------|---------|-----------------|
+| Unit | Vitest + jsdom | `__tests__/` | `npm test` | No |
+| Integration | Vitest + node | `__tests__/integration/` | `npm run test:integration` | Yes |
+| E2E | Playwright (Chromium) | `e2e/` | `npm run test:e2e` | Yes |
+
+- **Unit tests** mock `next-auth/react` and global `fetch`
+- **Integration tests** call `lib/api.ts` against a running API (`localhost:8080`)
+- **E2E tests** run a real browser against Next.js dev server + API
+- Playwright auto-starts the Next.js dev server via `webServer` config
 
 ---
 
