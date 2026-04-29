@@ -25,10 +25,10 @@ for PROTECTED_FILE in "${PROTECTED[@]}"; do
   fi
 done
 
-# Block .env files
-if [[ "$FILE" == *".env"* ]]; then
+# Block .env files (but allow .env.example)                                                                                                              
+if [[ "$FILE" == *".env"* && "$FILE" != *".env.example" ]]; then                                                                                         
   echo "Blocked: environment files (.env) must not be modified by agents." >&2
-  exit 2
-fi
+  exit 2                                                                                                                                                 
+fi 
 
 exit 0

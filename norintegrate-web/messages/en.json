@@ -20,6 +20,135 @@
   },
   "VisaSelector": {
     "heading": "Choose Your Visa Type",
-    "description": "Select your visa category to see the required settlement procedures."
+    "description": "Select your visa category to see the required settlement procedures.",
+    "visaTypes": {
+      "SKILLED_WORKER": {
+        "name": "Skilled Worker",
+        "description": "Residence permit for skilled workers with a job offer in Norway"
+      },
+      "FAMILY_REUNIFICATION": {
+        "name": "Family Reunification",
+        "description": "Family reunification residence permit"
+      },
+      "STUDENT": {
+        "name": "Student",
+        "description": "Student residence permit"
+      }
+    }
+  },
+  "Checklist": {
+    "heading": "Settlement Checklist",
+    "descriptionAuth": "Check off procedures as you complete them.",
+    "descriptionGuest": "Sign in to track your progress.",
+    "loading": "Loading checklist...",
+    "nextStep": "Next step",
+    "nextSteps": "Next steps",
+    "congratsTitle": "Congratulations!",
+    "congratsMessage": "You have completed all settlement procedures. Welcome to Norway!",
+    "close": "Close",
+    "estimated": "Estimated: {days} {days, plural, one {day} other {days}}",
+    "optional": "Optional",
+    "procedures": {
+      "1": {
+        "title": "Receive job offer from Norwegian employer",
+        "guidance": "Your employer handles this step. The contract must meet UDI requirements for skilled worker permits."
+      },
+      "2": {
+        "title": "Apply for skilled worker residence permit via UDI",
+        "guidance": "Apply online at udi.no — search for 'skilled worker residence permit'. Your employer may also need to submit documentation."
+      },
+      "3": {
+        "title": "Book biometrics appointment at Norwegian embassy/consulate",
+        "guidance": "Contact your nearest Norwegian embassy or consulate to book a biometrics appointment. Find locations at norway.no."
+      },
+      "4": {
+        "title": "Apply for D-number from Skatteetaten",
+        "guidance": "Visit your local tax office (skattekontor) in person. Find your nearest office at skatteetaten.no — search for 'skattekontor'."
+      },
+      "5": {
+        "title": "Open Norwegian bank account",
+        "guidance": "Contact a Norwegian bank (e.g. DNB, SpareBank 1, Nordea) with your D-number and valid passport. Most banks allow starting the process online."
+      },
+      "6": {
+        "title": "Obtain tax card (skattekort) from Skatteetaten",
+        "guidance": "Apply online at skatteetaten.no — search for 'skattekort'. Your employer needs this before your first payslip."
+      },
+      "7": {
+        "title": "Register with NAV",
+        "guidance": "Register as a jobseeker at nav.no or visit your local NAV office. This gives you access to Norwegian welfare services."
+      },
+      "8": {
+        "title": "Register with a GP (fastlege)",
+        "guidance": "Register for a GP at helsenorge.no — search for 'bytte fastlege'. You need a D-number or personnummer first."
+      },
+      "9": {
+        "title": "Register with the National Population Register (Folkeregisteret)",
+        "guidance": "Register in person at your local tax office (skattekontor). Find your nearest office at skatteetaten.no — search for 'folkeregisteret'."
+      },
+      "10": {
+        "title": "Obtain national ID number (personnummer)",
+        "guidance": "Issued automatically by Skatteetaten after you have lived in Norway for at least 6 months and registered in the Folkeregisteret."
+      },
+      "11": {
+        "title": "Apply for Norwegian national ID card",
+        "guidance": "Apply at your local police station (politistasjon). Book an appointment at politiet.no — search for 'nasjonalt ID-kort'."
+      },
+      "12": {
+        "title": "Prepare documentation of family relationship",
+        "guidance": "Gather marriage certificates, birth certificates, and passport copies. Documents may need to be translated and apostilled."
+      },
+      "13": {
+        "title": "Apply for family reunification residence permit",
+        "guidance": "Apply online at udi.no — search for 'family immigration'. The reference person in Norway must also submit documentation."
+      },
+      "14": {
+        "title": "Attend interview at Norwegian embassy/consulate",
+        "guidance": "The embassy will contact you to schedule an interview after your application is submitted. Bring all original documents."
+      },
+      "15": {
+        "title": "Receive admission letter from Norwegian educational institution",
+        "guidance": "Apply to Norwegian institutions through their own admission portals, or through samordnaopptak.no for public universities."
+      },
+      "16": {
+        "title": "Show proof of financial support",
+        "guidance": "You must demonstrate sufficient funds for one academic year. Check current amounts at udi.no — search for 'financial support student'."
+      },
+      "17": {
+        "title": "Apply for student residence permit",
+        "guidance": "Apply online at udi.no — search for 'student residence permit'. Apply early, as processing times can be several weeks."
+      }
+    },
+    "documents": {
+      "Employment contract": "Employment contract",
+      "Valid passport": "Valid passport",
+      "Proof of qualifications": "Proof of qualifications",
+      "UDI application reference number": "UDI application reference number",
+      "Residence permit approval letter": "Residence permit approval letter",
+      "D-number confirmation": "D-number confirmation",
+      "Employment details": "Employment details",
+      "Tax card (skattekort)": "Tax card (skattekort)",
+      "D-number or personnummer": "D-number or personnummer",
+      "Proof of address in Norway": "Proof of address in Norway",
+      "Proof of 6 months residence in Norway": "Proof of 6 months residence in Norway",
+      "Folkeregisteret registration confirmation": "Folkeregisteret registration confirmation",
+      "Personnummer": "Personnummer",
+      "Biometric photo": "Biometric photo",
+      "Marriage certificate or birth certificate": "Marriage certificate or birth certificate",
+      "Passport copy of reference person in Norway": "Passport copy of reference person in Norway",
+      "Family relationship documentation": "Family relationship documentation",
+      "Proof of income of reference person": "Proof of income of reference person",
+      "Housing documentation": "Housing documentation",
+      "Original family relationship documents": "Original family relationship documents",
+      "Acceptance letter from Norwegian institution": "Acceptance letter from Norwegian institution",
+      "Transcript of previous education": "Transcript of previous education",
+      "Proof of English language proficiency": "Proof of English language proficiency",
+      "Bank statement showing sufficient funds": "Bank statement showing sufficient funds",
+      "Scholarship confirmation letter": "Scholarship confirmation letter",
+      "Proof of financial support": "Proof of financial support",
+      "Health insurance documentation": "Health insurance documentation"
+    }
+  },
+  "SessionExpired": {
+    "message": "Your session has expired. Please sign in again to continue tracking your progress."
   }
 }

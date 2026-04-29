@@ -3,6 +3,7 @@
 import { useParams, useRouter } from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
 import { useEffect, useState, useCallback } from "react";
+import { useTranslations } from "next-intl";
 import {
   getChecklist,
   getProgress,
@@ -16,11 +17,20 @@ export default function ChecklistDetailPage() {
   const params = useParams<{ visaTypeId: string }>();
   const router = useRouter();
   const { data: session } = useSession();
+  const t = useTranslations("Checklist");
   const [steps, setSteps] = useState<ChecklistItemResponse[]>([]);
   const [progress, setProgress] = useState<UserProgress[]>([]);
   const [loading, setLoading] = useState(true);
   const [nextStepTitles, setNextStepTitles] = useState<string[]>([]);
   const [showCongrats, setShowCongrats] = useState(false);
+
+  const getProcedureTitle = useCallback(
+    (procedureId: number, fallback: string) => {
+      const key = `procedures.${procedureId}.title`;
+      return t.has(key) ? t(key) : fallback;
+    },
+    [t]
+  );
 
   const handleSessionExpired = useCallback(async () => {
     await signOut({ redirect: false });
@@ -38,10 +48,8 @@ export default function ChecklistDetailPage() {
             .filter((p) => p.completed)
             .map((p) => p.procedureId);
 
-          // Fetch with completed IDs to get accurate isNext markers
           const checklist = await getChecklist(params.visaTypeId, userCompletedIds);
 
-          // Merge: keep all steps, but re-add completed ones from the full list
           const fullChecklist = await getChecklist(params.visaTypeId);
           const remainingIds = new Set(checklist.map((s) => s.procedureId));
           const merged = fullChecklist.map((s) => ({
@@ -63,7 +71,9 @@ export default function ChecklistDetailPage() {
                 (s) => s.isNext && !userCompletedIds.includes(s.procedureId)
               );
               if (nextSteps.length > 0) {
-                setNextStepTitles(nextSteps.map((s) => s.title));
+                setNextStepTitles(
+                  nextSteps.map((s) => getProcedureTitle(s.procedureId, s.title))
+                );
                 setTimeout(() => setNextStepTitles([]), 5000);
               }
             }
@@ -79,7 +89,7 @@ export default function ChecklistDetailPage() {
     } finally {
       setLoading(false);
     }
-  }, [params.visaTypeId, session?.idToken, handleSessionExpired]);
+  }, [params.visaTypeId, session?.idToken, handleSessionExpired, getProcedureTitle]);
 
   useEffect(() => {
     fetchData();
@@ -97,7 +107,7 @@ export default function ChecklistDetailPage() {
   };
 
   if (loading) {
-    return <p className="text-gray-500">Loading checklist...</p>;
+    return <p className="text-gray-500">{t("loading")}</p>;
   }
 
   const completedIds = new Set(
@@ -105,16 +115,14 @@ export default function ChecklistDetailPage() {
   );
   return (
     <div>
-      <h1 className="text-3xl font-bold mb-2">Settlement Checklist</h1>
+      <h1 className="text-3xl font-bold mb-2">{t("heading")}</h1>
       <p className="text-gray-600 mb-6">
-        {session
-          ? "Check off procedures as you complete them."
-          : "Sign in to track your progress."}
+        {session ? t("descriptionAuth") : t("descriptionGuest")}
       </p>
       {nextStepTitles.length > 0 && (
         <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-blue-600 text-white px-6 py-4 rounded-lg shadow-lg max-w-2xl w-auto">
           <p className="font-medium mb-1">
-            {nextStepTitles.length === 1 ? "Next step:" : "Next steps:"}
+            {nextStepTitles.length === 1 ? `${t("nextStep")}:` : `${t("nextSteps")}:`}
           </p>
           <ul className="space-y-1">
             {nextStepTitles.map((title) => (
@@ -128,16 +136,16 @@ export default function ChecklistDetailPage() {
           <div className="bg-white rounded-2xl shadow-xl p-10 max-w-md mx-4 text-center">
             <p className="text-4xl mb-4">&#127881;</p>
             <p className="text-2xl font-bold text-green-800 mb-3">
-              Congratulations!
+              {t("congratsTitle")}
             </p>
             <p className="text-gray-600 mb-6">
-              You have completed all settlement procedures. Welcome to Norway!
+              {t("congratsMessage")}
             </p>
             <button
               onClick={() => setShowCongrats(false)}
               className="bg-green-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-green-700 transition-colors"
             >
-              Close
+              {t("close")}
             </button>
           </div>
         </div>

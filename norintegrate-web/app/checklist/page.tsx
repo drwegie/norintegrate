@@ -14,7 +14,12 @@ export default async function ChecklistPage() {
       <p className="text-gray-600 mb-8">{t("description")}</p>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {visaTypes.map((vt) => (
-          <VisaTypeCard key={vt.id} visaType={vt} />
+          <VisaTypeCard
+            key={vt.id}
+            visaType={vt}
+            name={t(`visaTypes.${vt.id}.name`)}
+            description={t(`visaTypes.${vt.id}.description`)}
+          />
         ))}
       </div>
     </div>

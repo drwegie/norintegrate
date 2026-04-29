@@ -20,6 +20,135 @@
   },
   "VisaSelector": {
     "heading": "Velg visumstype",
-    "description": "Velg visumkategorien din for å se de nødvendige bosettingsprosedyrene."
+    "description": "Velg visumkategorien din for å se de nødvendige bosettingsprosedyrene.",
+    "visaTypes": {
+      "SKILLED_WORKER": {
+        "name": "Faglært arbeidstaker",
+        "description": "Oppholdstillatelse for faglærte arbeidstakere med jobbtilbud i Norge"
+      },
+      "FAMILY_REUNIFICATION": {
+        "name": "Familiegjenforening",
+        "description": "Oppholdstillatelse for familiegjenforening"
+      },
+      "STUDENT": {
+        "name": "Student",
+        "description": "Oppholdstillatelse for studenter"
+      }
+    }
+  },
+  "Checklist": {
+    "heading": "Sjekkliste for bosetting",
+    "descriptionAuth": "Kryss av prosedyrer etter hvert som du fullfører dem.",
+    "descriptionGuest": "Logg inn for å følge fremgangen din.",
+    "loading": "Laster sjekkliste...",
+    "nextStep": "Neste steg",
+    "nextSteps": "Neste steg",
+    "congratsTitle": "Gratulerer!",
+    "congratsMessage": "Du har fullført alle bosettingsprosedyrer. Velkommen til Norge!",
+    "close": "Lukk",
+    "estimated": "Estimert: {days} {days, plural, one {dag} other {dager}}",
+    "optional": "Valgfritt",
+    "procedures": {
+      "1": {
+        "title": "Motta jobbtilbud fra norsk arbeidsgiver",
+        "guidance": "Arbeidsgiveren din håndterer dette steget. Kontrakten må oppfylle UDIs krav for faglært arbeidstaker."
+      },
+      "2": {
+        "title": "Søk om oppholdstillatelse for faglært arbeidstaker via UDI",
+        "guidance": "Søk på nett via udi.no — søk etter «oppholdstillatelse for faglært». Arbeidsgiveren din må kanskje også sende inn dokumentasjon."
+      },
+      "3": {
+        "title": "Bestill time for biometri på norsk ambassade/konsulat",
+        "guidance": "Kontakt nærmeste norske ambassade eller konsulat for å bestille time for biometri. Finn lokasjoner på norway.no."
+      },
+      "4": {
+        "title": "Søk om D-nummer fra Skatteetaten",
+        "guidance": "Møt opp personlig på ditt lokale skattekontor. Finn nærmeste kontor på skatteetaten.no — søk etter «skattekontor»."
+      },
+      "5": {
+        "title": "Åpne norsk bankkonto",
+        "guidance": "Kontakt en norsk bank (f.eks. DNB, SpareBank 1, Nordea) med D-nummeret ditt og gyldig pass. De fleste banker lar deg starte prosessen på nett."
+      },
+      "6": {
+        "title": "Skaff skattekort fra Skatteetaten",
+        "guidance": "Søk på nett via skatteetaten.no — søk etter «skattekort». Arbeidsgiveren din trenger dette før første lønnsslipp."
+      },
+      "7": {
+        "title": "Registrer deg hos NAV",
+        "guidance": "Registrer deg som arbeidssøker på nav.no eller besøk ditt lokale NAV-kontor. Dette gir deg tilgang til norske velferdstjenester."
+      },
+      "8": {
+        "title": "Registrer deg hos en fastlege",
+        "guidance": "Registrer deg for fastlege på helsenorge.no — søk etter «bytte fastlege». Du trenger D-nummer eller personnummer først."
+      },
+      "9": {
+        "title": "Registrer deg i Folkeregisteret",
+        "guidance": "Registrer deg personlig på ditt lokale skattekontor. Finn nærmeste kontor på skatteetaten.no — søk etter «folkeregisteret»."
+      },
+      "10": {
+        "title": "Få personnummer",
+        "guidance": "Tildeles automatisk av Skatteetaten etter at du har bodd i Norge i minst 6 måneder og er registrert i Folkeregisteret."
+      },
+      "11": {
+        "title": "Søk om nasjonalt ID-kort",
+        "guidance": "Søk på din lokale politistasjon. Bestill time på politiet.no — søk etter «nasjonalt ID-kort»."
+      },
+      "12": {
+        "title": "Forbered dokumentasjon av familieforhold",
+        "guidance": "Samle vigselsattester, fødselsattester og passkopier. Dokumenter må kanskje oversettes og apostilleres."
+      },
+      "13": {
+        "title": "Søk om oppholdstillatelse for familiegjenforening",
+        "guidance": "Søk på nett via udi.no — søk etter «familieinnvandring». Referansepersonen i Norge må også sende inn dokumentasjon."
+      },
+      "14": {
+        "title": "Møt til intervju på norsk ambassade/konsulat",
+        "guidance": "Ambassaden kontakter deg for å avtale intervju etter at søknaden er levert. Ta med alle originaldokumenter."
+      },
+      "15": {
+        "title": "Motta opptaksbrev fra norsk utdanningsinstitusjon",
+        "guidance": "Søk til norske institusjoner gjennom deres egne opptaksportaler, eller via samordnaopptak.no for offentlige universiteter."
+      },
+      "16": {
+        "title": "Vis bevis på økonomisk støtte",
+        "guidance": "Du må dokumentere tilstrekkelige midler for ett studieår. Sjekk gjeldende beløp på udi.no — søk etter «økonomisk støtte student»."
+      },
+      "17": {
+        "title": "Søk om oppholdstillatelse for studenter",
+        "guidance": "Søk på nett via udi.no — søk etter «oppholdstillatelse for studenter». Søk tidlig, da behandlingstiden kan være flere uker."
+      }
+    },
+    "documents": {
+      "Employment contract": "Arbeidskontrakt",
+      "Valid passport": "Gyldig pass",
+      "Proof of qualifications": "Dokumentasjon av kvalifikasjoner",
+      "UDI application reference number": "UDI søknadsreferansenummer",
+      "Residence permit approval letter": "Vedtaksbrev om oppholdstillatelse",
+      "D-number confirmation": "D-nummer-bekreftelse",
+      "Employment details": "Arbeidsopplysninger",
+      "Tax card (skattekort)": "Skattekort",
+      "D-number or personnummer": "D-nummer eller personnummer",
+      "Proof of address in Norway": "Bevis på adresse i Norge",
+      "Proof of 6 months residence in Norway": "Bevis på 6 måneders opphold i Norge",
+      "Folkeregisteret registration confirmation": "Bekreftelse på registrering i Folkeregisteret",
+      "Personnummer": "Personnummer",
+      "Biometric photo": "Biometrisk foto",
+      "Marriage certificate or birth certificate": "Vigselsattest eller fødselsattest",
+      "Passport copy of reference person in Norway": "Passkopi av referanseperson i Norge",
+      "Family relationship documentation": "Dokumentasjon av familieforhold",
+      "Proof of income of reference person": "Inntektsdokumentasjon for referanseperson",
+      "Housing documentation": "Boligdokumentasjon",
+      "Original family relationship documents": "Originale dokumenter om familieforhold",
+      "Acceptance letter from Norwegian institution": "Opptaksbrev fra norsk institusjon",
+      "Transcript of previous education": "Karakterutskrift fra tidligere utdanning",
+      "Proof of English language proficiency": "Bevis på engelskkunnskaper",
+      "Bank statement showing sufficient funds": "Kontoutskrift som viser tilstrekkelige midler",
+      "Scholarship confirmation letter": "Stipendbekreftelse",
+      "Proof of financial support": "Bevis på økonomisk støtte",
+      "Health insurance documentation": "Helseforsikringsdokumentasjon"
+    }
+  },
+  "SessionExpired": {
+    "message": "Økten din har utløpt. Logg inn igjen for å fortsette å følge fremgangen din."
   }
 }

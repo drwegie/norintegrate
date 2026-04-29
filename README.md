@@ -79,10 +79,11 @@ The fastest way to run the full stack locally:
 git clone <repo-url> norintegrate
 cd norintegrate
 
-# Copy and configure environment
-cp .env.example .env
-# Edit .env — set JWT_ISSUER_URI to your OAuth provider issuer URL
-# e.g. https://accounts.google.com or https://token.actions.githubusercontent.com
+# Copy and configure environment for each module
+cp norintegrate-api/.env.example norintegrate-api/.env
+cp norintegrate-mcp/.env.example norintegrate-mcp/.env
+cp norintegrate-web/.env.example norintegrate-web/.env
+# Edit each .env — see comments inside for required values
 
 # Start everything (Postgres + API + MCP)
 docker-compose up
@@ -115,24 +116,20 @@ Default credentials: `norintegrate / norintegrate` (as configured in `docker-com
 
 ### 3. Configure environment
 
+Each module has its own `.env.example` with the variables it needs:
+
 ```bash
-cp .env.example .env
-# Edit .env and set JWT_ISSUER_URI
-```
+cp norintegrate-api/.env.example norintegrate-api/.env
+# Edit norintegrate-api/.env — set JWT_ISSUER_URI (DB credentials have defaults)
 
-The application reads `DB_USERNAME`, `DB_PASSWORD`, and `JWT_ISSUER_URI` from environment variables (with defaults for the first two):
-
-```yaml
-# application.yml defaults
-spring.datasource.username: ${DB_USERNAME:norintegrate}
-spring.datasource.password: ${DB_PASSWORD:norintegrate}
-spring.security.oauth2.resourceserver.jwt.issuer-uri: ${JWT_ISSUER_URI}
+cp norintegrate-web/.env.example norintegrate-web/.env
+# Edit norintegrate-web/.env — set GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, NEXTAUTH_SECRET
 ```
 
 ### 4. Run the API
 
 ```bash
-export $(cat .env | xargs)
+export $(cat norintegrate-api/.env | xargs)
 ./gradlew :norintegrate-api:bootRun
 ```
 
@@ -207,7 +204,7 @@ npm run dev
 
 The dev server runs at `http://localhost:3000` and expects the API at `http://localhost:8080`.
 
-**Google OAuth:** To enable sign-in, create a Google OAuth 2.0 client and set `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, and `NEXTAUTH_SECRET` in your `.env` file. See `.env.example` for details.
+**Google OAuth:** To enable sign-in, create a Google OAuth 2.0 client and set `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, and `NEXTAUTH_SECRET` in `norintegrate-web/.env`. See `norintegrate-web/.env.example` for details.
 
 ---
 
@@ -341,7 +338,7 @@ Full interactive documentation is available via Swagger UI at `/swagger-ui.html`
 | `NORINTEGRATE_SECURITY_ADMIN_EMAILS` | — | No | Comma-separated admin emails for `ROLE_ADMIN` |
 | `GRAFANA_ADMIN_PASSWORD` | — | For monitoring | Grafana admin password |
 
-Copy `.env.example` to `.env` and fill in `JWT_ISSUER_URI` before running. For frontend OAuth, also set the `GOOGLE_*` and `NEXTAUTH_SECRET` variables.
+Each module has its own `.env.example`. Copy and configure the ones you need — see `norintegrate-api/.env.example`, `norintegrate-mcp/.env.example`, and `norintegrate-web/.env.example`.
 
 ---
 
