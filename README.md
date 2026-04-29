@@ -5,9 +5,9 @@
 ![Spring Boot 4](https://img.shields.io/badge/Spring_Boot-4.0-green)
 ![Next.js 15](https://img.shields.io/badge/Next.js-15-black)
 
-A platform that helps immigrants navigate the settlement process in Norway. Provides a REST API for human users and an MCP server for AI agents. Both share domain logic through a common library module.
+A platform that helps immigrants navigate the settlement process in Norway. Provides a REST API for human users, an MCP server for AI agents, and a Next.js frontend with i18n support (English/Norwegian). All backend modules share domain logic through a common library.
 
-This project demonstrates a full migration from Java 8 + Spring 3 to Java 25 + Spring Boot 4. Architecture decisions are documented in [`docs/adr/`](docs/adr/). See [`docs/architecture.md`](docs/architecture.md) for system diagrams.
+This project demonstrates a migration from Java 8 + Spring 3 to **Java 25 + Spring Boot 4**. Every architectural decision is documented in [`docs/adr/`](docs/adr/).
 
 ---
 
@@ -15,347 +15,75 @@ This project demonstrates a full migration from Java 8 + Spring 3 to Java 25 + S
 
 ```
 norintegrate/
-├── norintegrate-common/   ← Shared domain: entities, services, repositories (not deployed)
-├── norintegrate-api/      ← REST API for human users          (port 8080)
-├── norintegrate-mcp/      ← MCP server for AI agents          (port 8081)
-└── norintegrate-web/      ← Next.js frontend                  (port 3000)
+├── norintegrate-common/   ← Shared domain: entities, services, repositories (library)
+├── norintegrate-api/      ← REST API (port 8080) — OAuth 2.0 + Swagger UI
+├── norintegrate-mcp/      ← MCP server for AI agents (port 8081)
+├── norintegrate-web/      ← Next.js 15 frontend (port 3000) — Auth.js + next-intl
+└── docs/                  ← ADRs, OpenAPI spec, schema, seed data
 ```
 
-Both deployable modules depend on `norintegrate-common` and never depend on each other. A Next.js frontend (`norintegrate-web/`) communicates with the API over HTTP. The database is PostgreSQL 18 — the sole persistence layer.
+The API and MCP modules depend on `norintegrate-common` and never on each other. PostgreSQL 18 is the sole persistence layer. The frontend communicates with the API over HTTP.
 
 ---
 
-## Why an MCP Server?
+## MCP Server
 
-[Model Context Protocol (MCP)](https://modelcontextprotocol.io/) is an open standard that lets AI agents call structured tools over a lightweight transport. NorIntegrate's MCP server gives any MCP-compatible client (Claude Desktop, Cursor, custom agents) direct access to Norway's settlement procedure data — no scraping, no prompt engineering, no hallucinated steps. The server exposes three read-only tools over SSE:
+[Model Context Protocol (MCP)](https://modelcontextprotocol.io/) lets AI agents call structured tools directly. NorIntegrate exposes three read-only tools over SSE — no authentication required ([rationale](docs/adr/ADR-017-mcp-server-authentication-posture.md)):
 
 | Tool | Description |
 |------|-------------|
-| `getIntegrationGuide` | Returns the full checklist of settlement procedures for a visa type, topologically sorted by dependencies |
-| `getProcedureDetail` | Returns details for a single procedure including required documents, authority, and estimated days |
-| `searchMunicipality` | Searches Norwegian municipalities via the SSB Klass API (Statistics Norway) |
-
-**Connect a local MCP client:**
+| `getIntegrationGuide` | Full settlement checklist for a visa type, topologically sorted |
+| `getProcedureDetail` | Procedure details including documents, authority, estimated days |
+| `searchMunicipality` | Municipality search via SSB Klass API (Statistics Norway) |
 
 ```json
-{
-  "mcpServers": {
-    "norintegrate": {
-      "url": "http://localhost:8081/mcp/messages"
-    }
-  }
-}
-```
-
-All tools are read-only against public reference data. No authentication is required at the application level — see [ADR-017](docs/adr/ADR-017-mcp-server-authentication-posture.md) for the security rationale.
-
----
-
-## Prerequisites
-
-| Tool | Version | Notes |
-|------|---------|-------|
-| Java | 25 (LTS) | Temurin distribution recommended |
-| Node.js | 22 (LTS) | Required for the frontend (`norintegrate-web/`) |
-| Docker | any recent | Required for local Postgres and integration tests |
-| Gradle | 9.4.0 | Provided by the wrapper — no install needed |
-
-**Install Java 25 on macOS:**
-```bash
-# Homebrew
-brew install --cask temurin@25
-
-# SDKMAN
-sdk install java 25-tem
+{ "mcpServers": { "norintegrate": { "url": "http://localhost:8081/mcp/messages" } } }
 ```
 
 ---
 
-## Quick Start (Docker Compose)
+## Quick Start
 
-The fastest way to run the full stack locally:
+**Prerequisites:** Java 25, Node.js 22, Docker
 
 ```bash
-git clone <repo-url> norintegrate
-cd norintegrate
+git clone <repo-url> && cd norintegrate
 
-# Copy and configure environment for each module
+# Configure environment (each module has its own .env.example)
 cp norintegrate-api/.env.example norintegrate-api/.env
-cp norintegrate-mcp/.env.example norintegrate-mcp/.env
 cp norintegrate-web/.env.example norintegrate-web/.env
-# Edit each .env — see comments inside for required values
 
-# Start everything (Postgres + API + MCP)
-docker-compose up
-```
-
-The API will be available at `http://localhost:8080`, the frontend at `http://localhost:3000`, and Swagger UI at `http://localhost:8080/swagger-ui.html`.
-
-On first start, PostgreSQL automatically applies `docs/schema.sql` and `docs/seed.sql` via the `docker-entrypoint-initdb.d` mechanism. To re-initialize with a fresh database:
-
-```bash
-docker compose down -v   # removes the data volume
-docker compose up        # schema + seed re-applied on fresh volume
-```
-
----
-
-## Local Development (without Docker for the app)
-
-This is the recommended workflow during active development.
-
-### 1. Start the database
-
-```bash
+# Start Postgres (schema + seed applied automatically)
 docker compose up postgres -d
-```
 
-Schema and seed data are applied automatically on first start (via init volumes in `docker-compose.yml`). To re-apply from scratch, run `docker compose down -v` first.
-
-Default credentials: `norintegrate / norintegrate` (as configured in `docker-compose.yml`).
-
-### 3. Configure environment
-
-Each module has its own `.env.example` with the variables it needs:
-
-```bash
-cp norintegrate-api/.env.example norintegrate-api/.env
-# Edit norintegrate-api/.env — set JWT_ISSUER_URI (DB credentials have defaults)
-
-cp norintegrate-web/.env.example norintegrate-web/.env
-# Edit norintegrate-web/.env — set GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, NEXTAUTH_SECRET
-```
-
-### 4. Run the API
-
-```bash
+# Start the API
 export $(cat norintegrate-api/.env | xargs)
 ./gradlew :norintegrate-api:bootRun
+
+# Start the frontend (in another terminal)
+cd norintegrate-web && npm install && npm run dev
 ```
+
+Or run the full stack with `docker compose up`. Swagger UI is at `http://localhost:8080/swagger-ui.html`.
 
 ---
 
-## Database Setup
-
-The schema is managed manually via SQL files in `docs/`. The application uses `ddl-auto: validate` in production — it will refuse to start if the schema does not match the JPA entities.
-
-| File | Purpose |
-|------|---------|
-| `docs/schema.sql` | Creates all 7 tables, triggers, and constraints |
-| `docs/seed.sql` | Inserts 3 visa types (SKILLED_WORKER, FAMILY_REUNIFICATION, STUDENT) with 17 procedures |
-
-Apply to any target database:
-```bash
-psql -h <host> -U <user> -d <dbname> -f docs/schema.sql
-psql -h <host> -U <user> -d <dbname> -f docs/seed.sql
-```
-
----
-
-## Running Tests
-
-Integration tests require Docker (for Testcontainers). A PostgreSQL 18 container is started automatically and shared across all test classes.
+## Testing
 
 ```bash
-# Run all tests for the API module
-./gradlew :norintegrate-api:test
-
-# Run all tests for the MCP module (includes E2E MCP protocol tests)
-./gradlew :norintegrate-mcp:test
-
-# Run all tests across all modules
-./gradlew test
-
-# Run with code style check
-./gradlew :norintegrate-api:spotlessCheck :norintegrate-api:test
-
-# Generate coverage report for norintegrate-common (≥80% enforced)
-./gradlew :norintegrate-common:jacocoTestReport
+./gradlew test                    # All modules (needs Docker for Testcontainers)
+cd norintegrate-web && npm test   # Frontend unit tests (Vitest)
 ```
 
-Test reports are written to `norintegrate-api/build/reports/tests/test/index.html`.
-Coverage reports (HTML) are at `norintegrate-common/build/reports/jacoco/test/html/index.html`.
-
----
-
-## Code Style
-
-Code is formatted with [Google Java Format](https://github.com/google/google-java-format) enforced via [Spotless](https://github.com/diffplug/spotless):
-
-```bash
-# Check formatting
-./gradlew spotlessCheck
-
-# Apply formatting
-./gradlew spotlessApply
-```
-
----
-
-## Frontend Development
-
-The frontend is a standalone Next.js 15 project in `norintegrate-web/`.
-
-```bash
-cd norintegrate-web
-npm install
-npm run dev
-```
-
-The dev server runs at `http://localhost:3000` and expects the API at `http://localhost:8080`.
-
-**Google OAuth:** To enable sign-in, create a Google OAuth 2.0 client and set `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, and `NEXTAUTH_SECRET` in `norintegrate-web/.env`. See `norintegrate-web/.env.example` for details.
+Code style: `./gradlew spotlessCheck` / `./gradlew spotlessApply` (Google Java Format).
 
 ---
 
 ## Monitoring
 
-Prometheus + Grafana are available via a Docker Compose profile:
-
 ```bash
-docker compose --profile monitoring up
+docker compose --profile monitoring up   # Prometheus :9090, Grafana :3001
 ```
-
-| Service | URL | Description |
-|---------|-----|-------------|
-| Prometheus | `http://localhost:9090` | Metrics collection and querying |
-| Grafana | `http://localhost:3001` | Dashboards (login: admin/admin) |
-| API metrics | `http://localhost:8080/actuator/prometheus` | Raw Prometheus metrics |
-| MCP metrics | `http://localhost:8081/actuator/prometheus` | Raw Prometheus metrics |
-| Health check | `http://localhost:8080/actuator/health` | Application health status |
-
-Grafana is pre-configured with Prometheus as the default data source.
-
----
-
-## Project Structure
-
-```
-norintegrate/
-├── norintegrate-common/
-│   └── src/main/java/com/norintegrate/common/
-│       ├── checklist/       ChecklistTemplate, ChecklistService, DependencyResolver
-│       ├── procedure/       Procedure, ProcedureDependency, DocumentRequirement, ProcedureService
-│       ├── visa/            VisaType, VisaTypeService
-│       ├── progress/        AppUser, UserProgress, ProgressService
-│       └── municipality/    MunicipalityInfo, SsbKlassClient, MunicipalityService
-│
-├── norintegrate-api/
-│   └── src/main/java/com/norintegrate/api/
-│       ├── checklist/       ChecklistController
-│       ├── procedure/       ProcedureController, ProcedureAdminController
-│       ├── visa/            VisaTypeController
-│       ├── progress/        ProgressController, AccountController
-│       ├── municipality/    MunicipalityController
-│       ├── config/          SecurityConfig, WebConfig, OpenApiConfig
-│       └── exception/       GlobalExceptionHandler
-│
-├── norintegrate-mcp/
-│   └── src/main/java/com/norintegrate/mcp/
-│       ├── tool/            Integration guide, procedure detail, municipality search tools
-│       └── config/          MCP server configuration
-│
-├── norintegrate-web/            Next.js 15 frontend (Node.js project)
-│   ├── app/                     App Router pages and layouts
-│   ├── components/              React components
-│   └── lib/                     API client and Auth.js config
-│
-├── docs/
-│   ├── adr/                 Architecture Decision Records
-│   ├── schema.sql           PostgreSQL DDL
-│   ├── api-spec/            OpenAPI specification
-│   └── seed.sql             Reference data (3 visa types, 17 procedures)
-│
-├── docker/
-│   ├── api.Dockerfile       Multi-stage build for norintegrate-api
-│   ├── mcp.Dockerfile       Multi-stage build for norintegrate-mcp
-│   ├── web.Dockerfile       Multi-stage build for norintegrate-web
-│   ├── prometheus.yml       Prometheus scrape configuration
-│   └── grafana/             Grafana provisioning (datasources)
-│
-├── .github/workflows/
-│   ├── api.yml              Path-filtered CI for norintegrate-api
-│   ├── common.yml           Path-filtered CI for norintegrate-common (+ coverage)
-│   ├── docker.yml           Docker build verification
-│   ├── mcp.yml              Path-filtered CI for norintegrate-mcp
-│   └── web.yml              Path-filtered CI for norintegrate-web
-│
-└── docker-compose.yml       Local development stack
-```
-
----
-
-## API Reference
-
-### Public endpoints — no authentication required
-
-| Method | Path | Description |
-|--------|------|-------------|
-| `GET` | `/api/v1/visa-types` | List all visa types |
-| `GET` | `/api/v1/visa-types/{id}` | Get a single visa type |
-| `GET` | `/api/v1/procedures` | List all settlement procedures |
-| `GET` | `/api/v1/procedures/{id}` | Get a procedure with details |
-| `GET` | `/api/v1/procedures/{id}/documents` | List required documents for a procedure |
-| `GET` | `/api/v1/checklist/{visaTypeId}` | Get ordered checklist with dependency resolution |
-| `GET` | `/api/v1/checklist/{visaTypeId}?completed=1,2,3` | Checklist with completed procedures excluded |
-| `GET` | `/api/v1/municipalities?query=Oslo` | Search municipalities via SSB Klass API |
-| `GET` | `/api/v1/municipalities/{code}` | Look up a municipality by code |
-
-### Protected endpoints — OAuth 2.0 JWT required
-
-| Method | Path | Description |
-|--------|------|-------------|
-| `GET` | `/api/v1/progress` | Get current user's procedure progress |
-| `POST` | `/api/v1/progress/{procedureId}/complete` | Mark a procedure complete |
-| `DELETE` | `/api/v1/progress/{procedureId}/complete` | Mark a procedure incomplete |
-| `DELETE` | `/api/v1/account` | Delete account and all progress |
-
-### Admin endpoints — ROLE_ADMIN required
-
-| Method | Path | Description |
-|--------|------|-------------|
-| `POST` | `/api/v1/admin/procedures` | Create a procedure |
-| `PUT` | `/api/v1/admin/procedures/{id}` | Update a procedure |
-| `DELETE` | `/api/v1/admin/procedures/{id}` | Delete a procedure |
-| `POST` | `/api/v1/admin/procedures/{id}/dependencies` | Add a prerequisite relationship |
-| `DELETE` | `/api/v1/admin/procedures/{prerequisiteId}/dependencies/{dependentId}` | Remove a prerequisite |
-
-Full interactive documentation is available via Swagger UI at `/swagger-ui.html` when the API is running.
-
----
-
-## Environment Variables
-
-| Variable | Default | Required | Description |
-|----------|---------|----------|-------------|
-| `JWT_ISSUER_URI` | — | Yes | OAuth 2.0 issuer URL (e.g. `https://accounts.google.com`) |
-| `DB_USERNAME` | `norintegrate` | No | PostgreSQL username |
-| `DB_PASSWORD` | `norintegrate` | No | PostgreSQL password |
-| `GOOGLE_CLIENT_ID` | — | For frontend | Google OAuth 2.0 client ID |
-| `GOOGLE_CLIENT_SECRET` | — | For frontend | Google OAuth 2.0 client secret |
-| `NEXTAUTH_SECRET` | — | For frontend | Auth.js session secret (`openssl rand -base64 32`) |
-| `CORS_ALLOWED_ORIGINS` | `http://localhost:3000` | No | Comma-separated list of allowed CORS origins |
-| `NORINTEGRATE_SECURITY_ADMIN_EMAILS` | — | No | Comma-separated admin emails for `ROLE_ADMIN` |
-| `GRAFANA_ADMIN_PASSWORD` | — | For monitoring | Grafana admin password |
-
-Each module has its own `.env.example`. Copy and configure the ones you need — see `norintegrate-api/.env.example`, `norintegrate-mcp/.env.example`, and `norintegrate-web/.env.example`.
-
----
-
-## CI/CD
-
-Each module has a dedicated GitHub Actions workflow triggered only when its relevant files change. See ADR-006 (GitHub Actions) and ADR-009 (monorepo + path filtering) for the rationale.
-
-| Workflow | Triggers on changes to |
-|----------|----------------------|
-| `api.yml` | `norintegrate-api/`, `norintegrate-common/`, root `build.gradle.kts` |
-| `common.yml` | `norintegrate-common/`, root `build.gradle.kts`, `settings.gradle.kts` |
-| `docker.yml` | `docker/`, `docker-compose.yml`, `**/build.gradle.kts`, `**/src/**` |
-| `mcp.yml` | `norintegrate-mcp/`, `norintegrate-common/`, root `build.gradle.kts` |
-| `web.yml` | `norintegrate-web/` |
-| `security-scan.yml` | All files (push, PR, weekly cron) — Trivy SCA scan |
-
-Each module workflow runs `spotlessCheck` and `build` (which includes all tests) on `ubuntu-latest` with Java 25 (Temurin). The `common.yml` workflow also generates and uploads a JaCoCo coverage report. The `docker.yml` workflow verifies Docker images build successfully.
 
 ---
 
@@ -381,3 +109,9 @@ Each module workflow runs `spotlessCheck` and `build` (which includes all tests)
 | [ADR-016](docs/adr/ADR-016-aws-ecs-fargate-deployment.md) | AWS ECS Fargate deployment |
 | [ADR-017](docs/adr/ADR-017-mcp-server-authentication-posture.md) | MCP server authentication posture |
 | [ADR-018](docs/adr/ADR-018-structured-json-logging.md) | Structured JSON logging |
+
+---
+
+## License
+
+[MIT](LICENSE)
