@@ -1,0 +1,25 @@
+{
+  "Layout": {
+    "title": "NorIntegrate",
+    "description": "Hjelper innvandrere med bosettingsprosessen i Norge"
+  },
+  "Navbar": {
+    "brand": "NorIntegrate",
+    "signIn": "Logg inn med Google",
+    "signOut": "Logg ut"
+  },
+  "Locale": {
+    "en": "English",
+    "nb": "Norsk",
+    "label": "Språk"
+  },
+  "Landing": {
+    "heading": "Velkommen til NorIntegrate",
+    "description": "En trinn-for-trinn-guide som hjelper innvandrere med bosettingsprosessen i Norge. Følg fremgangen din gjennom visumprosedyrer, nødvendige dokumenter og offentlige registreringer.",
+    "cta": "Kom i gang"
+  },
+  "VisaSelector": {
+    "heading": "Velg visumstype",
+    "description": "Velg visumkategorien din for å se de nødvendige bosettingsprosedyrene."
+  }
+}

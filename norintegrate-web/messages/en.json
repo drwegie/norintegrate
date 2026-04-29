@@ -1,0 +1,25 @@
+{
+  "Layout": {
+    "title": "NorIntegrate",
+    "description": "Helping immigrants navigate the settlement process in Norway"
+  },
+  "Navbar": {
+    "brand": "NorIntegrate",
+    "signIn": "Sign in with Google",
+    "signOut": "Sign out"
+  },
+  "Locale": {
+    "en": "English",
+    "nb": "Norsk",
+    "label": "Language"
+  },
+  "Landing": {
+    "heading": "Welcome to NorIntegrate",
+    "description": "A step-by-step guide to help immigrants navigate the settlement process in Norway. Track your progress through visa procedures, required documents, and official registrations.",
+    "cta": "Get Started"
+  },
+  "VisaSelector": {
+    "heading": "Choose Your Visa Type",
+    "description": "Select your visa category to see the required settlement procedures."
+  }
+}
