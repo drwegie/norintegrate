@@ -108,6 +108,38 @@ class McpServerEndToEndIT {
   }
 
   @Test
+  @DisplayName("MCP server exposes resources")
+  void listResources_returnsAllResources() {
+    var result = mcpClient.listResources();
+
+    var resourceUris = result.resources().stream().map(McpSchema.Resource::uri).toList();
+    assertThat(resourceUris)
+        .containsExactlyInAnyOrder("norintegrate://visa-types", "norintegrate://procedures");
+  }
+
+  @Test
+  @DisplayName("readResource visa-types returns valid JSON")
+  void readResource_visaTypes_returnsData() {
+    var result =
+        mcpClient.readResource(new McpSchema.ReadResourceRequest("norintegrate://visa-types"));
+
+    assertThat(result.contents()).isNotEmpty();
+    var text = ((McpSchema.TextResourceContents) result.contents().getFirst()).text();
+    assertThat(text).contains("SKILLED_WORKER");
+  }
+
+  @Test
+  @DisplayName("readResource procedures returns valid JSON")
+  void readResource_procedures_returnsData() {
+    var result =
+        mcpClient.readResource(new McpSchema.ReadResourceRequest("norintegrate://procedures"));
+
+    assertThat(result.contents()).isNotEmpty();
+    var text = ((McpSchema.TextResourceContents) result.contents().getFirst()).text();
+    assertThat(text).contains("Receive job offer");
+  }
+
+  @Test
   @DisplayName("MCP server reports correct server info")
   void serverInfo_returnsCorrectNameAndVersion() {
     var info = mcpClient.getServerInfo();

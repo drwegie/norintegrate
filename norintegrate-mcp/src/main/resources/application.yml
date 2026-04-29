@@ -19,6 +19,7 @@ spring:
 
 server:
   port: 8081
+  shutdown: graceful
 
 norintegrate:
   ssb:
@@ -32,3 +33,17 @@ management:
   endpoint:
     health:
       show-details: when-authorized
+
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://postgres:5432/norintegrate?sslmode=require}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    hikari:
+      maximum-pool-size: 10
+      connection-timeout: 5000
+      leak-detection-threshold: 30000

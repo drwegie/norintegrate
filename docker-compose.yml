@@ -2,9 +2,9 @@ services:
   postgres:
     image: postgres:18-alpine
     environment:
-      POSTGRES_DB: norintegrate
-      POSTGRES_USER: norintegrate
-      POSTGRES_PASSWORD: norintegrate
+      POSTGRES_DB: ${POSTGRES_DB:-norintegrate}
+      POSTGRES_USER: ${DB_USERNAME:-norintegrate}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD in .env}
     ports:
       - "5432:5432"
     volumes:
@@ -12,7 +12,7 @@ services:
       - ./docs/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
       - ./docs/seed.sql:/docker-entrypoint-initdb.d/02-seed.sql:ro
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U norintegrate -d norintegrate"]
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME:-norintegrate} -d ${POSTGRES_DB:-norintegrate}"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -28,10 +28,11 @@ services:
     ports:
       - "8080:8080"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/norintegrate
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB:-norintegrate}
       DB_USERNAME: ${DB_USERNAME:-norintegrate}
-      DB_PASSWORD: ${DB_PASSWORD:-norintegrate}
-      JWT_ISSUER_URI: ${JWT_ISSUER_URI:-https://accounts.google.com}
+      DB_PASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD in .env}
+      JWT_ISSUER_URI: ${JWT_ISSUER_URI:?Set JWT_ISSUER_URI in .env}
+      NORINTEGRATE_SECURITY_ADMIN_EMAILS: ${NORINTEGRATE_SECURITY_ADMIN_EMAILS:-}
     env_file:
       - path: .env
         required: false
@@ -46,9 +47,9 @@ services:
     ports:
       - "8081:8081"
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/norintegrate
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB:-norintegrate}
       DB_USERNAME: ${DB_USERNAME:-norintegrate}
-      DB_PASSWORD: ${DB_PASSWORD:-norintegrate}
+      DB_PASSWORD: ${DB_PASSWORD:?Set DB_PASSWORD in .env}
     env_file:
       - path: .env
         required: false
@@ -62,11 +63,11 @@ services:
     ports:
       - "3000:3000"
     environment:
-      NEXTAUTH_URL: http://localhost:3000
-      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET:-change-me-in-production}
-      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-}
-      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:-}
-      NEXT_PUBLIC_API_URL: http://api:8080
+      NEXTAUTH_URL: ${NEXTAUTH_URL:-http://localhost:3000}
+      NEXTAUTH_SECRET: ${NEXTAUTH_SECRET:?Set NEXTAUTH_SECRET in .env}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:?Set GOOGLE_CLIENT_ID in .env}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:?Set GOOGLE_CLIENT_SECRET in .env}
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-http://api:8080}
 
   prometheus:
     image: prom/prometheus:v3.3.0
@@ -88,7 +89,7 @@ services:
     ports:
       - "3001:3000"
     environment:
-      GF_SECURITY_ADMIN_PASSWORD: admin
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:?Set GRAFANA_ADMIN_PASSWORD in .env}
     depends_on:
       - prometheus
 

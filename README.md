@@ -1,8 +1,13 @@
 # NorIntegrate
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+![Java 25](https://img.shields.io/badge/Java-25_LTS-orange)
+![Spring Boot 4](https://img.shields.io/badge/Spring_Boot-4.0-green)
+![Next.js 15](https://img.shields.io/badge/Next.js-15-black)
+
 A platform that helps immigrants navigate the settlement process in Norway. Provides a REST API for human users and an MCP server for AI agents. Both share domain logic through a common library module.
 
-This project demonstrates a full migration from Java 8 + Spring 3 to Java 25 + Spring Boot 4. Architecture decisions are documented in [`docs/adr/`](docs/adr/).
+This project demonstrates a full migration from Java 8 + Spring 3 to Java 25 + Spring Boot 4. Architecture decisions are documented in [`docs/adr/`](docs/adr/). See [`docs/architecture.md`](docs/architecture.md) for system diagrams.
 
 ---
 
@@ -17,6 +22,32 @@ norintegrate/
 ```
 
 Both deployable modules depend on `norintegrate-common` and never depend on each other. A Next.js frontend (`norintegrate-web/`) communicates with the API over HTTP. The database is PostgreSQL 18 — the sole persistence layer.
+
+---
+
+## Why an MCP Server?
+
+[Model Context Protocol (MCP)](https://modelcontextprotocol.io/) is an open standard that lets AI agents call structured tools over a lightweight transport. NorIntegrate's MCP server gives any MCP-compatible client (Claude Desktop, Cursor, custom agents) direct access to Norway's settlement procedure data — no scraping, no prompt engineering, no hallucinated steps. The server exposes three read-only tools over SSE:
+
+| Tool | Description |
+|------|-------------|
+| `getIntegrationGuide` | Returns the full checklist of settlement procedures for a visa type, topologically sorted by dependencies |
+| `getProcedureDetail` | Returns details for a single procedure including required documents, authority, and estimated days |
+| `searchMunicipality` | Searches Norwegian municipalities via the SSB Klass API (Statistics Norway) |
+
+**Connect a local MCP client:**
+
+```json
+{
+  "mcpServers": {
+    "norintegrate": {
+      "url": "http://localhost:8081/mcp/messages"
+    }
+  }
+}
+```
+
+All tools are read-only against public reference data. No authentication is required at the application level — see [ADR-017](docs/adr/ADR-017-mcp-server-authentication-posture.md) for the security rationale.
 
 ---
 
@@ -282,7 +313,7 @@ norintegrate/
 | `DELETE` | `/api/v1/progress/{procedureId}/complete` | Mark a procedure incomplete |
 | `DELETE` | `/api/v1/account` | Delete account and all progress |
 
-### Admin endpoints — authentication required
+### Admin endpoints — ROLE_ADMIN required
 
 | Method | Path | Description |
 |--------|------|-------------|
@@ -307,6 +338,8 @@ Full interactive documentation is available via Swagger UI at `/swagger-ui.html`
 | `GOOGLE_CLIENT_SECRET` | — | For frontend | Google OAuth 2.0 client secret |
 | `NEXTAUTH_SECRET` | — | For frontend | Auth.js session secret (`openssl rand -base64 32`) |
 | `CORS_ALLOWED_ORIGINS` | `http://localhost:3000` | No | Comma-separated list of allowed CORS origins |
+| `NORINTEGRATE_SECURITY_ADMIN_EMAILS` | — | No | Comma-separated admin emails for `ROLE_ADMIN` |
+| `GRAFANA_ADMIN_PASSWORD` | — | For monitoring | Grafana admin password |
 
 Copy `.env.example` to `.env` and fill in `JWT_ISSUER_URI` before running. For frontend OAuth, also set the `GOOGLE_*` and `NEXTAUTH_SECRET` variables.
 
@@ -323,6 +356,7 @@ Each module has a dedicated GitHub Actions workflow triggered only when its rele
 | `docker.yml` | `docker/`, `docker-compose.yml`, `**/build.gradle.kts`, `**/src/**` |
 | `mcp.yml` | `norintegrate-mcp/`, `norintegrate-common/`, root `build.gradle.kts` |
 | `web.yml` | `norintegrate-web/` |
+| `security-scan.yml` | All files (push, PR, weekly cron) — Trivy SCA scan |
 
 Each module workflow runs `spotlessCheck` and `build` (which includes all tests) on `ubuntu-latest` with Java 25 (Temurin). The `common.yml` workflow also generates and uploads a JaCoCo coverage report. The `docker.yml` workflow verifies Docker images build successfully.
 
@@ -347,3 +381,6 @@ Each module workflow runs `spotlessCheck` and `build` (which includes all tests)
 | [ADR-013](docs/adr/ADR-013-observability-with-actuator-prometheus-grafana.md) | Observability with Actuator + Prometheus + Grafana |
 | [ADR-014](docs/adr/ADR-014-decision-not-to-integrate-idporten.md) | No ID-porten/BankID (requires Digdir registration) |
 | [ADR-015](docs/adr/ADR-015-three-layer-frontend-testing-strategy.md) | Three-layer frontend testing (Vitest + Playwright) |
+| [ADR-016](docs/adr/ADR-016-aws-ecs-fargate-deployment.md) | AWS ECS Fargate deployment |
+| [ADR-017](docs/adr/ADR-017-mcp-server-authentication-posture.md) | MCP server authentication posture |
+| [ADR-018](docs/adr/ADR-018-structured-json-logging.md) | Structured JSON logging |

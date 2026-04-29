@@ -19,5 +19,12 @@ out/
 # Logs
 *.log
 
+# Terraform
+infra/.terraform/
+infra/bootstrap/.terraform/
+*.tfstate
+*.tfstate.backup
+*.tfplan
+
 # Claude Code task files
 tasks/

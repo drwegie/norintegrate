@@ -121,6 +121,7 @@ All ADRs live in `docs/adr/`. Use Michael Nygard's template (Status, Context, De
 | ADR-013 | Observability with Actuator, Prometheus, and Grafana | Done |
 | ADR-014 | Decision Not to Integrate ID-porten/BankID | Done |
 | ADR-015 | Three-Layer Frontend Testing Strategy with Playwright | Done |
+| ADR-016 | AWS ECS Fargate Deployment | Done |
 
 When a new architectural decision is made, add a row here and create the file in `docs/adr/` before marking the task complete.
 

@@ -1,6 +1,7 @@
 package com.norintegrate.api.procedure;
 
 import com.norintegrate.common.procedure.ProcedureService;
+import jakarta.validation.Valid;
 import java.net.URI;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +24,8 @@ public class ProcedureAdminController {
   }
 
   @PostMapping
-  public ResponseEntity<ProcedureResponse> create(@RequestBody CreateProcedureRequest request) {
+  public ResponseEntity<ProcedureResponse> create(
+      @Valid @RequestBody CreateProcedureRequest request) {
     var p =
         procedureService.create(
             request.title(), request.description(), request.authority(), request.estimatedDays());
@@ -35,7 +37,7 @@ public class ProcedureAdminController {
 
   @PutMapping("/{id}")
   public ResponseEntity<ProcedureResponse> update(
-      @PathVariable Long id, @RequestBody UpdateProcedureRequest request) {
+      @PathVariable Long id, @Valid @RequestBody UpdateProcedureRequest request) {
     var p =
         procedureService.update(
             id,
@@ -56,7 +58,7 @@ public class ProcedureAdminController {
 
   @PostMapping("/{id}/dependencies")
   public ResponseEntity<Void> addDependency(
-      @PathVariable Long id, @RequestBody AddDependencyRequest request) {
+      @PathVariable Long id, @Valid @RequestBody AddDependencyRequest request) {
     procedureService.addDependency(request.prerequisiteId(), request.dependentId());
     return ResponseEntity.status(HttpStatus.CREATED).build();
   }

@@ -1,0 +1,9 @@
+environment         = "prod"
+db_instance_class   = "db.t4g.small"
+db_multi_az         = true
+api_desired_count   = 2
+mcp_desired_count   = 1
+web_desired_count   = 2
+log_retention_days  = 90
+deletion_protection = true
+skip_final_snapshot = false

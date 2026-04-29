@@ -1,4 +1,4 @@
-name: Docker Build Verification
+name: Docker Build & Push
 
 on:
   push:
@@ -9,6 +9,7 @@ on:
       - 'docker-compose.yml'
       - '**/build.gradle.kts'
       - '**/src/**'
+      - 'norintegrate-web/**'
   pull_request:
     branches:
       - main
@@ -17,11 +18,11 @@ on:
       - 'docker-compose.yml'
       - '**/build.gradle.kts'
       - '**/src/**'
+      - 'norintegrate-web/**'
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -31,3 +32,41 @@ jobs:
 
       - name: Verify images exist
         run: docker compose images
+
+  push:
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+    strategy:
+      matrix:
+        include:
+          - service: api
+            dockerfile: docker/api.Dockerfile
+          - service: mcp
+            dockerfile: docker/mcp.Dockerfile
+          - service: web
+            dockerfile: docker/web.Dockerfile
+            context: norintegrate-web
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push image
+        uses: docker/build-push-action@v6
+        with:
+          context: ${{ matrix.context || '.' }}
+          file: ${{ matrix.dockerfile }}
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository_owner }}/norintegrate-${{ matrix.service }}:latest
+            ghcr.io/${{ github.repository_owner }}/norintegrate-${{ matrix.service }}:${{ github.sha }}

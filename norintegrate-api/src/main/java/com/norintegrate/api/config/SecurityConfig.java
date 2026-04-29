@@ -13,6 +13,7 @@ import org.springframework.security.oauth2.jwt.JwtDecoders;
 import org.springframework.security.oauth2.jwt.JwtValidators;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter.ReferrerPolicy;
 
 @Configuration
 @EnableWebSecurity
@@ -20,6 +21,12 @@ public class SecurityConfig {
 
   @Value("${spring.security.oauth2.resourceserver.jwt.issuer-uri}")
   private String issuerUri;
+
+  private final AdminAuthorities adminAuthorities;
+
+  public SecurityConfig(AdminAuthorities adminAuthorities) {
+    this.adminAuthorities = adminAuthorities;
+  }
 
   @Bean
   @ConditionalOnMissingBean
@@ -34,7 +41,19 @@ public class SecurityConfig {
 
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-    http.cors(cors -> {})
+    // OWASP Secure Headers
+    http.headers(
+            headers ->
+                headers
+                    .frameOptions(frame -> frame.deny())
+                    .contentTypeOptions(content -> {})
+                    .httpStrictTransportSecurity(
+                        hsts ->
+                            hsts.maxAgeInSeconds(31536000).includeSubDomains(true).preload(true))
+                    .referrerPolicy(
+                        referrer ->
+                            referrer.policy(ReferrerPolicy.STRICT_ORIGIN_WHEN_CROSS_ORIGIN)))
+        .cors(cors -> {})
         .csrf(csrf -> csrf.disable())
         .sessionManagement(
             session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -49,7 +68,7 @@ public class SecurityConfig {
                     .requestMatchers(HttpMethod.GET, "/api/v1/municipalities/**")
                     .permitAll()
                     .requestMatchers("/api/v1/admin/**")
-                    .authenticated()
+                    .hasRole("ADMIN")
                     .requestMatchers("/api/v1/progress/**")
                     .authenticated()
                     .requestMatchers("/api/v1/account/**")
@@ -61,7 +80,8 @@ public class SecurityConfig {
                     .permitAll()
                     .anyRequest()
                     .authenticated())
-        .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> {}));
+        .oauth2ResourceServer(
+            oauth2 -> oauth2.jwt(jwt -> jwt.jwtAuthenticationConverter(adminAuthorities)));
     return http.build();
   }
 }

@@ -1,3 +1,5 @@
 package com.norintegrate.api.procedure;
 
-public record AddDependencyRequest(long prerequisiteId, long dependentId) {}
+import jakarta.validation.constraints.Positive;
+
+public record AddDependencyRequest(@Positive long prerequisiteId, @Positive long dependentId) {}

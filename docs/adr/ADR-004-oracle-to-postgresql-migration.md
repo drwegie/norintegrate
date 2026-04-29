@@ -24,5 +24,5 @@ Use PostgreSQL 18+ as the sole database. The JDBC URL, Flyway configuration, and
 
 - Database triggers manage `updated_at` — a pattern portable across PostgreSQL environments.
 - `gen_random_uuid()` is called in DDL for `app_user.id`; no application-side UUID generation is needed for inserts.
-- The Spring Data JPA dialect is set to `PostgreSQLDialect` (Hibernate 6).
+- The Spring Data JPA dialect is set to `PostgreSQLDialect` (Hibernate 7).
 - Developers must have Docker available locally to run the Testcontainers-based integration tests.

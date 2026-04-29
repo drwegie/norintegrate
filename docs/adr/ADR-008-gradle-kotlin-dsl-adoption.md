@@ -19,7 +19,7 @@ Spring Boot 4's `spring-boot-gradle-plugin` and Spring Dependency Management plu
 
 ## Decision
 
-Use Gradle 8.x with Kotlin DSL (`build.gradle.kts` and `settings.gradle.kts`) for all build configuration. Dependency versions are managed in `gradle/libs.versions.toml`. Maven is not used.
+Use Gradle 9.x with Kotlin DSL (`build.gradle.kts` and `settings.gradle.kts`) for all build configuration. Dependency versions are managed in `gradle/libs.versions.toml`. Maven is not used.
 
 ## Consequences
 

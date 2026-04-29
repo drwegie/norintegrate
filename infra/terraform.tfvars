@@ -1,0 +1,9 @@
+environment         = "dev"
+db_instance_class   = "db.t4g.micro"
+db_multi_az         = false
+api_desired_count   = 1
+mcp_desired_count   = 1
+web_desired_count   = 1
+log_retention_days  = 14
+deletion_protection = false
+skip_final_snapshot = true
