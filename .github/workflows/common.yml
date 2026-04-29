@@ -50,7 +50,7 @@ jobs:
         run: ./gradlew :norintegrate-common:jacocoTestReport
 
       - name: Upload coverage report
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: jacoco-coverage-report
           path: norintegrate-common/build/reports/jacoco/test/html/
