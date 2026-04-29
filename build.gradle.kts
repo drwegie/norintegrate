@@ -44,7 +44,7 @@ subprojects {
     configure<io.spring.gradle.dependencymanagement.dsl.DependencyManagementExtension> {
         imports {
             mavenBom("org.springframework.boot:spring-boot-dependencies:4.0.6")
-            mavenBom("org.testcontainers:testcontainers-bom:2.0.3")
+            mavenBom("org.testcontainers:testcontainers-bom:2.0.5")
             mavenBom("org.springframework.ai:spring-ai-bom:2.0.0-M5")
         }
     }
