@@ -56,4 +56,15 @@ subprojects {
     tasks.withType<Test> {
         useJUnitPlatform()
     }
+
+    tasks.withType<org.springframework.boot.gradle.tasks.run.BootRun> {
+        val envFile = project.file(".env.local")
+        if (envFile.exists()) {
+            envFile.readLines()
+                .filter { it.isNotBlank() && !it.startsWith("#") }
+                .map { it.split("=", limit = 2) }
+                .filter { it.size == 2 }
+                .forEach { (key, value) -> environment(key.trim(), value.trim()) }
+        }
+    }
 }

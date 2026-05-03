@@ -1,19 +1,25 @@
 import { screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { useSession, signIn, signOut } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
 import { Navbar } from "@/components/Navbar";
 import { renderWithIntl } from "../test-utils";
 
+const mockHandleSignIn = vi.fn();
+const mockHandleSignOut = vi.fn();
+
 vi.mock("next-auth/react", () => ({
   useSession: vi.fn(),
-  signIn: vi.fn(),
-  signOut: vi.fn(),
 }));
 
 vi.mock("next/navigation", () => ({
   usePathname: vi.fn(),
+}));
+
+vi.mock("@/lib/auth-actions", () => ({
+  handleSignIn: (...args: unknown[]) => mockHandleSignIn(...args),
+  handleSignOut: (...args: unknown[]) => mockHandleSignOut(...args),
 }));
 
 vi.mock("@/app/actions/locale", () => ({
@@ -80,33 +86,19 @@ describe("Navbar", () => {
     expect(screen.queryByText("Sign in with Google")).not.toBeInTheDocument();
   });
 
-  it("calls signIn with callbackUrl /checklist from the landing page", async () => {
+  it("renders sign-in button inside a form", () => {
     mockUsePathname.mockReturnValue("/");
     mockUseSession.mockReturnValue({
       data: null,
       status: "unauthenticated",
       update: vi.fn(),
     });
-    const user = userEvent.setup();
     renderWithIntl(<Navbar />);
-    await user.click(screen.getByText("Sign in with Google"));
-    expect(signIn).toHaveBeenCalledWith("google", { callbackUrl: "/checklist" });
+    const button = screen.getByText("Sign in with Google");
+    expect(button.closest("form")).toBeInTheDocument();
   });
 
-  it("calls signIn with current path as callbackUrl from a checklist page", async () => {
-    mockUsePathname.mockReturnValue("/checklist/SKILLED_WORKER");
-    mockUseSession.mockReturnValue({
-      data: null,
-      status: "unauthenticated",
-      update: vi.fn(),
-    });
-    const user = userEvent.setup();
-    renderWithIntl(<Navbar />);
-    await user.click(screen.getByText("Sign in with Google"));
-    expect(signIn).toHaveBeenCalledWith("google", { callbackUrl: "/checklist/SKILLED_WORKER" });
-  });
-
-  it("calls signOut when sign-out button is clicked", async () => {
+  it("renders sign-out button inside a form", () => {
     mockUseSession.mockReturnValue({
       data: {
         user: { email: "user@example.com", name: "Test User", image: null },
@@ -115,10 +107,9 @@ describe("Navbar", () => {
       status: "authenticated",
       update: vi.fn(),
     });
-    const user = userEvent.setup();
     renderWithIntl(<Navbar />);
-    await user.click(screen.getByText("Sign out"));
-    expect(signOut).toHaveBeenCalled();
+    const button = screen.getByText("Sign out");
+    expect(button.closest("form")).toBeInTheDocument();
   });
 
   it("renders the locale switcher", () => {
