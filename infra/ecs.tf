@@ -62,7 +62,7 @@ resource "aws_ecs_service" "api" {
   desired_count   = var.api_desired_count
   launch_type     = "FARGATE"
 
-  health_check_grace_period_seconds = 120
+  health_check_grace_period_seconds = 300
 
   network_configuration {
     subnets          = aws_subnet.public[*].id
@@ -130,7 +130,7 @@ resource "aws_ecs_service" "mcp" {
   desired_count   = var.mcp_desired_count
   launch_type     = "FARGATE"
 
-  health_check_grace_period_seconds = 120
+  health_check_grace_period_seconds = 300
 
   network_configuration {
     subnets          = aws_subnet.public[*].id

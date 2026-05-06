@@ -1,6 +1,6 @@
 resource "aws_security_group" "alb" {
   name_prefix = "${local.name_prefix}-alb-"
-  description = "ALB — allow HTTP from internet"
+  description = "ALB - allow HTTP from internet"
   vpc_id      = aws_vpc.main.id
 
   tags = { Name = "${local.name_prefix}-alb-sg" }
@@ -28,7 +28,7 @@ resource "aws_vpc_security_group_egress_rule" "alb_to_ecs" {
 
 resource "aws_security_group" "ecs" {
   name_prefix = "${local.name_prefix}-ecs-"
-  description = "ECS tasks — allow traffic from ALB, outbound to RDS and internet"
+  description = "ECS tasks - allow traffic from ALB, outbound to RDS and internet"
   vpc_id      = aws_vpc.main.id
 
   tags = { Name = "${local.name_prefix}-ecs-sg" }
@@ -54,7 +54,7 @@ resource "aws_vpc_security_group_egress_rule" "ecs_all_outbound" {
 
 resource "aws_security_group" "rds" {
   name_prefix = "${local.name_prefix}-rds-"
-  description = "RDS — allow PostgreSQL from ECS only"
+  description = "RDS - allow PostgreSQL from ECS only"
   vpc_id      = aws_vpc.main.id
 
   tags = { Name = "${local.name_prefix}-rds-sg" }

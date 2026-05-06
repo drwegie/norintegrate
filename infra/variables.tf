@@ -139,7 +139,7 @@ variable "web_image_tag" {
 variable "ghcr_owner" {
   description = "GHCR repository owner (GitHub username or org)"
   type        = string
-  default     = "flppd"
+  default     = "drwegie"
 }
 
 # ---------- Logging ----------
