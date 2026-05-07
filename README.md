@@ -87,6 +87,47 @@ docker compose --profile monitoring up   # Prometheus :9090, Grafana :3001
 
 ---
 
+## Infrastructure
+
+Deployed on AWS using Terraform (IaC). The infrastructure is designed for cost-efficient development use and can be created/destroyed on demand.
+
+```
+Internet → ALB (HTTP:80) → ECS Fargate Cluster
+                              ├─ API service  (8080) ──┐
+                              ├─ MCP service  (8081) ──┤── RDS PostgreSQL 18
+                              └─ Web service  (3000)   │   (db.t4g.micro)
+                                                       │
+                           Secrets Manager ─────────────┘
+```
+
+| Component | Spec |
+|-----------|------|
+| ECS Fargate | 3 services, 0.25 vCPU / 512 MB each |
+| RDS PostgreSQL | 18, db.t4g.micro, single-AZ |
+| ALB | Path-based routing (`/api/*`, `/mcp/*`, default → web) |
+| Networking | VPC with public subnets, security groups (ALB → ECS → RDS) |
+| Secrets | GHCR credentials, JWT, Google OAuth, NextAuth via Secrets Manager |
+
+Terraform files are in [`infra/`](infra/). See [ADR-016](docs/adr/ADR-016-aws-ecs-fargate-deployment.md) for the deployment rationale.
+
+<details>
+<summary>Deployment screenshots</summary>
+
+**ECS Cluster — 3 services running**
+![ECS Cluster](docs/screenshots/02-ecs-cluster.png)
+
+**API response — visa types with settlement procedures**
+![API Data](docs/screenshots/06-api-data.png)
+
+**Terraform output — all resources provisioned**
+![Terraform Output](docs/screenshots/07-terraform-output.png)
+
+All screenshots: [`docs/screenshots/`](docs/screenshots/)
+
+</details>
+
+---
+
 ## Architecture Decision Records
 
 | ADR | Decision |
