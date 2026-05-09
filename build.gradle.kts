@@ -47,6 +47,9 @@ subprojects {
             mavenBom("org.testcontainers:testcontainers-bom:2.0.5")
             mavenBom("org.springframework.ai:spring-ai-bom:2.0.0-M5")
         }
+        dependencies {
+            dependency("org.postgresql:postgresql:42.7.11")
+        }
     }
 
     dependencies {
