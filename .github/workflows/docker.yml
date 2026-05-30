@@ -1,4 +1,4 @@
-name: Docker Build & Push
+name: Docker Build
 
 on:
   workflow_dispatch:
@@ -50,39 +50,40 @@ jobs:
           GOOGLE_CLIENT_SECRET: build-only
           GRAFANA_ADMIN_PASSWORD: build-only
 
-  push:
-    needs: build
-    if: github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-    permissions:
-      packages: write
-      contents: read
-    strategy:
-      matrix:
-        include:
-          - service: api
-            dockerfile: docker/api.Dockerfile
-          - service: mcp
-            dockerfile: docker/mcp.Dockerfile
-          - service: web
-            dockerfile: docker/web.Dockerfile
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
-
-      - name: Log in to GHCR
-        uses: docker/login-action@v4
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Build and push image
-        uses: docker/build-push-action@v7
-        with:
-          context: ${{ matrix.context || '.' }}
-          file: ${{ matrix.dockerfile }}
-          push: true
-          tags: |
-            ghcr.io/${{ github.repository_owner }}/norintegrate-${{ matrix.service }}:latest
-            ghcr.io/${{ github.repository_owner }}/norintegrate-${{ matrix.service }}:${{ github.sha }}
+  # Push job disabled — AWS infra suspended (ADR-016). Re-enable when deploying.
+  # push:
+  #   needs: build
+  #   if: github.ref == 'refs/heads/main'
+  #   runs-on: ubuntu-latest
+  #   permissions:
+  #     packages: write
+  #     contents: read
+  #   strategy:
+  #     matrix:
+  #       include:
+  #         - service: api
+  #           dockerfile: docker/api.Dockerfile
+  #         - service: mcp
+  #           dockerfile: docker/mcp.Dockerfile
+  #         - service: web
+  #           dockerfile: docker/web.Dockerfile
+  #   steps:
+  #     - name: Checkout repository
+  #       uses: actions/checkout@v6
+  #
+  #     - name: Log in to GHCR
+  #       uses: docker/login-action@v4
+  #       with:
+  #         registry: ghcr.io
+  #         username: ${{ github.actor }}
+  #         password: ${{ secrets.GITHUB_TOKEN }}
+  #
+  #     - name: Build and push image
+  #       uses: docker/build-push-action@v7
+  #       with:
+  #         context: ${{ matrix.context || '.' }}
+  #         file: ${{ matrix.dockerfile }}
+  #         push: true
+  #         tags: |
+  #           ghcr.io/${{ github.repository_owner }}/norintegrate-${{ matrix.service }}:latest
+  #           ghcr.io/${{ github.repository_owner }}/norintegrate-${{ matrix.service }}:${{ github.sha }}
