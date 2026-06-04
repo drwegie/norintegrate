@@ -45,7 +45,7 @@ subprojects {
         imports {
             mavenBom("org.springframework.boot:spring-boot-dependencies:4.0.6")
             mavenBom("org.testcontainers:testcontainers-bom:2.0.5")
-            mavenBom("org.springframework.ai:spring-ai-bom:2.0.0-M6")
+            mavenBom("org.springframework.ai:spring-ai-bom:2.0.0-M8")
         }
         dependencies {
             dependency("org.postgresql:postgresql:42.7.11")
