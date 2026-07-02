@@ -1,7 +1,8 @@
 # ADR-016: AWS ECS Fargate Deployment
 
-**Status:** Accepted
+**Status:** Suspended
 **Date:** 2026-04-20
+**Suspended:** 2026-05-30
 
 ## Context
 
@@ -34,6 +35,10 @@ Key design choices:
 - **Path-based ALB routing**: `/api/*` routes to the API service, `/mcp/*` to the MCP service, and all other paths to the Web service. One ALB instead of three keeps costs down.
 - **Managed RDS password**: Using `manage_master_user_password = true` lets AWS create and rotate the database password in Secrets Manager automatically.
 - **Terraform workspaces** for dev/prod separation within a single state backend.
+
+## Suspension Note
+
+The AWS infrastructure was provisioned and validated but subsequently torn down due to ongoing cost (~$53/month for dev environment). The architectural decision remains sound — ECS Fargate is the right fit if the project needs production hosting. The Docker CI pipeline continues to build and push images to GHCR so the project is deployment-ready without maintaining active AWS resources.
 
 ## Consequences
 
