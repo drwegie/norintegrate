@@ -100,6 +100,13 @@ Each module has its own `CLAUDE.md` with package design, code style, and testing
 
 ---
 
+## Git Conventions
+
+- Commit subjects: imperative English (e.g. "Add X", "Fix Y"), ≤72 chars; body explains why when non-obvious.
+- Feature work via PR to `main`; agent branches use the `claude/*` prefix and are deleted after merge.
+
+---
+
 ## Architecture Decision Records
 
 All ADRs live in `docs/adr/`. Use Michael Nygard's template (Status, Context, Decision, Consequences). Write in English. Explain the migration journey — WHY the new choice was made over the familiar one, not just WHAT was chosen.

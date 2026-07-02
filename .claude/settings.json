@@ -2,20 +2,10 @@
   "permissions": {
     "allow": [
       "Bash(./gradlew *)",
-      "Bash(git status)",
-      "Bash(git diff*)",
-      "Bash(git log*)",
       "Bash(git add *)",
       "Bash(git commit *)",
       "Bash(mkdir -p *)",
-      "Bash(ls *)",
-      "Bash(find * -type f*)",
-      "Bash(find * -not *)",
-      "Bash(cat *)",
-      "Bash(head *)",
-      "Bash(tail *)",
-      "Bash(java -version)",
-      "Bash(rm *)"
+      "Bash(java -version)"
     ],
     "deny": [
       "Bash(git push*)",
@@ -38,7 +28,18 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash .claude/hooks/guard.sh"
+            "command": "bash \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/guard.sh"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/format.sh"
           }
         ]
       }

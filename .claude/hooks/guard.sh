@@ -10,12 +10,12 @@ if [ -z "$FILE" ]; then
 fi
 
 # Protected files — require explicit user intent to modify
+# (.env and .claude/settings.json are covered by the global hook: ~/.claude/hooks/protect-sensitive.sh)
 PROTECTED=(
   "docs/schema.sql"
   "docs/seed.sql"
   "CLAUDE.md"
-  ".claude/settings.json"
-  ".claude/hooks/guard.sh"
+  ".claude/hooks/"
 )
 
 for PROTECTED_FILE in "${PROTECTED[@]}"; do
@@ -24,11 +24,5 @@ for PROTECTED_FILE in "${PROTECTED[@]}"; do
     exit 2
   fi
 done
-
-# Block .env files (but allow .env.example)                                                                                                              
-if [[ "$FILE" == *".env"* && "$FILE" != *".env.example" ]]; then                                                                                         
-  echo "Blocked: environment files (.env) must not be modified by agents." >&2
-  exit 2                                                                                                                                                 
-fi 
 
 exit 0
