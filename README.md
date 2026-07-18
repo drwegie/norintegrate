@@ -89,7 +89,7 @@ docker compose --profile monitoring up   # Prometheus :9090, Grafana :3001
 
 ## Infrastructure
 
-Deployed on AWS using Terraform (IaC). The infrastructure is designed for cost-efficient development use and can be created/destroyed on demand.
+Provisioned on AWS (ECS Fargate + RDS) using Terraform (IaC) and validated end-to-end — see the deployment screenshots below. The stack has been torn down to avoid ongoing cost (~$53/month); it can be recreated on demand with `terraform apply` plus the setup steps in [`infra/README.md`](infra/README.md) (see [ADR-016](docs/adr/ADR-016-aws-ecs-fargate-deployment.md) for the suspension rationale).
 
 ```
 Internet → ALB (HTTP:80) → ECS Fargate Cluster
