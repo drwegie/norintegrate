@@ -20,7 +20,8 @@ com.norintegrate.mcp
 ## MCP Server Configuration
 
 - Transport: SSE (Server-Sent Events) via WebMVC
-- SSE endpoint: `/mcp/messages`
+- SSE connection endpoint: `/sse` (Spring AI default, not overridden)
+- SSE message (POST) endpoint: `/mcp/messages` (set via `sse-message-endpoint`)
 - All requests permitted (no OAuth on MCP server)
 - Spring AI MCP server integration (`spring-ai-starter-mcp-server-webmvc`)
 

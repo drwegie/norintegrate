@@ -11,6 +11,16 @@ This project demonstrates a migration from Java 8 + Spring 3 to **Java 25 + Spri
 
 ---
 
+## Demo
+
+**Web UI — browsing the settlement checklist, expanding steps, and switching between English and Norwegian**
+![Web demo](docs/screenshots/demo-web.gif)
+
+**MCP tools — MCP Inspector connecting over SSE and calling `getIntegrationGuide`, the same tool an AI agent would call**
+![MCP demo](docs/screenshots/demo-mcp.gif)
+
+---
+
 ## Architecture
 
 ```
@@ -37,7 +47,7 @@ The API and MCP modules depend on `norintegrate-common` and never on each other.
 | `searchMunicipality` | Municipality search via SSB Klass API (Statistics Norway) |
 
 ```json
-{ "mcpServers": { "norintegrate": { "url": "http://localhost:8081/mcp/messages" } } }
+{ "mcpServers": { "norintegrate": { "url": "http://localhost:8081/sse" } } }
 ```
 
 ---
