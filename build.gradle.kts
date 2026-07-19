@@ -38,7 +38,6 @@ subprojects {
 
     repositories {
         mavenCentral()
-        maven { url = uri("https://repo.spring.io/milestone") } // TODO: Remove once Spring AI 2.0 GA is released
     }
 
     configure<io.spring.gradle.dependencymanagement.dsl.DependencyManagementExtension> {
