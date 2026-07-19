@@ -36,3 +36,7 @@ Playwright was chosen over Cypress because it supports multiple browser engines,
 ### Neutral
 - The `npm test` command continues to run only unit tests; integration and E2E tests are opt-in via `npm run test:integration` and `npm run test:e2e`
 - Playwright artifacts (`test-results/`, `playwright-report/`) are gitignored
+
+## Update (2026-07-19)
+
+All three layers now run in CI. The `web.yml` `build` job continues to run unit tests; a new `e2e` job spins up a `postgres` service, builds and starts the real `norintegrate-api` jar, then runs `npm run test:integration` and `npm run test:e2e` against it — closing the gap described above. `playwright.config.ts`'s `webServer` command switches to `npm run start` under `CI` so E2E tests exercise the production build rather than the dev server.
