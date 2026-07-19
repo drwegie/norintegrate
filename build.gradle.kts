@@ -1,5 +1,5 @@
 plugins {
-    id("org.springframework.boot") version "4.0.6" apply false
+    id("org.springframework.boot") version "4.1.0" apply false
     id("io.spring.dependency-management") version "1.1.7" apply false
     id("com.diffplug.spotless") version "8.5.1" apply false
 }
@@ -43,9 +43,9 @@ subprojects {
 
     configure<io.spring.gradle.dependencymanagement.dsl.DependencyManagementExtension> {
         imports {
-            mavenBom("org.springframework.boot:spring-boot-dependencies:4.0.6")
+            mavenBom("org.springframework.boot:spring-boot-dependencies:4.1.0")
             mavenBom("org.testcontainers:testcontainers-bom:2.0.5")
-            mavenBom("org.springframework.ai:spring-ai-bom:2.0.0-M6")
+            mavenBom("org.springframework.ai:spring-ai-bom:2.0.0")
         }
         dependencies {
             dependency("org.postgresql:postgresql:42.7.11")
