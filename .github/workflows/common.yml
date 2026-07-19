@@ -52,6 +52,20 @@ jobs:
       - name: Upload coverage report
         uses: actions/upload-artifact@v7
         with:
-          name: jacoco-coverage-report
+          name: jacoco-coverage-report-common
           path: norintegrate-common/build/reports/jacoco/test/html/
           retention-days: 14
+
+      - name: Add coverage summary
+        if: always()
+        run: |
+          REPORT=norintegrate-common/build/reports/jacoco/test/jacocoTestReport.xml
+          if [ -f "$REPORT" ]; then
+            MISSED=$(grep -o '<counter type="INSTRUCTION" missed="[0-9]*" covered="[0-9]*"/>' "$REPORT" | tail -1 | grep -o 'missed="[0-9]*"' | grep -o '[0-9]*')
+            COVERED=$(grep -o '<counter type="INSTRUCTION" missed="[0-9]*" covered="[0-9]*"/>' "$REPORT" | tail -1 | grep -o 'covered="[0-9]*"' | grep -o '[0-9]*')
+            TOTAL=$((MISSED + COVERED))
+            PCT=$(awk "BEGIN { printf \"%.2f\", ($COVERED / $TOTAL) * 100 }")
+            echo "## JaCoCo Coverage — norintegrate-common" >> "$GITHUB_STEP_SUMMARY"
+            echo "" >> "$GITHUB_STEP_SUMMARY"
+            echo "Instruction coverage: **${PCT}%** (${COVERED}/${TOTAL} instructions covered)" >> "$GITHUB_STEP_SUMMARY"
+          fi
