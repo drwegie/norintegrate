@@ -49,9 +49,9 @@ subprojects {
         }
         dependencies {
             dependency("org.postgresql:postgresql:42.7.11")
-            dependency("org.apache.tomcat.embed:tomcat-embed-core:11.0.22")
-            dependency("org.apache.tomcat.embed:tomcat-embed-el:11.0.22")
-            dependency("org.apache.tomcat.embed:tomcat-embed-websocket:11.0.22")
+            dependency("org.apache.tomcat.embed:tomcat-embed-core:11.0.23")
+            dependency("org.apache.tomcat.embed:tomcat-embed-el:11.0.23")
+            dependency("org.apache.tomcat.embed:tomcat-embed-websocket:11.0.23")
         }
     }
 
