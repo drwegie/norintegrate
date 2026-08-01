@@ -47,11 +47,12 @@ subprojects {
             mavenBom("org.springframework.ai:spring-ai-bom:2.0.0")
         }
         dependencies {
-            dependency("org.postgresql:postgresql:42.7.11")
+            dependency("org.postgresql:postgresql:42.7.13")
             dependency("org.apache.tomcat.embed:tomcat-embed-core:11.0.23")
             dependency("org.apache.tomcat.embed:tomcat-embed-el:11.0.23")
             dependency("org.apache.tomcat.embed:tomcat-embed-websocket:11.0.23")
             dependency("com.fasterxml.jackson.core:jackson-databind:2.21.5")
+            dependency("tools.jackson.core:jackson-databind:3.1.5")
         }
     }
 
