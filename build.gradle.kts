@@ -51,6 +51,7 @@ subprojects {
             dependency("org.apache.tomcat.embed:tomcat-embed-core:11.0.23")
             dependency("org.apache.tomcat.embed:tomcat-embed-el:11.0.23")
             dependency("org.apache.tomcat.embed:tomcat-embed-websocket:11.0.23")
+            dependency("com.fasterxml.jackson.core:jackson-databind:2.21.5")
         }
     }
 
