@@ -18,6 +18,13 @@ updates:
     directory: /norintegrate-web
     schedule:
       interval: weekly
+    # Majors are deliberate migrations (HQ A-016). Per GitHub docs,
+    # update-types ignores never suppress security updates.
+    ignore:
+      - dependency-name: "next"
+        update-types: ["version-update:semver-major"]
+      - dependency-name: "typescript"
+        update-types: ["version-update:semver-major"]
 
   - package-ecosystem: github-actions
     directory: /
