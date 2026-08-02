@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# Opt-in pre-commit hook: runs the same docs-drift check that CI runs.
+#
+# Enable with:
+#   git config core.hooksPath .githooks
+#
+# This is a convenience for faster local feedback only. It is bypassable
+# with `git commit --no-verify`, and CI (.github/workflows/docs.yml) is the
+# actual gate — a bypassed or skipped hook will still be caught there.
+
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+bash "$REPO_ROOT/scripts/check-docs.sh"

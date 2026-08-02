@@ -87,6 +87,8 @@ cd norintegrate-web && npm test   # Frontend unit tests (Vitest)
 
 Code style: `./gradlew spotlessCheck` / `./gradlew spotlessApply` (Google Java Format for Java, ktlint for Kotlin).
 
+Docs drift check: `bash scripts/check-docs.sh` (verifies ADR indexes, relative links, and version claims). Enable it as a local pre-commit hook with `git config core.hooksPath .githooks` — this is opt-in and bypassable with `--no-verify`; CI (`.github/workflows/docs.yml`) is the actual gate, the hook only makes feedback faster.
+
 ---
 
 ## Monitoring

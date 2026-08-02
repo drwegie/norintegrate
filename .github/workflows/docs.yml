@@ -1,0 +1,24 @@
+name: Docs Drift Check
+
+# Deliberately no `paths:` filter: the whole point of this workflow is to
+# catch code-side changes that leave the docs stale (wrong version claims,
+# missing ADR index entries, broken links). Watching only docs/** would
+# make it useless for that purpose.
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  check-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Check docs for drift
+        run: bash scripts/check-docs.sh

@@ -106,6 +106,7 @@ Each module has its own `CLAUDE.md` with package design, code style, and testing
 
 - Commit subjects: imperative English (e.g. "Add X", "Fix Y"), ≤72 chars; body explains why when non-obvious.
 - Feature work via PR to `main`; agent branches use the `claude/*` prefix and are deleted after merge.
+- Docs drift is checked by `scripts/check-docs.sh` (ADR indexes, relative links, version claims); enable it locally as a pre-commit hook with `git config core.hooksPath .githooks`. This is opt-in and bypassable with `--no-verify` — `.github/workflows/docs.yml` is the actual gate, the hook only speeds up local feedback.
 
 ---
 
