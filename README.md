@@ -85,7 +85,7 @@ Or run the full stack with `docker compose up`. Swagger UI is at `http://localho
 cd norintegrate-web && npm test   # Frontend unit tests (Vitest)
 ```
 
-Code style: `./gradlew spotlessCheck` / `./gradlew spotlessApply` (Google Java Format).
+Code style: `./gradlew spotlessCheck` / `./gradlew spotlessApply` (Google Java Format for Java, ktlint for Kotlin).
 
 ---
 
@@ -160,6 +160,7 @@ All screenshots: [`docs/screenshots/`](docs/screenshots/)
 | [ADR-016](docs/adr/ADR-016-aws-ecs-fargate-deployment.md) | AWS ECS Fargate deployment |
 | [ADR-017](docs/adr/ADR-017-mcp-server-authentication-posture.md) | MCP server authentication posture |
 | [ADR-018](docs/adr/ADR-018-structured-json-logging.md) | Structured JSON logging |
+| [ADR-019](docs/adr/ADR-019-kotlin-introduction-for-mcp.md) | Kotlin for norintegrate-mcp (proposed) |
 
 ---
 
