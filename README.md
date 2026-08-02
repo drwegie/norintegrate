@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 ![Java 25](https://img.shields.io/badge/Java-25_LTS-orange)
-![Spring Boot 4](https://img.shields.io/badge/Spring_Boot-4.0-green)
+![Spring Boot 4.1](https://img.shields.io/badge/Spring_Boot-4.1-green)
 ![Next.js 15](https://img.shields.io/badge/Next.js-15-black)
 
 A platform that helps immigrants navigate the settlement process in Norway. Provides a REST API for human users, an MCP server for AI agents, and a Next.js frontend with i18n support (English/Norwegian). All backend modules share domain logic through a common library.
