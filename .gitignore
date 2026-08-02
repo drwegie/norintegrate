@@ -32,3 +32,4 @@ infra/bootstrap/.terraform/
 # Claude Code
 tasks/
 .claude/worktrees/
+.claude/settings.local.json
