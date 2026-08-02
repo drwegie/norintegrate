@@ -18,7 +18,7 @@ Backend modules share domain logic through a common library.
 |-----------|---------|-------|
 | Java | 25 (LTS) | Use records, pattern matching, text blocks, var — common / api |
 | Kotlin | 2.3.21 | norintegrate-mcp only (ADR-019). Pinned to Spring Boot 4.1's managed kotlin.version |
-| Spring Boot | 4.0.x | Spring Framework 7 base |
+| Spring Boot | 4.1.0 | Spring Framework 7 base. Declared in root `build.gradle.kts` |
 | Spring AI | Latest stable | MCP server integration |
 | Spring Security | OAuth 2.0 | Google provider |
 | PostgreSQL | 18+ | Only database |
