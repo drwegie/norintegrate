@@ -25,7 +25,7 @@ Backend modules share domain logic through a common library.
 | Gradle | Kotlin DSL | Multi-project build; JVM modules are Java, except norintegrate-mcp (Kotlin) |
 | Next.js | 15 | App Router, TypeScript, Tailwind CSS 4 |
 | Docker | Multi-stage | One Dockerfile per deployable module |
-| GitHub Actions | Path-filtered | Separate workflows per module |
+| GitHub Actions | Path-filtered per module | Except `security-scan.yml` and `docs.yml`, which run on every push |
 
 ---
 

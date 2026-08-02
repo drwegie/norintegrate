@@ -6,6 +6,11 @@
 #      both README.md and CLAUDE.md's ADR tables, and vice versa.
 #   2. Broken relative links   — every relative markdown link target in a
 #      tracked *.md file resolves to a real path on disk.
+#      Constraint this imposes on link syntax (deliberate: a CommonMark
+#      destination parser in bash is not worth it here): a relative link
+#      target must not contain ")", a space, a "title" string, or the
+#      angle-bracket <...> form. Those parse as broken and fail loudly —
+#      the failure mode is a red CI run, never a silently shipped drift.
 #   3. Version claim consistency — the CLAUDE.md technology stack table
 #      matches the versions actually declared in the build files.
 #
@@ -140,6 +145,11 @@ extract_col2() {
 version_prefix_match() {
   local claim="$1" actual="$2"
   local claim_parts actual_parts i
+  # An empty claim splits into zero components, so the loop below would never
+  # run and the function would report a match — a blank version cell, or a
+  # badge message that truncates to "", would pass silently. No legitimate
+  # call site passes an empty claim: treat "nothing to check" as a FAIL.
+  [ -z "$claim" ] && return 1
   IFS='.' read -ra claim_parts <<< "$claim"
   IFS='.' read -ra actual_parts <<< "$actual"
   i=0
@@ -169,8 +179,12 @@ extract_badge_value() {
   line="$(grep -E "badge/${label}-" "$file" | head -1)"
   [ -z "$line" ] && return 1
   message="$(echo "$line" | sed -E "s/.*badge\\/${label}-([^-]+)-[a-zA-Z]+\\).*/\\1/")"
+  # Guard the value actually returned, not the pre-truncation one: a message
+  # beginning with "_" truncates to "" and would otherwise be returned with
+  # status 0 — a silent pass at the call site.
+  message="${message%%_*}"
   [ -z "$message" ] && return 1
-  printf '%s' "${message%%_*}"
+  printf '%s' "$message"
   return 0
 }
 
