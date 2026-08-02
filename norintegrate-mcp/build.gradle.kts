@@ -1,5 +1,18 @@
 plugins {
     id("org.springframework.boot")
+    kotlin("jvm")
+    kotlin("plugin.spring")
+}
+
+kotlin {
+    compilerOptions {
+        jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_25
+        freeCompilerArgs.add("-Xjsr305=strict")
+    }
+}
+
+spotless {
+    kotlin { ktlint("1.8.0") }
 }
 
 dependencies {
@@ -9,6 +22,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-security")
     implementation("org.springframework.ai:spring-ai-starter-mcp-server-webmvc")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
+    implementation("org.jetbrains.kotlin:kotlin-reflect")
     runtimeOnly("io.micrometer:micrometer-registry-prometheus")
     runtimeOnly("net.logstash.logback:logstash-logback-encoder:9.0")
 
