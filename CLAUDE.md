@@ -16,12 +16,13 @@ Backend modules share domain logic through a common library.
 
 | Component | Version | Notes |
 |-----------|---------|-------|
-| Java | 25 (LTS) | Use records, pattern matching, text blocks, var |
+| Java | 25 (LTS) | Use records, pattern matching, text blocks, var — common / api |
+| Kotlin | 2.3.21 | norintegrate-mcp only (ADR-019). Pinned to Spring Boot 4.1's managed kotlin.version |
 | Spring Boot | 4.0.x | Spring Framework 7 base |
 | Spring AI | Latest stable | MCP server integration |
 | Spring Security | OAuth 2.0 | Google provider |
 | PostgreSQL | 18+ | Only database |
-| Gradle | Kotlin DSL | Multi-project build (Java modules only) |
+| Gradle | Kotlin DSL | Multi-project build; JVM modules are Java, except norintegrate-mcp (Kotlin) |
 | Next.js | 15 | App Router, TypeScript, Tailwind CSS 4 |
 | Docker | Multi-stage | One Dockerfile per deployable module |
 | GitHub Actions | Path-filtered | Separate workflows per module |
@@ -97,6 +98,7 @@ Each module has its own `CLAUDE.md` with package design, code style, and testing
 - Do NOT create a norintegrate-batch module
 - Do NOT use WidthType.PERCENTAGE in any docx generation
 - Do NOT integrate ID-porten/BankID (ADR-014) — requires organizational registration with Digdir
+- Do NOT introduce Kotlin into norintegrate-common or norintegrate-api (ADR-019 scopes Kotlin to norintegrate-mcp)
 
 ---
 
@@ -129,6 +131,7 @@ All ADRs live in `docs/adr/`. Use Michael Nygard's template (Status, Context, De
 | ADR-014 | Decision Not to Integrate ID-porten/BankID | Done |
 | ADR-015 | Three-Layer Frontend Testing Strategy with Playwright | Done |
 | ADR-016 | AWS ECS Fargate Deployment | Suspended |
+| ADR-019 | Kotlin Introduction for norintegrate-mcp | Proposed |
 
 When a new architectural decision is made, add a row here and create the file in `docs/adr/` before marking the task complete.
 
