@@ -6,13 +6,15 @@ MCP (Model Context Protocol) server for AI agents. Deployed independently on por
 
 ## Package Design (Domain-Based)
 
-Package-by-feature, NOT package-by-layer.
+Package-by-feature, NOT package-by-layer. All main sources are Kotlin (ADR-019).
 
 ```
-com.norintegrate.mcp
+src/main/kotlin/com/norintegrate/mcp
 ├── tool/            ← IntegrationGuideTool, ProcedureDetailTool, MunicipalitySearchTool
+│                       + their record result/DTO types (ProcedureStep, DocumentItem, ...)
+├── resource/        ← ProcedureResource, VisaTypeResource
 ├── config/          ← McpServerConfig, McpSecurityConfig
-└── NorintegrateMcpApplication.java
+└── NorIntegrateMcpApplication.kt
 ```
 
 ---
@@ -32,3 +34,7 @@ com.norintegrate.mcp
 - E2E MCP protocol tests using `spring-ai-starter-mcp-client-webflux`
 - Testcontainers with shared PostgreSQL container
 - Test packages mirror main source packages
+- Unit tests (`src/test/kotlin`) are Kotlin, alongside their Kotlin subjects
+- Integration tests (`*IT.java`, `src/test/java`) stay in Java by design — a standing regression
+  check that Java call sites still interoperate correctly with the Kotlin-compiled tools and
+  record types (ADR-019)

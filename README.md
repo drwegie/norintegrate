@@ -2,6 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 ![Java 25](https://img.shields.io/badge/Java-25_LTS-orange)
+![Kotlin 2.3](https://img.shields.io/badge/norintegrate--mcp-Kotlin_2.3-7F52FF)
 ![Spring Boot 4.1](https://img.shields.io/badge/Spring_Boot-4.1-green)
 ![Next.js 15](https://img.shields.io/badge/Next.js-15-black)
 
@@ -27,7 +28,7 @@ This project demonstrates a migration from Java 8 + Spring 3 to **Java 25 + Spri
 norintegrate/
 ├── norintegrate-common/   ← Shared domain: entities, services, repositories (library)
 ├── norintegrate-api/      ← REST API (port 8080) — OAuth 2.0 + Swagger UI
-├── norintegrate-mcp/      ← MCP server for AI agents (port 8081)
+├── norintegrate-mcp/      ← MCP server for AI agents (port 8081) — Kotlin
 ├── norintegrate-web/      ← Next.js 15 frontend (port 3000) — Auth.js + next-intl
 └── docs/                  ← ADRs, OpenAPI spec, schema, seed data
 ```
@@ -162,7 +163,7 @@ All screenshots: [`docs/screenshots/`](docs/screenshots/)
 | [ADR-016](docs/adr/ADR-016-aws-ecs-fargate-deployment.md) | AWS ECS Fargate deployment |
 | [ADR-017](docs/adr/ADR-017-mcp-server-authentication-posture.md) | MCP server authentication posture |
 | [ADR-018](docs/adr/ADR-018-structured-json-logging.md) | Structured JSON logging |
-| [ADR-019](docs/adr/ADR-019-kotlin-introduction-for-mcp.md) | Kotlin for norintegrate-mcp (proposed) |
+| [ADR-019](docs/adr/ADR-019-kotlin-introduction-for-mcp.md) | Kotlin for norintegrate-mcp |
 
 ---
 

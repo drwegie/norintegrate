@@ -2,7 +2,7 @@
 
 ## Status
 
-Proposed
+Accepted
 
 ## Context
 
@@ -21,7 +21,7 @@ All of the above was confirmed against a real build of the target module, not as
 
 ## Decision
 
-Adopt Kotlin, scoped to `norintegrate-mcp` only. This ADR (NOR-14) wires the Gradle build for Kotlin/Java interop and migrates one pilot file (`MunicipalitySearchTool`). A follow-up item (NOR-15) will convert the remainder of `norintegrate-mcp` to Kotlin and will be the point at which this ADR's status moves from Proposed to Accepted.
+Adopt Kotlin, scoped to `norintegrate-mcp` only. NOR-14 wired the Gradle build for Kotlin/Java interop and migrated one pilot file (`MunicipalitySearchTool`) to validate the approach. NOR-15 completed the migration: all 11 remaining `norintegrate-mcp` main sources (application entry point, both `@Configuration` classes, both MCP resources, both tools, and their record-style result/DTO types) are now Kotlin, and this ADR's status moves from Proposed to Accepted.
 
 `norintegrate-mcp` was chosen as the pilot module for three concrete reasons:
 
@@ -35,6 +35,8 @@ Build wiring:
 - `norintegrate-mcp/build.gradle.kts` applies both Kotlin plugins, sets `jvmTarget = JVM_25` explicitly (required — Kotlin does not infer this from the Java toolchain, and a mismatch fails the build), adds `kotlin-reflect` (version-managed by the Spring Boot BOM), and adds a module-local `spotless { kotlin { ktlint("1.8.0") } }` block alongside the existing `java { googleJavaFormat() }` configuration inherited from the root.
 - `MunicipalityResult` is a Kotlin `data class` annotated `@JvmRecord`, so it compiles to an actual JVM record and keeps record-style accessors (`code()`, `name()`) for the Java call sites that still reference it (`MunicipalitySearchToolIT.java`), while also getting Kotlin's `data class` `equals`/`hashCode`/`copy`/destructuring for Kotlin call sites.
 - `MunicipalitySearchTool.searchMunicipality`'s `query` parameter is typed nullable (`String?`), not non-null (`String`). A non-null Kotlin parameter causes the compiler to insert an `Intrinsics.checkNotNullParameter` null check that throws `NullPointerException` before the method body runs — which would change the tool's contract (it currently throws `IllegalArgumentException("query must not be blank")` for a `null` query, both as a matter of Java API design and as part of the MCP protocol's behavior when a client omits an argument). The nullable parameter plus an explicit `require(!query.isNullOrBlank())` preserves the exact original exception type and message.
+- NOR-15 applied the same two patterns to the remaining files: `IntegrationGuideTool.getIntegrationGuide`'s `visaTypeId` and `completedIds` parameters are both `String?` guarded by `require(!x.isNullOrBlank())`, and every result/DTO type (`ProcedureStep`, `DocumentItem`, `ProcedureDetailResult`, `IntegrationGuideResult`, and the nested `ProcedureResource`/`VisaTypeResource` summary records) is a `@JvmRecord data class`, so Java record-style accessors (`procedureId()`, `isNext()`, `mandatory()`, etc.) are preserved byte-for-byte for the `*IT.java` tests that still call them. Domain fields backed by nullable database columns (`Procedure.description`, `Procedure.authority`, `Procedure.estimatedDays`, `DocumentRequirement.description`) are typed nullable (`String?`, `Int?`) in the Kotlin records too, for the same `Intrinsics.checkNotNullParameter` reason — a non-null Kotlin field would throw `NullPointerException` on construction for the already-tested case of a procedure with no description, instead of the original Java record's silent `null` accessor return.
+- `norintegrate-mcp`'s `NorIntegrateMcpApplication` is now a Kotlin `@SpringBootApplication` class with a top-level `fun main` calling `runApplication<NorIntegrateMcpApplication>(*args)`, the idiomatic Kotlin/Spring Boot entry point.
 
 ## Alternatives Considered by AI (and Why Rejected)
 
@@ -47,19 +49,21 @@ As part of this decision, the AI proposed several alternative approaches. Each w
 - **E. Apply the Kotlin plugin uniformly to all `subprojects`.** Rejected: this would add the Kotlin stdlib and a `compileKotlin` task to two modules (`norintegrate-common`, `norintegrate-api`) that have no Kotlin source, and it would make the module boundary this ADR establishes unreadable from the build files themselves — any reader would have to know the ADR by heart instead of seeing the scope in `build.gradle.kts`.
 - **F. Convert all three JVM modules to Kotlin in one pass.** Rejected: PORT-2 explicitly deprioritizes this. The regression risk spans multiple iterations' worth of surface area at once, with no incremental verification point.
 - **G. Keep the JVM toolchain at 25 but lower Kotlin's bytecode target below 25 as a workaround.** Rejected: unnecessary. Kotlin 2.3.x officially generates JVM 25 bytecode (confirmed in the PoC — class file major version 69), so there is no compatibility gap to work around in the first place.
+- **H. (NOR-15) Type every migrated record field as non-null, matching the Java records' declared (if not enforced) types literally.** Rejected: several fields are backed by nullable database columns and already have test coverage exercising the `null` case (e.g. `ProcedureDetailToolIT`'s "procedure having no description" test). A literal non-null translation would pass compilation but insert an `Intrinsics.checkNotNullParameter` check that throws `NullPointerException` at construction time the first time that column is actually `null` — a silent behavior change the type-level translation would hide until runtime. Fields were instead typed nullable wherever the backing column has no `nullable = false` constraint.
 
 ## Consequences
 
 ### Positive
 
-- `norintegrate-mcp` gains a modern, null-safe, more concise language for future tool implementations, validated end-to-end against this project's actual build (not just Kotlin's general documentation).
+- `norintegrate-mcp` gains a modern, null-safe, more concise language for its tool implementations, validated end-to-end against this project's actual build (not just Kotlin's general documentation).
 - The Kotlin/Gradle plugin version is pinned to exactly what Spring Boot 4.1's BOM manages, eliminating a whole class of stdlib/compiler version-skew bugs.
-- `norintegrate-common` and `norintegrate-api` remain untouched — zero risk to the coverage-gated module or the REST API during this pilot.
-- `MunicipalitySearchToolIT.java` remains in Java, providing a standing regression check that Java call sites continue to interoperate correctly with the Kotlin-compiled `MunicipalityResult`/`MunicipalitySearchTool`.
-- The `@JvmRecord` + nullable-parameter pattern established here is now documented and repeatable for the remaining `norintegrate-mcp` files in NOR-15.
+- `norintegrate-common` and `norintegrate-api` remain untouched — zero risk to the coverage-gated module or the REST API from this migration.
+- All four `*IT.java` integration tests remain in Java, providing a standing regression check that Java call sites continue to interoperate correctly with the Kotlin-compiled tools, resources, and record types (`ProcedureStep`, `DocumentItem`, `MunicipalityResult`, etc.).
+- `norintegrate-mcp/src/main` is now 100% Kotlin (11 files migrated in NOR-15, on top of the 1 migrated in NOR-14); the module no longer mixes source languages in production code.
+- The `@JvmRecord` + nullable-parameter pattern piloted in NOR-14 proved repeatable across all remaining files without exception, validating it as the project's standard approach for any future Kotlin file exposed to Java call sites or Spring AI's `@Tool`/`@McpResource` reflection-based invocation.
 
 ### Negative
 
-- `norintegrate-mcp` now has two source languages (Java and Kotlin) simultaneously until NOR-15 completes, which is a temporary but real cognitive cost for anyone reading the module.
-- Two toolchains (`javac` and `kotlinc`) now run in `norintegrate-mcp`'s build, adding a small amount of build time and a second linter (`ktlint`) alongside `google-java-format`.
-- The `@JvmRecord` requirement and the nullable-parameter-plus-`require()` pattern are non-obvious Kotlin/Java interop pitfalls that must be documented and remembered for every future Kotlin file that is exposed to Java call sites or Spring AI's `@Tool` reflection-based invocation.
+- `norintegrate-mcp`'s test sources still mix Java (`*IT.java`) and Kotlin (`*Test.kt`) by design — this is intentional (see Alternatives, and the positive consequence above), not a residual migration gap, but it does mean a reader must know which suffix implies which language.
+- Two toolchains (`javac` and `kotlinc`) still run in `norintegrate-mcp`'s build for the Java integration tests, adding a small amount of build time and a second linter (`ktlint`) alongside `google-java-format`.
+- The `@JvmRecord` requirement and the nullable-parameter-plus-`require()` pattern remain non-obvious Kotlin/Java interop pitfalls that must be documented and remembered for every future Kotlin file in this module.

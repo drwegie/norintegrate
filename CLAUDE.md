@@ -22,7 +22,7 @@ Backend modules share domain logic through a common library.
 | Spring AI | Latest stable | MCP server integration |
 | Spring Security | OAuth 2.0 | Google provider |
 | PostgreSQL | 18+ | Only database |
-| Gradle | Kotlin DSL | Multi-project build; JVM modules are Java, except norintegrate-mcp (Kotlin) |
+| Gradle | Kotlin DSL | Multi-project build; norintegrate-common/api are Java, norintegrate-mcp is Kotlin |
 | Next.js | 15 | App Router, TypeScript, Tailwind CSS 4 |
 | Docker | Multi-stage | One Dockerfile per deployable module |
 | GitHub Actions | Path-filtered per module | Except `security-scan.yml` and `docs.yml`, which run on every push |
@@ -134,7 +134,7 @@ All ADRs live in `docs/adr/`. Use Michael Nygard's template (Status, Context, De
 | ADR-016 | AWS ECS Fargate Deployment | Suspended |
 | ADR-017 | MCP Server Authentication Posture | Accepted |
 | ADR-018 | Structured JSON Logging | Accepted |
-| ADR-019 | Kotlin Introduction for norintegrate-mcp | Proposed |
+| ADR-019 | Kotlin Introduction for norintegrate-mcp | Accepted |
 
 When a new architectural decision is made, add a row here and create the file in `docs/adr/` before marking the task complete.
 
