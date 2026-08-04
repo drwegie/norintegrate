@@ -313,7 +313,12 @@ extract_notice() {
   jar="$(find "$GRADLE_CACHE/$group/$artifact/$version" -type f -name "${artifact}-${version}.jar" 2>/dev/null | head -1)"
   [ -z "$jar" ] && return 1
   local entry
-  entry="$(unzip -l "$jar" 2>/dev/null | tr -s ' ' | cut -d' ' -f5 | grep -E '^META-INF/NOTICE(\.txt|\.md)?$' | head -1)"
+  # Case-insensitive on purpose: the JAR spec does not fix the casing, and
+  # Spring Framework ships META-INF/notice.txt in lower case. Matching only
+  # the upper-case form silently dropped all 12 spring-* artifacts — every
+  # one of them Apache-2.0, i.e. exactly the artifacts whose NOTICE text
+  # section 4(d) requires us to carry.
+  entry="$(unzip -l "$jar" 2>/dev/null | tr -s ' ' | cut -d' ' -f5 | grep -iE '^META-INF/NOTICE(\.txt|\.md)?$' | head -1)"
   [ -z "$entry" ] && return 1
   local safe_name notice_file
   safe_name="$(printf '%s' "$gav" | tr ':/' '__')"

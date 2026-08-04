@@ -112,7 +112,19 @@ AMBIGUOUS = {
 }
 
 # Licenses whose full text must travel with the distribution.
-FULL_TEXT = ["Apache-2.0", "MIT", "BSD-3-Clause", "BSD-2-Clause", "EDL-1.0"]
+#
+# EPL-2.0 is here because section 3.2(b) requires a copy of the Agreement to
+# accompany each copy of the Program distributed in object-code form, and the
+# logback JARs — the EPL artifacts with the strongest claim on us — bundle no
+# license text of their own. A URL would not discharge that.
+FULL_TEXT = [
+    "Apache-2.0",
+    "MIT",
+    "BSD-3-Clause",
+    "BSD-2-Clause",
+    "EDL-1.0",
+    "EPL-2.0",
+]
 
 LICENSE_URLS = {
     "Apache-2.0": "https://www.apache.org/licenses/LICENSE-2.0",
@@ -375,6 +387,15 @@ def main():
         path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "license-texts", f"{spdx}.txt")
         w(f"### {spdx}")
         w("")
+        if spdx == "EPL-2.0":
+            w(
+                "The EPL-2.0 artifacts above are consumed as unmodified "
+                "binaries from Maven Central; norintegrate modifies none of "
+                "them. Their source is available from the upstream projects. "
+                "The full text is reproduced here because the logback JARs "
+                "bundle no license text themselves."
+            )
+            w("")
         if os.path.exists(path):
             with open(path, encoding="utf-8") as fh:
                 w("```text")
@@ -390,13 +411,6 @@ def main():
         w(f"### {spdx}")
         w("")
         w(f"Full text: {LICENSE_URLS.get(spdx, '(see upstream)')}")
-        if spdx == "EPL-2.0":
-            w("")
-            w(
-                "The EPL-2.0 artifacts above are consumed as unmodified binaries "
-                "from Maven Central. Their source is available from the upstream "
-                "projects; norintegrate makes no modifications to them."
-            )
         w("")
 
     with open(TARGET, "w", encoding="utf-8") as fh:

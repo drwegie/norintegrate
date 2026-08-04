@@ -22,3 +22,38 @@ jobs:
 
       - name: Check docs for drift
         run: bash scripts/check-docs.sh
+
+  # Separate job because this one needs a JDK to ask Gradle what actually
+  # resolves onto runtimeClasspath. check-docs.sh is deliberately dependency
+  # free and runs without one, so folding this check into it would have meant
+  # dragging a JDK into that job for something it otherwise does not need.
+  check-third-party-notices:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Set up Java 25
+        uses: actions/setup-java@v5.6.0
+        with:
+          distribution: temurin
+          java-version: 25
+
+      - name: Cache Gradle packages
+        uses: actions/cache@v6
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle.kts', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Make Gradle wrapper executable
+        run: chmod +x gradlew
+
+      # Fails when a dependency bump leaves THIRD-PARTY-NOTICES.md describing
+      # a dependency graph that no longer ships. Attribution obligations are
+      # easy to satisfy once and then lose silently.
+      - name: Check third-party notices for drift
+        run: bash scripts/check-third-party-drift.sh
