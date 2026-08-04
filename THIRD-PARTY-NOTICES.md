@@ -21,8 +21,16 @@ The first script resolves each artifact's license from its Maven Central POM (wa
 
 The dependency list itself is a reviewed snapshot captured from Gradle's `resolvedArtifacts` API, **not** from parsing `./gradlew dependencies` tree output — that text form both invents entries (BOM/platform pseudo-artifacts declare no code) and drops real ones (`(*)` conflict-resolved starters). If the dependency graph changes, re-capture the list and re-run both scripts.
 
+To check that this file still describes what actually ships — the failure mode a fixed list invites — run:
+
+```bash
+scripts/check-third-party-drift.sh
+```
+
+It re-resolves `runtimeClasspath` and diffs it against the recorded list, exiting non-zero on any drift.
+
 - Generated: 2026-08-04
-- Source commit: `6a78489`
+- Source commit: `1fc06aa`
 - Artifacts covered: **152**
 
 ## Summary
@@ -39,7 +47,7 @@ The dependency list itself is a reviewed snapshot captured from Gradle's `resolv
 | MIT-0 | 1 |
 | **Total** | **152** |
 
-No dependency in this list is under a copyleft license that would impose source-disclosure obligations on norintegrate's own code. Where an artifact is offered under a choice of licenses, the elected license is stated explicitly with the artifact.
+No dependency is under a strong copyleft license (the GPL/AGPL/SSPL family); none is present. 5 dependencies are under EPL-2.0, which is *weak* copyleft: its reciprocal obligations attach to modifications of the EPL-licensed files themselves, not to code that merely depends on them. norintegrate consumes all of them as unmodified binaries from Maven Central, so no source-disclosure obligation attaches to norintegrate's own code. Where an artifact is offered under a choice of licenses, the elected license is stated explicitly with the artifact.
 
 ## Dual-licensed dependencies and elected licenses
 

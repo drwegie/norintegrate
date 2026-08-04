@@ -258,6 +258,20 @@ def main():
         "re-capture the list and re-run both scripts."
     )
     w("")
+    w(
+        "To check that this file still describes what actually ships — the "
+        "failure mode a fixed list invites — run:"
+    )
+    w("")
+    w("```bash")
+    w("scripts/check-third-party-drift.sh")
+    w("```")
+    w("")
+    w(
+        "It re-resolves `runtimeClasspath` and diffs it against the recorded "
+        "list, exiting non-zero on any drift."
+    )
+    w("")
     w(f"- Generated: {date.today().isoformat()}")
     w(f"- Source commit: `{git_commit()}`")
     w(f"- Artifacts covered: **{len(rows)}**")
@@ -270,11 +284,17 @@ def main():
         w(f"| {spdx} | {len(groups[spdx])} |")
     w(f"| **Total** | **{len(rows)}** |")
     w("")
+    epl_count = len(groups.get("EPL-2.0", []))
     w(
-        "No dependency in this list is under a copyleft license that would "
-        "impose source-disclosure obligations on norintegrate's own code. "
-        "Where an artifact is offered under a choice of licenses, the elected "
-        "license is stated explicitly with the artifact."
+        "No dependency is under a strong copyleft license (the GPL/AGPL/SSPL "
+        f"family); none is present. {epl_count} dependencies are under "
+        "EPL-2.0, which is *weak* copyleft: its reciprocal obligations attach "
+        "to modifications of the EPL-licensed files themselves, not to code "
+        "that merely depends on them. norintegrate consumes all of them as "
+        "unmodified binaries from Maven Central, so no source-disclosure "
+        "obligation attaches to norintegrate's own code. Where an artifact is "
+        "offered under a choice of licenses, the elected license is stated "
+        "explicitly with the artifact."
     )
     w("")
 

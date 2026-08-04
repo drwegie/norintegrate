@@ -344,3 +344,14 @@ echo "" >&2
 echo "Resolved $((total - unresolved))/$total artifacts; $unresolved need manual follow-up." >&2
 echo "Extracted $notice_count META-INF/NOTICE file(s) to $NOTICE_DIR" >&2
 echo "Report: $REPORT" >&2
+
+# Exit non-zero when any artifact's license could not be established, so a
+# caller (or CI) fails loudly instead of rendering a notices file with holes
+# in it. A network hiccup and a genuinely unlicensed POM both land here; the
+# report tells them apart. Re-running is safe — resolved POMs are cached.
+if [ "$unresolved" -gt 0 ]; then
+  echo "" >&2
+  echo "ERROR: $unresolved artifact(s) unresolved — see $REPORT." >&2
+  echo "Do not render THIRD-PARTY-NOTICES.md until every artifact resolves." >&2
+  exit 1
+fi
