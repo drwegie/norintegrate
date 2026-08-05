@@ -17,7 +17,7 @@
     "next-auth": "^5.0.0-beta.32",
     "next-intl": "^4.13.4",
     "react": "^19.2.6",
-    "react-dom": "^19.2.7"
+    "react-dom": "^19.2.8"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.12.1",
@@ -28,7 +28,7 @@
     "@testing-library/user-event": "^14.6.1",
     "@types/node": "^25.9.1",
     "@types/react": "^19.2.15",
-    "@types/react-dom": "^19.1.0",
+    "@types/react-dom": "^19.2.4",
     "@vitejs/plugin-react": "^6.0.4",
     "eslint": "^9.39.5",
     "eslint-config-next": "^15.5.19",
