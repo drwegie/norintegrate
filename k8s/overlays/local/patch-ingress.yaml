@@ -1,0 +1,40 @@
+# No ingressClassName / TLS for local — same path map as base, host-scoped
+# to norintegrate.localhost. Not exercised by the DoD smoke test (see
+# k8s/base/ingress.yaml); OrbStack has no ingress controller by default.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: norintegrate
+spec:
+  rules:
+    - host: norintegrate.localhost
+      http:
+        paths:
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: api
+                port:
+                  number: 8080
+          - path: /actuator
+            pathType: Prefix
+            backend:
+              service:
+                name: api
+                port:
+                  number: 8080
+          - path: /mcp
+            pathType: Prefix
+            backend:
+              service:
+                name: mcp
+                port:
+                  number: 8081
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: web
+                port:
+                  number: 3000

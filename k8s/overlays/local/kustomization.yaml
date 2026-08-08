@@ -1,0 +1,30 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+# Namespace is created out-of-band before `kubectl apply -k` — see
+# k8s/README.md. Declaring it here would make `kubectl delete -k` remove the
+# namespace (and any Secret in it) between smoke-test cycles.
+namespace: norintegrate
+
+resources:
+  - ../../base
+  - postgres.yaml
+
+# Local images are built by `docker compose build` and never pushed
+# anywhere; base's ghcr.io/... references are swapped for the compose
+# service names.
+images:
+  - name: ghcr.io/drwegie/norintegrate-api
+    newName: norintegrate-api
+    newTag: latest
+  - name: ghcr.io/drwegie/norintegrate-mcp
+    newName: norintegrate-mcp
+    newTag: latest
+  - name: ghcr.io/drwegie/norintegrate-web
+    newName: norintegrate-web
+    newTag: latest
+
+patches:
+  - path: patch-images.yaml
+  - path: patch-config.yaml
+  - path: patch-ingress.yaml

@@ -1,0 +1,90 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api
+  labels:
+    app.kubernetes.io/name: api
+    app.kubernetes.io/component: backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: api
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: api
+        app.kubernetes.io/component: backend
+    spec:
+      # server.shutdown: graceful in application.yml — give in-flight
+      # requests time to finish before SIGKILL.
+      terminationGracePeriodSeconds: 45
+      securityContext:
+        runAsNonRoot: true
+        # docker/api.Dockerfile creates USER appuser (non-numeric); kubelet
+        # cannot resolve that to a UID, so runAsUser must be set explicitly
+        # or every container fails with CreateContainerConfigError. Verified:
+        # `docker run --entrypoint sh norintegrate-api:latest -c id` ->
+        # uid=100(appuser) gid=101(appgroup).
+        runAsUser: 100
+        runAsGroup: 101
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+        - name: api
+          image: ghcr.io/drwegie/norintegrate-api:latest
+          ports:
+            - name: http
+              containerPort: 8080
+          securityContext:
+            runAsNonRoot: true
+            runAsUser: 100
+            runAsGroup: 101
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+            seccompProfile:
+              type: RuntimeDefault
+          envFrom:
+            - configMapRef:
+                name: norintegrate-config
+          env:
+            - name: DB_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: norintegrate-db
+                  key: DB_USERNAME
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: norintegrate-db
+                  key: DB_PASSWORD
+            - name: JWT_ISSUER_URI
+              valueFrom:
+                secretKeyRef:
+                  name: norintegrate-api
+                  key: JWT_ISSUER_URI
+          # SecurityConfig.java permits GET /actuator/health, /info,
+          # /prometheus without authentication.
+          startupProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            periodSeconds: 5
+            failureThreshold: 30
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            periodSeconds: 10
+          resources:
+            requests:
+              cpu: 100m
+              memory: 384Mi
+            limits:
+              memory: 1Gi

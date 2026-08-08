@@ -1,0 +1,54 @@
+# infra/variables.tf: api_cpu/mcp_cpu/web_cpu default to 256 (0.25 vCPU),
+# api_memory/mcp_memory/web_memory default to 512 (MB). Fargate task-level
+# cpu/memory acts as both floor and ceiling, so requests == limits here
+# mirrors that (unlike overlays/local, which sets no CPU limit).
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api
+spec:
+  template:
+    spec:
+      containers:
+        - name: api
+          resources:
+            requests:
+              cpu: 250m
+              memory: 512Mi
+            limits:
+              cpu: 250m
+              memory: 512Mi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mcp
+spec:
+  template:
+    spec:
+      containers:
+        - name: mcp
+          resources:
+            requests:
+              cpu: 250m
+              memory: 512Mi
+            limits:
+              cpu: 250m
+              memory: 512Mi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web
+spec:
+  template:
+    spec:
+      containers:
+        - name: web
+          resources:
+            requests:
+              cpu: 250m
+              memory: 512Mi
+            limits:
+              cpu: 250m
+              memory: 512Mi

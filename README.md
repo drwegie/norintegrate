@@ -123,6 +123,10 @@ Internet → ALB (HTTP:80) → ECS Fargate Cluster
 
 Terraform files are in [`infra/`](infra/). See [ADR-016](docs/adr/ADR-016-aws-ecs-fargate-deployment.md) for the deployment rationale.
 
+### Kubernetes manifests (local verification only)
+
+[`k8s/`](k8s/) holds the same three services expressed as plain Kubernetes manifests (kustomize base + `local`/`prod-example` overlays), alongside the ECS Fargate deployment above rather than in place of it. **This was verified against a local, ephemeral OrbStack cluster and torn down afterward — nothing here is continuously hosted.** See [`k8s/README.md`](k8s/README.md) for the verification steps and [ADR-020](docs/adr/ADR-020-kubernetes-manifests-alongside-ecs-fargate.md) for why it exists and why Helm was not used.
+
 <details>
 <summary>Deployment screenshots</summary>
 
@@ -164,6 +168,7 @@ All screenshots: [`docs/screenshots/`](docs/screenshots/)
 | [ADR-017](docs/adr/ADR-017-mcp-server-authentication-posture.md) | MCP server authentication posture |
 | [ADR-018](docs/adr/ADR-018-structured-json-logging.md) | Structured JSON logging |
 | [ADR-019](docs/adr/ADR-019-kotlin-introduction-for-mcp.md) | Kotlin for norintegrate-mcp |
+| [ADR-020](docs/adr/ADR-020-kubernetes-manifests-alongside-ecs-fargate.md) | Kubernetes manifests alongside ECS Fargate |
 
 ---
 

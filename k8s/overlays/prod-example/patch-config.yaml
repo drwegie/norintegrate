@@ -1,0 +1,20 @@
+# Illustrative values only — REPLACE_* placeholders are not real hosts.
+# SPRING_PROFILES_ACTIVE=prod activates the application.yml `on-profile:
+# prod` Hikari-tuning block. infra/ecs.tf never sets this env var, so that
+# block is dead on ECS today; this overlay is the more faithful of the two
+# (see ADR-020).
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: norintegrate-config
+data:
+  SPRING_PROFILES_ACTIVE: "prod"
+  SPRING_DATASOURCE_URL: "jdbc:postgresql://REPLACE_WITH_RDS_ENDPOINT:5432/norintegrate?sslmode=require"
+  CORS_ALLOWED_ORIGINS: "https://norintegrate.example.com"
+  NEXTAUTH_URL: "https://norintegrate.example.com"
+  # See k8s/README.md: this is baked into the client bundle at `npm run
+  # build` time, not read at runtime, so setting it here has no effect
+  # without also changing docker/web.Dockerfile to accept it as a build
+  # ARG — infra/ecs.tf sets the equivalent env var for the same reason and
+  # has the same limitation.
+  NEXT_PUBLIC_API_URL: "https://norintegrate.example.com"

@@ -1,0 +1,49 @@
+# Illustrative — assumes an ingress-nginx controller and a cert-manager (or
+# equivalent) managed TLS secret, neither of which this project operates.
+# proxy-buffering is disabled because norintegrate-mcp streams over SSE
+# (application.yml: spring.ai.mcp.server.sse-message-endpoint); buffering
+# would delay or break server-sent events through the proxy.
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: norintegrate
+  annotations:
+    nginx.ingress.kubernetes.io/proxy-buffering: "off"
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - norintegrate.example.com
+      secretName: norintegrate-tls
+  rules:
+    - host: norintegrate.example.com
+      http:
+        paths:
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: api
+                port:
+                  number: 8080
+          - path: /actuator
+            pathType: Prefix
+            backend:
+              service:
+                name: api
+                port:
+                  number: 8080
+          - path: /mcp
+            pathType: Prefix
+            backend:
+              service:
+                name: mcp
+                port:
+                  number: 8081
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: web
+                port:
+                  number: 3000

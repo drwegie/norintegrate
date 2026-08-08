@@ -1,0 +1,37 @@
+# Without this, the container image's default imagePullPolicy for a :latest
+# tag is Always, and norintegrate-api:latest etc. do not exist on any
+# registry — every Pod goes ImagePullBackOff. Local images only exist in the
+# OrbStack Docker daemon (docker compose build api mcp web), so they must be
+# used as-is.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api
+spec:
+  template:
+    spec:
+      containers:
+        - name: api
+          imagePullPolicy: IfNotPresent
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mcp
+spec:
+  template:
+    spec:
+      containers:
+        - name: mcp
+          imagePullPolicy: IfNotPresent
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web
+spec:
+  template:
+    spec:
+      containers:
+        - name: web
+          imagePullPolicy: IfNotPresent

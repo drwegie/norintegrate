@@ -1,0 +1,10 @@
+# All other base ConfigMap values already match local defaults (localhost
+# origins, in-cluster postgres DSN). The one local-specific addition: let
+# Hibernate create the schema since docs/schema.sql cannot be referenced
+# here (kustomize load restrictor — see ADR-020).
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: norintegrate-config
+data:
+  SPRING_JPA_HIBERNATE_DDL_AUTO: "update"
