@@ -23,6 +23,23 @@ spec:
       containers:
         - name: postgres
           image: postgres:18-alpine
+          # Deliberately weaker than the three application containers, which
+          # also set runAsNonRoot/runAsUser: the postgres entrypoint starts as
+          # root to run initdb and chown the data directory, then drops to the
+          # postgres user itself. Forcing runAsNonRoot here breaks startup. The
+          # privilege-escalation, capability and seccomp restrictions below do
+          # apply, so this is not left at container defaults.
+          # Dropping ALL outright makes the entrypoint fail with
+          # "chmod: /var/run/postgresql: Operation not permitted" and
+          # "chown: /var/lib/postgresql/18/docker: Operation not permitted",
+          # so the four capabilities it genuinely needs are added back.
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ["ALL"]
+              add: ["CHOWN", "DAC_OVERRIDE", "FOWNER", "SETGID", "SETUID"]
+            seccompProfile:
+              type: RuntimeDefault
           ports:
             - name: postgres
               containerPort: 5432
