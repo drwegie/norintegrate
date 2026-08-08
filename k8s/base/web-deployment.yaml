@@ -45,6 +45,14 @@ spec:
             - configMapRef:
                 name: norintegrate-config
           env:
+            # The Next.js standalone server binds to $HOSTNAME. Kubernetes sets
+            # HOSTNAME to the Pod name, so without this the server listens on
+            # the Pod IP only: Service traffic and kubelet probes still work,
+            # but nothing inside the Pod can reach it over loopback and
+            # `kubectl port-forward` fails with "connection refused".
+            # docker/web.Dockerfile sets PORT but not HOSTNAME, so pin it here.
+            - name: HOSTNAME
+              value: "0.0.0.0"
             - name: NEXTAUTH_SECRET
               valueFrom:
                 secretKeyRef:

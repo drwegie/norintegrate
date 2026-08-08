@@ -51,8 +51,13 @@ spec:
               command: ["sh", "-c", "pg_isready -U $POSTGRES_USER -d norintegrate"]
             periodSeconds: 10
           volumeMounts:
+            # postgres:18+ wants a single mount at /var/lib/postgresql and
+            # places the cluster in a major-version subdirectory below it.
+            # Mounting /var/lib/postgresql/data directly makes the entrypoint
+            # abort ("unused mount/volume"), unlike the 17-era layout that
+            # docker-compose.yml still uses for its named volume.
             - name: data
-              mountPath: /var/lib/postgresql/data
+              mountPath: /var/lib/postgresql
           resources:
             requests:
               cpu: 50m

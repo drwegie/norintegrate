@@ -64,22 +64,30 @@ spec:
                 secretKeyRef:
                   name: norintegrate-api
                   key: JWT_ISSUER_URI
-          # SecurityConfig.java permits GET /actuator/health, /info,
-          # /prometheus without authentication.
+          # NOTE: /actuator/health is NOT usable as a probe today. Although
+          # SecurityConfig.java lists it under permitAll, the running service
+          # answers 401 on every /actuator/* path (reproduced identically under
+          # docker compose, so this is an application defect and not a
+          # Kubernetes artefact — see k8s/README.md "Health endpoints").
+          # infra/alb.tf points its ECS target groups at the same path and is
+          # therefore affected by the same defect. Until that is fixed, these
+          # probes use an endpoint that genuinely returns 200: GET
+          # /api/v1/visa-types (permitAll, and it exercises the datasource, so
+          # it is a real readiness signal). Liveness stays on the TCP socket so
+          # a transient database problem restarts nothing.
           startupProbe:
             httpGet:
-              path: /actuator/health
+              path: /api/v1/visa-types
               port: 8080
             periodSeconds: 5
             failureThreshold: 30
           livenessProbe:
-            httpGet:
-              path: /actuator/health
+            tcpSocket:
               port: 8080
             periodSeconds: 10
           readinessProbe:
             httpGet:
-              path: /actuator/health
+              path: /api/v1/visa-types
               port: 8080
             periodSeconds: 10
           resources:

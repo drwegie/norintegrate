@@ -101,6 +101,31 @@ kubectl delete namespace norintegrate
 | Database | In-cluster `postgres:18-alpine` Deployment (`overlays/local/postgres.yaml`), `emptyDir` storage | External managed database — `SPRING_DATASOURCE_URL` points at `REPLACE_WITH_RDS_ENDPOINT` |
 | Ingress host | `norintegrate.localhost`, no TLS | `norintegrate.example.com` placeholder, `ingressClassName: nginx`, TLS via `secretName: norintegrate-tls` |
 
+## Health endpoints: why the probes do not use `/actuator/health`
+
+The obvious probe target does not work on either JVM service, and this was found
+by actually running the manifests on a cluster rather than by reading the code:
+
+| Service | `GET /actuator/health` | Probes actually used |
+|---|---|---|
+| api | **401** — every `/actuator/*` path is rejected, even though `SecurityConfig.java` lists `/actuator/health`, `/actuator/info` and `/actuator/prometheus` under `permitAll`. MVC-mapped paths such as `GET /api/v1/visa-types` do honour `permitAll` and return 200. | startup + readiness on `GET /api/v1/visa-types` (200, and it exercises the datasource); liveness on the TCP socket |
+| mcp | **404** — no actuator endpoint is registered at runtime, although `spring-boot-starter-actuator` is a dependency and `application.yml` exposes `health`. `/`, `/mcp` and `/sse` also answer 404, so no HTTP path returns 200. | startup, liveness and readiness on the TCP socket |
+| web | 200 on `/` | `GET /` |
+
+This is an **application defect, not a Kubernetes one**. The same api image run
+under `docker compose` returns 401 on `/actuator/health` and 200 on
+`/api/v1/visa-types`, exactly as it does in-cluster.
+
+It also affects the existing ECS deployment: `infra/alb.tf` configures the api
+and mcp target groups with `health_check.path = "/actuator/health"`, which
+neither service answers with 200, so those target groups could never become
+healthy. ADR-016 is in `Suspended` status and the stack is torn down, which is
+presumably why this went unnoticed.
+
+The probes above are a deliberate, documented workaround so that these manifests
+describe something that genuinely runs. They should be moved back to
+`/actuator/health` once the underlying defect is fixed.
+
 ## `NEXT_PUBLIC_API_URL` does not take effect at runtime
 
 Both overlays' `ConfigMap` set `NEXT_PUBLIC_API_URL`, but Next.js inlines every `NEXT_PUBLIC_*` env var into the client-side JavaScript bundle at `npm run build` time — it is not read from the process environment at container start. `docker/web.Dockerfile` does not accept it as a build `ARG`, so the value baked into the image is whatever it resolved to during the CI/local build, regardless of what a Pod's `ConfigMap` says at runtime. `infra/ecs.tf` sets the same env var for the same (non-)effect. This is an existing limitation of the frontend build, not something fixed by these manifests — noted here rather than left to look like it works (see ADR-020, Consequences).
