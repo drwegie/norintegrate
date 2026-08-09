@@ -92,6 +92,12 @@ Docs drift check: `bash scripts/check-docs.sh` (verifies ADR indexes, relative l
 
 ---
 
+## Development Workflow
+
+This project is built with Claude Code as the primary AI pair-programming tool. The conventions it works under are checked into the repository rather than kept in a chat history: [`CLAUDE.md`](CLAUDE.md) at the root plus one per module (`norintegrate-{common,api,web,mcp}`), and role-scoped subagent definitions under [`.claude/agents/`](.claude/agents) (`coder`, `reviewer`, `tester`).
+
+---
+
 ## Monitoring
 
 ```bash
@@ -116,7 +122,7 @@ Internet → ALB (HTTP:80) → ECS Fargate Cluster
 | Component | Spec |
 |-----------|------|
 | ECS Fargate | 3 services, 0.25 vCPU / 512 MB each |
-| RDS PostgreSQL | 18, db.t4g.micro, single-AZ |
+| RDS PostgreSQL | 18, db.t4g.micro, single-AZ — `db_multi_az = false` in [`infra/terraform.tfvars`](infra/terraform.tfvars), wired to `multi_az` in [`infra/rds.tf`](infra/rds.tf); [`infra/prod.tfvars`](infra/prod.tfvars) sets the same variable to `true` for a prod-sized deployment |
 | ALB | Path-based routing (`/api/*`, `/mcp/*`, default → web) |
 | Networking | VPC with public subnets, security groups (ALB → ECS → RDS) |
 | Secrets | GHCR credentials, JWT, Google OAuth, NextAuth via Secrets Manager |
