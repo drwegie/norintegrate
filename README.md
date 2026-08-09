@@ -2,7 +2,7 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 ![Java 25](https://img.shields.io/badge/Java-25_LTS-orange)
-![Kotlin 2.3](https://img.shields.io/badge/norintegrate--mcp-Kotlin_2.3-7F52FF)
+![Kotlin 2.4](https://img.shields.io/badge/norintegrate--mcp-Kotlin_2.4-7F52FF)
 ![Spring Boot 4.1](https://img.shields.io/badge/Spring_Boot-4.1-green)
 ![Next.js 15](https://img.shields.io/badge/Next.js-15-black)
 
