@@ -25,11 +25,16 @@ norintegrate:
   ssb:
     base-url: https://data.ssb.no/api/klass/v1
 
+# This service has no application-layer authentication by design (ADR-017), so
+# McpSecurityConfig permits every request. Exposure is therefore the only thing
+# standing between an actuator endpoint and an anonymous caller: keep this list
+# to endpoints that are safe to serve publicly. `metrics` is deliberately absent
+# — Prometheus scrapes /actuator/prometheus, not /actuator/metrics.
 management:
   endpoints:
     web:
       exposure:
-        include: health,info,prometheus,metrics
+        include: health,info,prometheus
   endpoint:
     health:
       show-details: when-authorized

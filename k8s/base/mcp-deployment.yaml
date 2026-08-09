@@ -54,16 +54,14 @@ spec:
                 secretKeyRef:
                   name: norintegrate-db
                   key: DB_PASSWORD
-          # NOTE: this service exposes no actuator endpoints at runtime —
-          # /actuator/health answers 404 even though the actuator starter is on
-          # the classpath and application.yml lists health under
-          # management.endpoints.web.exposure.include. No HTTP path returns 200
-          # here (/, /mcp and /sse all answer 404), so there is nothing to probe
-          # over HTTP and the probes use the TCP socket instead. infra/alb.tf
-          # points the mcp target group at /actuator/health and is affected by
-          # the same defect. See k8s/README.md "Health endpoints".
+          # Liveness deliberately stays on the TCP socket, for the same reason
+          # as the api: /actuator/health answers 503 when the database is
+          # unreachable, so probing it here would restart pods during a
+          # transient database outage. Do not probe /sse — it is a long-lived
+          # SSE stream, not a health endpoint.
           startupProbe:
-            tcpSocket:
+            httpGet:
+              path: /actuator/health
               port: 8081
             periodSeconds: 5
             failureThreshold: 30
@@ -72,7 +70,8 @@ spec:
               port: 8081
             periodSeconds: 10
           readinessProbe:
-            tcpSocket:
+            httpGet:
+              path: /actuator/health
               port: 8081
             periodSeconds: 10
           resources:

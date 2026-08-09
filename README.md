@@ -102,7 +102,7 @@ docker compose --profile monitoring up   # Prometheus :9090, Grafana :3001
 
 ## Infrastructure
 
-Provisioned on AWS (ECS Fargate + RDS) using Terraform (IaC) and validated end-to-end — see the deployment screenshots below. The stack has been torn down to avoid ongoing cost (~$53/month); it can be recreated on demand with `terraform apply` plus the setup steps in [`infra/README.md`](infra/README.md) (see [ADR-016](docs/adr/ADR-016-aws-ecs-fargate-deployment.md) for the suspension rationale).
+Provisioned on AWS (ECS Fargate + RDS) using Terraform (IaC) and validated against the running stack — the screenshots below show the API's health endpoint and live query results served through the load balancer's public DNS name, and the frontend rendering from that same origin. The MCP service ran as a steady ECS task, but the ALB routes `/actuator/*` to the API target group only ([`infra/alb.tf`](infra/alb.tf)), so its health check was never exercised from outside the VPC. The stack has been torn down to avoid ongoing cost (~$53/month); it can be recreated on demand with `terraform apply` plus the setup steps in [`infra/README.md`](infra/README.md) (see [ADR-016](docs/adr/ADR-016-aws-ecs-fargate-deployment.md) for the suspension rationale).
 
 ```
 Internet → ALB (HTTP:80) → ECS Fargate Cluster

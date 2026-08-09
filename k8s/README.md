@@ -16,7 +16,7 @@ k8s/
 
 - `kubectl` (this repo was verified with v1.33.9, which bundles kustomize v5.6.0 — no separate kustomize install needed)
 - A local Kubernetes cluster for the `local` overlay (this repo used OrbStack: `orbctl config set k8s.enable true`)
-- `docker compose build api mcp web` to produce the images the `local` overlay references (`norintegrate-{api,mcp,web}:latest`)
+- `docker compose build --pull api mcp web` to produce the images the `local` overlay references (`norintegrate-{api,mcp,web}:latest`). Rebuild every time — `docker compose up` reuses whatever `:latest` already exists, and the overlay's `imagePullPolicy: IfNotPresent` will happily run a months-old image (see "Health endpoints" below)
 
 ## Namespace and Secrets (created out-of-band)
 
@@ -101,30 +101,48 @@ kubectl delete namespace norintegrate
 | Database | In-cluster `postgres:18-alpine` Deployment (`overlays/local/postgres.yaml`), `emptyDir` storage | External managed database — `SPRING_DATASOURCE_URL` points at `REPLACE_WITH_RDS_ENDPOINT` |
 | Ingress host | `norintegrate.localhost`, no TLS | `norintegrate.example.com` placeholder, `ingressClassName: nginx`, TLS via `secretName: norintegrate-tls` |
 
-## Health endpoints: why the probes do not use `/actuator/health`
+## Health endpoints, and a stale-image trap worth knowing about
 
-The obvious probe target does not work on either JVM service, and this was found
-by actually running the manifests on a cluster rather than by reading the code:
+Startup and readiness probe `GET /actuator/health` on both JVM services; `web`
+uses `GET /`. Liveness is deliberately a TCP socket check on all three:
+`/actuator/health` answers **503** while the database is unreachable, which is
+correct for readiness but would make a transient database outage restart every
+pod.
 
-| Service | `GET /actuator/health` | Probes actually used |
+| Service | Probe target | Anonymous actuator surface |
 |---|---|---|
-| api | **401** — every `/actuator/*` path is rejected, even though `SecurityConfig.java` lists `/actuator/health`, `/actuator/info` and `/actuator/prometheus` under `permitAll`. MVC-mapped paths such as `GET /api/v1/visa-types` do honour `permitAll` and return 200. | startup + readiness on `GET /api/v1/visa-types` (200, and it exercises the datasource); liveness on the TCP socket |
-| mcp | **404** — no actuator endpoint is registered at runtime, although `spring-boot-starter-actuator` is a dependency and `application.yml` exposes `health`. `/`, `/mcp` and `/sse` also answer 404, so no HTTP path returns 200. | startup, liveness and readiness on the TCP socket |
-| web | 200 on `/` | `GET /` |
+| api | startup + readiness `GET /actuator/health`; liveness TCP | `health`, `info`, `prometheus` only — `SecurityConfig.java` lists exactly those under `permitAll`, so `/actuator` and `/actuator/metrics` answer 401 |
+| mcp | startup + readiness `GET /actuator/health`; liveness TCP | `health`, `info`, `prometheus` only — this service has no application-layer auth (ADR-017), so `management.endpoints.web.exposure.include` is the control |
+| web | `GET /` | n/a |
 
-This is an **application defect, not a Kubernetes one**. The same api image run
-under `docker compose` returns 401 on `/actuator/health` and 200 on
-`/api/v1/visa-types`, exactly as it does in-cluster.
+**A previous revision of this file claimed that neither JVM service could serve
+`/actuator/health` — that claim was wrong and has been removed.** It came from a
+smoke test that ran the local `norintegrate-{api,mcp}:latest` images, which were
+five months stale and predated the commit that added `spring-boot-starter-actuator`
+(`baa13ac`, 2026-03-23). The 401 and 404 were exactly what those images should
+return; current builds answer 200. The ECS deployment was never affected either:
+`infra/alb.tf` is correct as written, and `docs/screenshots/05-health-check.png`
+shows the api answering `/actuator/health` with 200 through the live ALB — the
+same path and port that the api target group's health check was configured to
+use.
 
-It also affects the existing ECS deployment: `infra/alb.tf` configures the api
-and mcp target groups with `health_check.path = "/actuator/health"`, which
-neither service answers with 200, so those target groups could never become
-healthy. ADR-016 is in `Suspended` status and the stack is torn down, which is
-presumably why this went unnoticed.
+The trap is worth naming, because it is easy to repeat: `docker compose up`
+**reuses an existing image and never rebuilds it**, and `overlays/local` pins
+`imagePullPolicy: IfNotPresent`, so the cluster silently runs whatever
+`:latest` happens to point at. Before trusting any smoke test, rebuild and check
+the date:
 
-The probes above are a deliberate, documented workaround so that these manifests
-describe something that genuinely runs. They should be moved back to
-`/actuator/health` once the underlying defect is fixed.
+```bash
+docker compose build --pull api mcp web
+docker image inspect norintegrate-api:latest --format '{{.Created}}'
+```
+
+One known sharp edge remains: on the api, `permitAll` is registered for the
+exact paths `/actuator/health`, `/actuator/info` and `/actuator/prometheus`, so
+the group endpoints `/actuator/health/liveness` and `/actuator/health/readiness`
+answer **401**. The probes above use `/actuator/health`, which covers both
+groups, so nothing is broken today — but split liveness/readiness probes would
+need `"/actuator/health/**"` added to `SecurityConfig.java` first.
 
 ## `NEXT_PUBLIC_API_URL` does not take effect at runtime
 
