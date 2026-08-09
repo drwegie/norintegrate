@@ -1,11 +1,11 @@
 # Stage 1: Dependencies
-FROM node:25-alpine AS deps
+FROM node:24-alpine AS deps
 WORKDIR /app
-COPY norintegrate-web/package.json norintegrate-web/package-lock.json* ./
-RUN npm ci || npm install
+COPY norintegrate-web/package.json norintegrate-web/package-lock.json* norintegrate-web/.npmrc ./
+RUN npm ci
 
 # Stage 2: Build
-FROM node:25-alpine AS builder
+FROM node:24-alpine AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY norintegrate-web/ .
@@ -13,7 +13,7 @@ ENV NEXT_TELEMETRY_DISABLED=1
 RUN npm run build
 
 # Stage 3: Runtime
-FROM node:25-alpine AS runner
+FROM node:24-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
