@@ -99,9 +99,9 @@ io.prometheus:prometheus-metrics-exposition-textformats:1.5.1
 io.prometheus:prometheus-metrics-model:1.5.1
 io.prometheus:prometheus-metrics-tracer-common:1.5.1
 io.swagger.core.v3:swagger-annotations-jakarta:2.2.38
-io.swagger.core.v3:swagger-annotations-jakarta:2.2.47
-io.swagger.core.v3:swagger-core-jakarta:2.2.47
-io.swagger.core.v3:swagger-models-jakarta:2.2.47
+io.swagger.core.v3:swagger-annotations-jakarta:2.2.52
+io.swagger.core.v3:swagger-core-jakarta:2.2.52
+io.swagger.core.v3:swagger-models-jakarta:2.2.52
 jakarta.activation:jakarta.activation-api:2.1.4
 jakarta.annotation:jakarta.annotation-api:3.0.0
 jakarta.inject:jakarta.inject-api:2.0.1
@@ -131,8 +131,8 @@ org.hibernate.models:hibernate-models:1.1.1
 org.hibernate.orm:hibernate-core:7.4.1.Final
 org.hibernate.validator:hibernate-validator:9.1.0.Final
 org.jboss.logging:jboss-logging:3.6.3.Final
-org.jetbrains.kotlin:kotlin-reflect:2.3.21
-org.jetbrains.kotlin:kotlin-stdlib:2.3.21
+org.jetbrains.kotlin:kotlin-reflect:2.4.10
+org.jetbrains.kotlin:kotlin-stdlib:2.4.10
 org.jetbrains:annotations:13.0
 org.jspecify:jspecify:1.0.0
 org.postgresql:postgresql:42.7.13
@@ -140,9 +140,9 @@ org.reactivestreams:reactive-streams:1.0.4
 org.slf4j:jul-to-slf4j:2.0.18
 org.slf4j:slf4j-api:2.0.18
 org.snakeyaml:snakeyaml-engine:3.0.1
-org.springdoc:springdoc-openapi-starter-common:3.0.3
-org.springdoc:springdoc-openapi-starter-webmvc-api:3.0.3
-org.springdoc:springdoc-openapi-starter-webmvc-ui:3.0.3
+org.springdoc:springdoc-openapi-starter-common:3.1.0
+org.springdoc:springdoc-openapi-starter-webmvc-api:3.1.0
+org.springdoc:springdoc-openapi-starter-webmvc-ui:3.1.0
 org.springframework.ai:mcp-spring-webmvc:2.0.0
 org.springframework.ai:spring-ai-autoconfigure-mcp-server-common:2.0.0
 org.springframework.ai:spring-ai-autoconfigure-mcp-server-webmvc:2.0.0
@@ -210,7 +210,7 @@ org.springframework:spring-orm:7.0.8
 org.springframework:spring-tx:7.0.8
 org.springframework:spring-web:7.0.8
 org.springframework:spring-webmvc:7.0.8
-org.webjars:swagger-ui:5.32.2
+org.webjars:swagger-ui:5.32.11
 org.webjars:webjars-locator-lite:1.1.3
 org.yaml:snakeyaml:2.6
 tools.jackson.core:jackson-core:3.1.4
