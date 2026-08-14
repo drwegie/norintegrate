@@ -29,8 +29,8 @@ scripts/check-third-party-drift.sh
 
 It re-resolves `runtimeClasspath` and diffs it against the recorded list, exiting non-zero on any drift.
 
-- Generated: 2026-08-09
-- Source commit: `b1f99af`
+- Generated: 2026-08-15
+- Source commit: `f4645e2`
 - Artifacts covered: **152**
 
 ## Summary
@@ -70,10 +70,10 @@ No dependency is under a strong copyleft license (the GPL/AGPL/SSPL family); non
 
 - `com.ethlo.time:itu:1.14.0`  
   <sub>[POM](https://repo1.maven.org/maven2/com/ethlo/time/itu/1.14.0/itu-1.14.0.pom)</sub>
-- `com.fasterxml.jackson.core:jackson-annotations:2.21`  
-  <sub>[POM](https://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-annotations/2.21/jackson-annotations-2.21.pom)</sub>
-- `com.fasterxml.jackson.core:jackson-core:2.21.4`  
-  <sub>[POM](https://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-core/2.21.4/jackson-core-2.21.4.pom)</sub>
+- `com.fasterxml.jackson.core:jackson-annotations:2.22`  
+  <sub>[POM](https://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.pom)</sub>
+- `com.fasterxml.jackson.core:jackson-core:2.22.1`  
+  <sub>[POM](https://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-core/2.22.1/jackson-core-2.22.1.pom)</sub>
 - `com.fasterxml.jackson.core:jackson-databind:2.22.1`  
   <sub>[POM](https://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-databind/2.22.1/jackson-databind-2.22.1.pom)</sub>
 - `com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.21.4`  
@@ -312,10 +312,10 @@ No dependency is under a strong copyleft license (the GPL/AGPL/SSPL family); non
   <sub>[POM](https://repo1.maven.org/maven2/org/webjars/swagger-ui/5.32.11/swagger-ui-5.32.11.pom)</sub>
 - `org.yaml:snakeyaml:2.6`  
   <sub>[POM](https://repo1.maven.org/maven2/org/yaml/snakeyaml/2.6/snakeyaml-2.6.pom)</sub>
-- `tools.jackson.core:jackson-core:3.1.4`  
-  <sub>[POM](https://repo1.maven.org/maven2/tools/jackson/core/jackson-core/3.1.4/jackson-core-3.1.4.pom)</sub>
-- `tools.jackson.core:jackson-databind:3.1.5`  
-  <sub>[POM](https://repo1.maven.org/maven2/tools/jackson/core/jackson-databind/3.1.5/jackson-databind-3.1.5.pom)</sub>
+- `tools.jackson.core:jackson-core:3.2.1`  
+  <sub>[POM](https://repo1.maven.org/maven2/tools/jackson/core/jackson-core/3.2.1/jackson-core-3.2.1.pom)</sub>
+- `tools.jackson.core:jackson-databind:3.2.1`  
+  <sub>[POM](https://repo1.maven.org/maven2/tools/jackson/core/jackson-databind/3.2.1/jackson-databind-3.2.1.pom)</sub>
 - `tools.jackson.dataformat:jackson-dataformat-yaml:3.1.4`  
   <sub>[POM](https://repo1.maven.org/maven2/tools/jackson/dataformat/jackson-dataformat-yaml/3.1.4/jackson-dataformat-yaml-3.1.4.pom)</sub>
 
@@ -396,14 +396,15 @@ No dependency is under a strong copyleft license (the GPL/AGPL/SSPL family); non
 
 ## Bundled NOTICE files (Apache-2.0 section 4(d))
 
-86 of the distributed artifacts bundle a `META-INF/NOTICE` file. Their contents are reproduced below, deduplicated to 29 distinct notices — several artifacts from the same project ship byte-identical text.
+93 of the distributed artifacts bundle a `META-INF/NOTICE` file. Their contents are reproduced below, deduplicated to 29 distinct notices — several artifacts from the same project ship byte-identical text.
 
 <details>
-<summary><code>com.fasterxml.jackson.core:jackson-annotations:2.21 (+1 more)</code></summary>
+<summary><code>com.fasterxml.jackson.core:jackson-annotations:2.22 (+2 more)</code></summary>
 
 Applies to:
 
 - `com.fasterxml.jackson.core:jackson-annotations:2.21`
+- `com.fasterxml.jackson.core:jackson-annotations:2.22`
 - `com.fasterxml.jackson.core:jackson-databind:2.22.1`
 
 ```text
@@ -433,7 +434,12 @@ from the source code management (SCM) system project uses.
 </details>
 
 <details>
-<summary><code>com.fasterxml.jackson.core:jackson-core:2.21.4</code></summary>
+<summary><code>com.fasterxml.jackson.core:jackson-core:2.22.1 (+1 more)</code></summary>
+
+Applies to:
+
+- `com.fasterxml.jackson.core:jackson-core:2.21.4`
+- `com.fasterxml.jackson.core:jackson-core:2.22.1`
 
 ```text
 # Jackson JSON processor
@@ -686,12 +692,13 @@ package in the Spring Framework library, distributed by VMware, Inc:
 </details>
 
 <details>
-<summary><code>io.swagger.core.v3:swagger-annotations-jakarta:2.2.38 (+1 more)</code></summary>
+<summary><code>io.swagger.core.v3:swagger-annotations-jakarta:2.2.38 (+2 more)</code></summary>
 
 Applies to:
 
 - `io.swagger.core.v3:swagger-annotations-jakarta:2.2.38`
 - `io.swagger.core.v3:swagger-annotations-jakarta:2.2.47`
+- `io.swagger.core.v3:swagger-annotations-jakarta:2.2.52`
 
 ```text
 Swagger Core - swagger-annotations
@@ -703,7 +710,12 @@ Copy of the Apache 2.0 license can be found in `LICENSE` file.
 </details>
 
 <details>
-<summary><code>io.swagger.core.v3:swagger-core-jakarta:2.2.47</code></summary>
+<summary><code>io.swagger.core.v3:swagger-core-jakarta:2.2.52 (+1 more)</code></summary>
+
+Applies to:
+
+- `io.swagger.core.v3:swagger-core-jakarta:2.2.47`
+- `io.swagger.core.v3:swagger-core-jakarta:2.2.52`
 
 ```text
 Swagger Core - swagger-core
@@ -715,7 +727,12 @@ Copy of the Apache 2.0 license can be found in `LICENSE` file.
 </details>
 
 <details>
-<summary><code>io.swagger.core.v3:swagger-models-jakarta:2.2.47</code></summary>
+<summary><code>io.swagger.core.v3:swagger-models-jakarta:2.2.52 (+1 more)</code></summary>
+
+Applies to:
+
+- `io.swagger.core.v3:swagger-models-jakarta:2.2.47`
+- `io.swagger.core.v3:swagger-models-jakarta:2.2.52`
 
 ```text
 Swagger Core - swagger-models
@@ -1561,7 +1578,12 @@ subcomponent's license, as noted in the license.txt file.
 </details>
 
 <details>
-<summary><code>tools.jackson.core:jackson-core:3.1.4</code></summary>
+<summary><code>tools.jackson.core:jackson-core:3.2.1 (+1 more)</code></summary>
+
+Applies to:
+
+- `tools.jackson.core:jackson-core:3.1.4`
+- `tools.jackson.core:jackson-core:3.2.1`
 
 ```text
 # Jackson JSON processor
@@ -1611,7 +1633,12 @@ See Schubfach-LICENSE.
 </details>
 
 <details>
-<summary><code>tools.jackson.core:jackson-databind:3.1.5</code></summary>
+<summary><code>tools.jackson.core:jackson-databind:3.2.1 (+1 more)</code></summary>
+
+Applies to:
+
+- `tools.jackson.core:jackson-databind:3.1.5`
+- `tools.jackson.core:jackson-databind:3.2.1`
 
 ```text
 # Jackson JSON processor

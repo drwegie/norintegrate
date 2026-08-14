@@ -67,8 +67,8 @@ ARTIFACTS="
 ch.qos.logback:logback-classic:1.5.34
 ch.qos.logback:logback-core:1.5.34
 com.ethlo.time:itu:1.14.0
-com.fasterxml.jackson.core:jackson-annotations:2.21
-com.fasterxml.jackson.core:jackson-core:2.21.4
+com.fasterxml.jackson.core:jackson-annotations:2.22
+com.fasterxml.jackson.core:jackson-core:2.22.1
 com.fasterxml.jackson.core:jackson-databind:2.22.1
 com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.21.4
 com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.21.4
@@ -213,8 +213,8 @@ org.springframework:spring-webmvc:7.0.8
 org.webjars:swagger-ui:5.32.11
 org.webjars:webjars-locator-lite:1.1.3
 org.yaml:snakeyaml:2.6
-tools.jackson.core:jackson-core:3.1.4
-tools.jackson.core:jackson-databind:3.1.5
+tools.jackson.core:jackson-core:3.2.1
+tools.jackson.core:jackson-databind:3.2.1
 tools.jackson.dataformat:jackson-dataformat-yaml:3.1.4
 "
 
