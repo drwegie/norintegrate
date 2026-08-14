@@ -43,3 +43,10 @@ updates:
     directory: /docker
     schedule:
       interval: weekly
+    # The web image's node major is tied to norintegrate-web's engines floor
+    # and .nvmrc, so it only moves when those do. Dependabot otherwise offers
+    # every odd (non-LTS) line — node 25 was proposed as #98 and could not
+    # build, since engines excludes it on purpose.
+    ignore:
+      - dependency-name: "node"
+        update-types: ["version-update:semver-major"]

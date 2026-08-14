@@ -57,8 +57,22 @@ subprojects {
             dependency("org.apache.tomcat.embed:tomcat-embed-core:11.0.24")
             dependency("org.apache.tomcat.embed:tomcat-embed-el:11.0.24")
             dependency("org.apache.tomcat.embed:tomcat-embed-websocket:11.0.24")
-            dependency("com.fasterxml.jackson.core:jackson-databind:2.22.1")
-            dependency("tools.jackson.core:jackson-databind:3.1.5")
+            // Jackson 3 (tools.jackson) still compiles against the 2.x annotations
+            // artifact, so both families move together. Importing the Jackson BOMs
+            // does not work here — the Spring Boot plugin's own managed versions
+            // outrank any imported bom, and only these explicit entries override
+            // them. Keep core/databind/annotations at the versions the matching
+            // jackson-bom declares; a partial bump resolves fine and then fails at
+            // runtime with NoClassDefFoundError.
+            dependency("com.fasterxml.jackson.core:jackson-annotations:2.22")
+            dependencySet("com.fasterxml.jackson.core:2.22.1") {
+                entry("jackson-core")
+                entry("jackson-databind")
+            }
+            dependencySet("tools.jackson.core:3.2.1") {
+                entry("jackson-core")
+                entry("jackson-databind")
+            }
         }
     }
 
