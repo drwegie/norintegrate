@@ -115,8 +115,8 @@ org.antlr:ST4:4.3.4
 org.antlr:antlr-runtime:3.5.3
 org.antlr:antlr4-runtime:4.13.2
 org.apache.commons:commons-lang3:3.20.0
-org.apache.logging.log4j:log4j-api:2.25.4
-org.apache.logging.log4j:log4j-to-slf4j:2.25.4
+org.apache.logging.log4j:log4j-api:2.25.5
+org.apache.logging.log4j:log4j-to-slf4j:2.25.5
 org.apache.tomcat.embed:tomcat-embed-core:11.0.24
 org.apache.tomcat.embed:tomcat-embed-el:11.0.24
 org.apache.tomcat.embed:tomcat-embed-websocket:11.0.24
@@ -218,6 +218,13 @@ tools.jackson.core:jackson-databind:3.2.1
 tools.jackson.dataformat:jackson-dataformat-yaml:3.1.4
 "
 
+# The POM cache is keyed by GAV and worth keeping across runs, but extracted
+# NOTICE files are not: they are named per GAV and nothing prunes the ones
+# whose version has since moved on. Left in place, a version bump renders a
+# notices file that credits both the old and the new artifact — and the drift
+# check would not catch it, since it only compares the ARTIFACTS list.
+# Re-extraction is cheap: it reads jars already in the Gradle cache.
+rm -rf "$NOTICE_DIR"
 mkdir -p "$POM_CACHE" "$NOTICE_DIR"
 : > "$REPORT"
 

@@ -1,23 +1,44 @@
 version: 2
 
+# PR volume policy: 61 Dependabot PRs landed in the three months to 2026-08-16,
+# of which only two were security-driven. The rest were routine version updates
+# that were reviewed and merged in manual bundles anyway (e.g. #104). Each
+# ecosystem therefore batches minor and patch updates into a single monthly PR.
+# Majors stay ungrouped so a deliberate migration is never hidden inside a
+# batch, and cooldown holds a release back so a same-week follow-up patch is
+# picked up by the same PR rather than a second one.
+#
+# Security updates are unaffected by any of this: they are not grouped by these
+# rules, ignore the schedule, and are exempt from open-pull-requests-limit.
+
 updates:
   - package-ecosystem: gradle
     directory: /
     schedule:
-      interval: weekly
+      interval: monthly
+    cooldown:
+      default-days: 7
     groups:
-      spring:
+      gradle-minor-and-patch:
         patterns:
-          - "org.springframework*"
-      testing:
-        patterns:
-          - "org.testcontainers*"
-          - "org.junit*"
+          - "*"
+        update-types:
+          - minor
+          - patch
 
   - package-ecosystem: npm
     directory: /norintegrate-web
     schedule:
-      interval: weekly
+      interval: monthly
+    cooldown:
+      default-days: 7
+    groups:
+      web-minor-and-patch:
+        patterns:
+          - "*"
+        update-types:
+          - minor
+          - patch
     # Majors are deliberate migrations (HQ A-016). Per GitHub docs,
     # update-types ignores never suppress security updates.
     ignore:
@@ -37,12 +58,30 @@ updates:
   - package-ecosystem: github-actions
     directory: /
     schedule:
-      interval: weekly
+      interval: monthly
+    cooldown:
+      default-days: 7
+    groups:
+      actions-minor-and-patch:
+        patterns:
+          - "*"
+        update-types:
+          - minor
+          - patch
 
   - package-ecosystem: docker
     directory: /docker
     schedule:
-      interval: weekly
+      interval: monthly
+    cooldown:
+      default-days: 7
+    groups:
+      docker-minor-and-patch:
+        patterns:
+          - "*"
+        update-types:
+          - minor
+          - patch
     # The web image's node major is tied to norintegrate-web's engines floor
     # and .nvmrc, so it only moves when those do. Dependabot otherwise offers
     # every odd (non-LTS) line — node 25 was proposed as #98 and could not

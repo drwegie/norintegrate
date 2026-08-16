@@ -29,8 +29,8 @@ scripts/check-third-party-drift.sh
 
 It re-resolves `runtimeClasspath` and diffs it against the recorded list, exiting non-zero on any drift.
 
-- Generated: 2026-08-15
-- Source commit: `f4645e2`
+- Generated: 2026-08-16
+- Source commit: `a6675cc`
 - Artifacts covered: **152**
 
 ## Summary
@@ -140,10 +140,10 @@ No dependency is under a strong copyleft license (the GPL/AGPL/SSPL family); non
   <sub>[POM](https://repo1.maven.org/maven2/net/logstash/logback/logstash-logback-encoder/9.0/logstash-logback-encoder-9.0.pom)</sub>
 - `org.apache.commons:commons-lang3:3.20.0`  
   <sub>[POM](https://repo1.maven.org/maven2/org/apache/apache/35/apache-35.pom)</sub>
-- `org.apache.logging.log4j:log4j-api:2.25.4`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/apache/logging/log4j/log4j-api/2.25.4/log4j-api-2.25.4.pom)</sub>
-- `org.apache.logging.log4j:log4j-to-slf4j:2.25.4`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/apache/logging/log4j/log4j-to-slf4j/2.25.4/log4j-to-slf4j-2.25.4.pom)</sub>
+- `org.apache.logging.log4j:log4j-api:2.25.5`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/apache/logging/log4j/log4j-api/2.25.5/log4j-api-2.25.5.pom)</sub>
+- `org.apache.logging.log4j:log4j-to-slf4j:2.25.5`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/apache/logging/log4j/log4j-to-slf4j/2.25.5/log4j-to-slf4j-2.25.5.pom)</sub>
 - `org.apache.tomcat.embed:tomcat-embed-core:11.0.24`  
   <sub>[POM](https://repo1.maven.org/maven2/org/apache/tomcat/embed/tomcat-embed-core/11.0.24/tomcat-embed-core-11.0.24.pom)</sub>
 - `org.apache.tomcat.embed:tomcat-embed-el:11.0.24`  
@@ -396,14 +396,13 @@ No dependency is under a strong copyleft license (the GPL/AGPL/SSPL family); non
 
 ## Bundled NOTICE files (Apache-2.0 section 4(d))
 
-93 of the distributed artifacts bundle a `META-INF/NOTICE` file. Their contents are reproduced below, deduplicated to 29 distinct notices — several artifacts from the same project ship byte-identical text.
+86 of the distributed artifacts bundle a `META-INF/NOTICE` file. Their contents are reproduced below, deduplicated to 29 distinct notices — several artifacts from the same project ship byte-identical text.
 
 <details>
-<summary><code>com.fasterxml.jackson.core:jackson-annotations:2.22 (+2 more)</code></summary>
+<summary><code>com.fasterxml.jackson.core:jackson-annotations:2.22 (+1 more)</code></summary>
 
 Applies to:
 
-- `com.fasterxml.jackson.core:jackson-annotations:2.21`
 - `com.fasterxml.jackson.core:jackson-annotations:2.22`
 - `com.fasterxml.jackson.core:jackson-databind:2.22.1`
 
@@ -434,12 +433,7 @@ from the source code management (SCM) system project uses.
 </details>
 
 <details>
-<summary><code>com.fasterxml.jackson.core:jackson-core:2.22.1 (+1 more)</code></summary>
-
-Applies to:
-
-- `com.fasterxml.jackson.core:jackson-core:2.21.4`
-- `com.fasterxml.jackson.core:jackson-core:2.22.1`
+<summary><code>com.fasterxml.jackson.core:jackson-core:2.22.1</code></summary>
 
 ```text
 # Jackson JSON processor
@@ -692,12 +686,11 @@ package in the Spring Framework library, distributed by VMware, Inc:
 </details>
 
 <details>
-<summary><code>io.swagger.core.v3:swagger-annotations-jakarta:2.2.38 (+2 more)</code></summary>
+<summary><code>io.swagger.core.v3:swagger-annotations-jakarta:2.2.38 (+1 more)</code></summary>
 
 Applies to:
 
 - `io.swagger.core.v3:swagger-annotations-jakarta:2.2.38`
-- `io.swagger.core.v3:swagger-annotations-jakarta:2.2.47`
 - `io.swagger.core.v3:swagger-annotations-jakarta:2.2.52`
 
 ```text
@@ -710,12 +703,7 @@ Copy of the Apache 2.0 license can be found in `LICENSE` file.
 </details>
 
 <details>
-<summary><code>io.swagger.core.v3:swagger-core-jakarta:2.2.52 (+1 more)</code></summary>
-
-Applies to:
-
-- `io.swagger.core.v3:swagger-core-jakarta:2.2.47`
-- `io.swagger.core.v3:swagger-core-jakarta:2.2.52`
+<summary><code>io.swagger.core.v3:swagger-core-jakarta:2.2.52</code></summary>
 
 ```text
 Swagger Core - swagger-core
@@ -727,12 +715,7 @@ Copy of the Apache 2.0 license can be found in `LICENSE` file.
 </details>
 
 <details>
-<summary><code>io.swagger.core.v3:swagger-models-jakarta:2.2.52 (+1 more)</code></summary>
-
-Applies to:
-
-- `io.swagger.core.v3:swagger-models-jakarta:2.2.47`
-- `io.swagger.core.v3:swagger-models-jakarta:2.2.52`
+<summary><code>io.swagger.core.v3:swagger-models-jakarta:2.2.52</code></summary>
 
 ```text
 Swagger Core - swagger-models
@@ -1148,7 +1131,7 @@ The Apache Software Foundation (https://www.apache.org/).
 </details>
 
 <details>
-<summary><code>org.apache.logging.log4j:log4j-api:2.25.4</code></summary>
+<summary><code>org.apache.logging.log4j:log4j-api:2.25.5</code></summary>
 
 ```text
 Apache Log4j API
@@ -1162,7 +1145,7 @@ The Apache Software Foundation (http://www.apache.org/).
 </details>
 
 <details>
-<summary><code>org.apache.logging.log4j:log4j-to-slf4j:2.25.4</code></summary>
+<summary><code>org.apache.logging.log4j:log4j-to-slf4j:2.25.5</code></summary>
 
 ```text
 Log4j API to SLF4J Adapter
@@ -1578,12 +1561,7 @@ subcomponent's license, as noted in the license.txt file.
 </details>
 
 <details>
-<summary><code>tools.jackson.core:jackson-core:3.2.1 (+1 more)</code></summary>
-
-Applies to:
-
-- `tools.jackson.core:jackson-core:3.1.4`
-- `tools.jackson.core:jackson-core:3.2.1`
+<summary><code>tools.jackson.core:jackson-core:3.2.1</code></summary>
 
 ```text
 # Jackson JSON processor
@@ -1633,12 +1611,7 @@ See Schubfach-LICENSE.
 </details>
 
 <details>
-<summary><code>tools.jackson.core:jackson-databind:3.2.1 (+1 more)</code></summary>
-
-Applies to:
-
-- `tools.jackson.core:jackson-databind:3.1.5`
-- `tools.jackson.core:jackson-databind:3.2.1`
+<summary><code>tools.jackson.core:jackson-databind:3.2.1</code></summary>
 
 ```text
 # Jackson JSON processor
