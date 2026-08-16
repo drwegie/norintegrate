@@ -64,6 +64,14 @@ subprojects {
             // them. Keep core/databind/annotations at the versions the matching
             // jackson-bom declares; a partial bump resolves fine and then fails at
             // runtime with NoClassDefFoundError.
+            // Boot 4.1.0 manages Log4j at 2.25.4, which carries CVE-2026-49844
+            // (MapMessage JSON serialization of non-finite floats). Only
+            // log4j-api is flagged, but api and to-slf4j ship as one release
+            // train, so both move together for the same reason Jackson does.
+            dependencySet("org.apache.logging.log4j:2.25.5") {
+                entry("log4j-api")
+                entry("log4j-to-slf4j")
+            }
             dependency("com.fasterxml.jackson.core:jackson-annotations:2.22")
             dependencySet("com.fasterxml.jackson.core:2.22.1") {
                 entry("jackson-core")
