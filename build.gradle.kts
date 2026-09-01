@@ -1,7 +1,7 @@
 plugins {
-    id("org.springframework.boot") version "4.1.0" apply false
+    id("org.springframework.boot") version "4.1.1" apply false
     id("io.spring.dependency-management") version "1.1.7" apply false
-    id("com.diffplug.spotless") version "8.9.0" apply false
+    id("com.diffplug.spotless") version "8.10.0" apply false
     kotlin("jvm") version "2.4.10" apply false
     kotlin("plugin.spring") version "2.4.10" apply false
 }
@@ -48,15 +48,15 @@ subprojects {
 
     configure<io.spring.gradle.dependencymanagement.dsl.DependencyManagementExtension> {
         imports {
-            mavenBom("org.springframework.boot:spring-boot-dependencies:4.1.0")
+            mavenBom("org.springframework.boot:spring-boot-dependencies:4.1.1")
             mavenBom("org.testcontainers:testcontainers-bom:2.0.5")
-            mavenBom("org.springframework.ai:spring-ai-bom:2.0.0")
+            mavenBom("org.springframework.ai:spring-ai-bom:2.0.1")
         }
         dependencies {
             dependency("org.postgresql:postgresql:42.7.13")
-            dependency("org.apache.tomcat.embed:tomcat-embed-core:11.0.24")
-            dependency("org.apache.tomcat.embed:tomcat-embed-el:11.0.24")
-            dependency("org.apache.tomcat.embed:tomcat-embed-websocket:11.0.24")
+            dependency("org.apache.tomcat.embed:tomcat-embed-core:11.0.25")
+            dependency("org.apache.tomcat.embed:tomcat-embed-el:11.0.25")
+            dependency("org.apache.tomcat.embed:tomcat-embed-websocket:11.0.25")
             // Jackson 3 (tools.jackson) still compiles against the 2.x annotations
             // artifact, so both families move together. Importing the Jackson BOMs
             // does not work here — the Spring Boot plugin's own managed versions
