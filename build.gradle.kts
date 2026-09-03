@@ -54,9 +54,9 @@ subprojects {
         }
         dependencies {
             dependency("org.postgresql:postgresql:42.7.13")
-            dependency("org.apache.tomcat.embed:tomcat-embed-core:11.0.24")
-            dependency("org.apache.tomcat.embed:tomcat-embed-el:11.0.24")
-            dependency("org.apache.tomcat.embed:tomcat-embed-websocket:11.0.24")
+            dependency("org.apache.tomcat.embed:tomcat-embed-core:11.0.25")
+            dependency("org.apache.tomcat.embed:tomcat-embed-el:11.0.25")
+            dependency("org.apache.tomcat.embed:tomcat-embed-websocket:11.0.25")
             // Jackson 3 (tools.jackson) still compiles against the 2.x annotations
             // artifact, so both families move together. Importing the Jackson BOMs
             // does not work here — the Spring Boot plugin's own managed versions
