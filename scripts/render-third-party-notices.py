@@ -64,13 +64,13 @@ LICENSE_MAP = {
 # so, otherwise the obligations that actually apply are ambiguous.
 # gav -> (elected SPDX id, rationale shown in the file)
 ELECTIONS = {
-    "ch.qos.logback:logback-classic:1.5.34": (
+    "ch.qos.logback:logback-classic:1.5.38": (
         "EPL-2.0",
         "Dual-licensed EPL-2.0 or LGPL-2.1-only. **EPL-2.0 is elected.** "
         "The LGPL-2.1-only option is expressly *not* taken, so LGPL's "
         "relinking/source-substitution obligations do not apply here.",
     ),
-    "ch.qos.logback:logback-core:1.5.34": (
+    "ch.qos.logback:logback-core:1.5.38": (
         "EPL-2.0",
         "Dual-licensed EPL-2.0 or LGPL-2.1-only. **EPL-2.0 is elected.** "
         "The LGPL-2.1-only option is expressly *not* taken, so LGPL's "
