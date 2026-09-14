@@ -29,8 +29,8 @@ scripts/check-third-party-drift.sh
 
 It re-resolves `runtimeClasspath` and diffs it against the recorded list, exiting non-zero on any drift.
 
-- Generated: 2026-08-16
-- Source commit: `a6675cc`
+- Generated: 2026-09-14
+- Source commit: `72c0a21`
 - Artifacts covered: **152**
 
 ## Summary
@@ -51,8 +51,8 @@ No dependency is under a strong copyleft license (the GPL/AGPL/SSPL family); non
 
 ## Dual-licensed dependencies and elected licenses
 
-- **`ch.qos.logback:logback-classic:1.5.34`** → elected **EPL-2.0**. Dual-licensed EPL-2.0 or LGPL-2.1-only. **EPL-2.0 is elected.** The LGPL-2.1-only option is expressly *not* taken, so LGPL's relinking/source-substitution obligations do not apply here.
-- **`ch.qos.logback:logback-core:1.5.34`** → elected **EPL-2.0**. Dual-licensed EPL-2.0 or LGPL-2.1-only. **EPL-2.0 is elected.** The LGPL-2.1-only option is expressly *not* taken, so LGPL's relinking/source-substitution obligations do not apply here.
+- **`ch.qos.logback:logback-classic:1.5.38`** → elected **EPL-2.0**. Dual-licensed EPL-2.0 or LGPL-2.1-only. **EPL-2.0 is elected.** The LGPL-2.1-only option is expressly *not* taken, so LGPL's relinking/source-substitution obligations do not apply here.
+- **`ch.qos.logback:logback-core:1.5.38`** → elected **EPL-2.0**. Dual-licensed EPL-2.0 or LGPL-2.1-only. **EPL-2.0 is elected.** The LGPL-2.1-only option is expressly *not* taken, so LGPL's relinking/source-substitution obligations do not apply here.
 - **`jakarta.annotation:jakarta.annotation-api:3.0.0`** → elected **EPL-2.0**. Dual-licensed EPL-2.0 or GPL-2.0-only WITH Classpath-exception-2.0. **EPL-2.0 is elected**; the GPL option is not taken.
 - **`jakarta.persistence:jakarta.persistence-api:3.2.0`** → elected **EDL-1.0**. Dual-licensed EPL-2.0 or EDL-1.0. **EDL-1.0 is elected** (the BSD-3-Clause-equivalent option).
 - **`jakarta.transaction:jakarta.transaction-api:2.0.1`** → elected **EPL-2.0**. Dual-licensed EPL-2.0 or GPL-2.0-only WITH Classpath-exception-2.0. **EPL-2.0 is elected**; the GPL option is not taken.
@@ -76,10 +76,10 @@ No dependency is under a strong copyleft license (the GPL/AGPL/SSPL family); non
   <sub>[POM](https://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-core/2.22.1/jackson-core-2.22.1.pom)</sub>
 - `com.fasterxml.jackson.core:jackson-databind:2.22.1`  
   <sub>[POM](https://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-databind/2.22.1/jackson-databind-2.22.1.pom)</sub>
-- `com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.21.4`  
-  <sub>[POM](https://repo1.maven.org/maven2/com/fasterxml/jackson/dataformat/jackson-dataformats-text/2.21.4/jackson-dataformats-text-2.21.4.pom)</sub>
-- `com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.21.4`  
-  <sub>[POM](https://repo1.maven.org/maven2/com/fasterxml/jackson/jackson-base/2.21.4/jackson-base-2.21.4.pom)</sub>
+- `com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.21.5`  
+  <sub>[POM](https://repo1.maven.org/maven2/com/fasterxml/jackson/dataformat/jackson-dataformats-text/2.21.5/jackson-dataformats-text-2.21.5.pom)</sub>
+- `com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.21.5`  
+  <sub>[POM](https://repo1.maven.org/maven2/com/fasterxml/jackson/jackson-base/2.21.5/jackson-base-2.21.5.pom)</sub>
 - `com.fasterxml:classmate:1.7.3`  
   <sub>[POM](https://repo1.maven.org/maven2/com/fasterxml/classmate/1.7.3/classmate-1.7.3.pom)</sub>
 - `com.github.victools:jsonschema-generator:5.0.0`  
@@ -90,38 +90,38 @@ No dependency is under a strong copyleft license (the GPL/AGPL/SSPL family); non
   <sub>[POM](https://repo1.maven.org/maven2/com/github/victools/jsonschema-generator-parent/5.0.0/jsonschema-generator-parent-5.0.0.pom)</sub>
 - `com.networknt:json-schema-validator:3.0.0`  
   <sub>[POM](https://repo1.maven.org/maven2/com/networknt/json-schema-validator/3.0.0/json-schema-validator-3.0.0.pom)</sub>
-- `com.nimbusds:nimbus-jose-jwt:10.9`  
-  <sub>[POM](https://repo1.maven.org/maven2/com/nimbusds/nimbus-jose-jwt/10.9/nimbus-jose-jwt-10.9.pom)</sub>
+- `com.nimbusds:nimbus-jose-jwt:10.9.1`  
+  <sub>[POM](https://repo1.maven.org/maven2/com/nimbusds/nimbus-jose-jwt/10.9.1/nimbus-jose-jwt-10.9.1.pom)</sub>
 - `com.zaxxer:HikariCP:7.0.2`  
   <sub>[POM](https://repo1.maven.org/maven2/com/zaxxer/HikariCP/7.0.2/HikariCP-7.0.2.pom)</sub>
 - `commons-logging:commons-logging:1.3.6`  
   <sub>[POM](https://repo1.maven.org/maven2/org/apache/apache/37/apache-37.pom)</sub>
 - `io.micrometer:context-propagation:1.2.1`  
   <sub>[POM](https://repo1.maven.org/maven2/io/micrometer/context-propagation/1.2.1/context-propagation-1.2.1.pom)</sub>
-- `io.micrometer:micrometer-commons:1.17.0`  
-  <sub>[POM](https://repo1.maven.org/maven2/io/micrometer/micrometer-commons/1.17.0/micrometer-commons-1.17.0.pom)</sub>
-- `io.micrometer:micrometer-core:1.17.0`  
-  <sub>[POM](https://repo1.maven.org/maven2/io/micrometer/micrometer-core/1.17.0/micrometer-core-1.17.0.pom)</sub>
-- `io.micrometer:micrometer-jakarta9:1.17.0`  
-  <sub>[POM](https://repo1.maven.org/maven2/io/micrometer/micrometer-jakarta9/1.17.0/micrometer-jakarta9-1.17.0.pom)</sub>
-- `io.micrometer:micrometer-observation:1.17.0`  
-  <sub>[POM](https://repo1.maven.org/maven2/io/micrometer/micrometer-observation/1.17.0/micrometer-observation-1.17.0.pom)</sub>
-- `io.micrometer:micrometer-registry-prometheus:1.17.0`  
-  <sub>[POM](https://repo1.maven.org/maven2/io/micrometer/micrometer-registry-prometheus/1.17.0/micrometer-registry-prometheus-1.17.0.pom)</sub>
-- `io.projectreactor:reactor-core:3.8.6`  
-  <sub>[POM](https://repo1.maven.org/maven2/io/projectreactor/reactor-core/3.8.6/reactor-core-3.8.6.pom)</sub>
-- `io.prometheus:prometheus-metrics-config:1.5.1`  
-  <sub>[POM](https://repo1.maven.org/maven2/io/prometheus/client_java_parent/1.5.1/client_java_parent-1.5.1.pom)</sub>
-- `io.prometheus:prometheus-metrics-core:1.5.1`  
-  <sub>[POM](https://repo1.maven.org/maven2/io/prometheus/client_java_parent/1.5.1/client_java_parent-1.5.1.pom)</sub>
-- `io.prometheus:prometheus-metrics-exposition-formats:1.5.1`  
-  <sub>[POM](https://repo1.maven.org/maven2/io/prometheus/client_java_parent/1.5.1/client_java_parent-1.5.1.pom)</sub>
-- `io.prometheus:prometheus-metrics-exposition-textformats:1.5.1`  
-  <sub>[POM](https://repo1.maven.org/maven2/io/prometheus/client_java_parent/1.5.1/client_java_parent-1.5.1.pom)</sub>
-- `io.prometheus:prometheus-metrics-model:1.5.1`  
-  <sub>[POM](https://repo1.maven.org/maven2/io/prometheus/client_java_parent/1.5.1/client_java_parent-1.5.1.pom)</sub>
-- `io.prometheus:prometheus-metrics-tracer-common:1.5.1`  
-  <sub>[POM](https://repo1.maven.org/maven2/io/prometheus/client_java_parent/1.5.1/client_java_parent-1.5.1.pom)</sub>
+- `io.micrometer:micrometer-commons:1.17.1`  
+  <sub>[POM](https://repo1.maven.org/maven2/io/micrometer/micrometer-commons/1.17.1/micrometer-commons-1.17.1.pom)</sub>
+- `io.micrometer:micrometer-core:1.17.1`  
+  <sub>[POM](https://repo1.maven.org/maven2/io/micrometer/micrometer-core/1.17.1/micrometer-core-1.17.1.pom)</sub>
+- `io.micrometer:micrometer-jakarta9:1.17.1`  
+  <sub>[POM](https://repo1.maven.org/maven2/io/micrometer/micrometer-jakarta9/1.17.1/micrometer-jakarta9-1.17.1.pom)</sub>
+- `io.micrometer:micrometer-observation:1.17.1`  
+  <sub>[POM](https://repo1.maven.org/maven2/io/micrometer/micrometer-observation/1.17.1/micrometer-observation-1.17.1.pom)</sub>
+- `io.micrometer:micrometer-registry-prometheus:1.17.1`  
+  <sub>[POM](https://repo1.maven.org/maven2/io/micrometer/micrometer-registry-prometheus/1.17.1/micrometer-registry-prometheus-1.17.1.pom)</sub>
+- `io.projectreactor:reactor-core:3.8.7`  
+  <sub>[POM](https://repo1.maven.org/maven2/io/projectreactor/reactor-core/3.8.7/reactor-core-3.8.7.pom)</sub>
+- `io.prometheus:prometheus-metrics-config:1.7.0`  
+  <sub>[POM](https://repo1.maven.org/maven2/io/prometheus/client_java_parent/1.7.0/client_java_parent-1.7.0.pom)</sub>
+- `io.prometheus:prometheus-metrics-core:1.7.0`  
+  <sub>[POM](https://repo1.maven.org/maven2/io/prometheus/client_java_parent/1.7.0/client_java_parent-1.7.0.pom)</sub>
+- `io.prometheus:prometheus-metrics-exposition-formats:1.7.0`  
+  <sub>[POM](https://repo1.maven.org/maven2/io/prometheus/client_java_parent/1.7.0/client_java_parent-1.7.0.pom)</sub>
+- `io.prometheus:prometheus-metrics-exposition-textformats:1.7.0`  
+  <sub>[POM](https://repo1.maven.org/maven2/io/prometheus/client_java_parent/1.7.0/client_java_parent-1.7.0.pom)</sub>
+- `io.prometheus:prometheus-metrics-model:1.7.0`  
+  <sub>[POM](https://repo1.maven.org/maven2/io/prometheus/client_java_parent/1.7.0/client_java_parent-1.7.0.pom)</sub>
+- `io.prometheus:prometheus-metrics-tracer-common:1.7.0`  
+  <sub>[POM](https://repo1.maven.org/maven2/io/prometheus/client_java_parent/1.7.0/client_java_parent-1.7.0.pom)</sub>
 - `io.swagger.core.v3:swagger-annotations-jakarta:2.2.38`  
   <sub>[POM](https://repo1.maven.org/maven2/io/swagger/core/v3/swagger-project-jakarta/2.2.38/swagger-project-jakarta-2.2.38.pom)</sub>
 - `io.swagger.core.v3:swagger-annotations-jakarta:2.2.52`  
@@ -134,8 +134,8 @@ No dependency is under a strong copyleft license (the GPL/AGPL/SSPL family); non
   <sub>[POM](https://repo1.maven.org/maven2/jakarta/inject/jakarta.inject-api/2.0.1/jakarta.inject-api-2.0.1.pom)</sub>
 - `jakarta.validation:jakarta.validation-api:3.1.1`  
   <sub>[POM](https://repo1.maven.org/maven2/jakarta/validation/jakarta.validation-api/3.1.1/jakarta.validation-api-3.1.1.pom)</sub>
-- `net.bytebuddy:byte-buddy:1.18.10`  
-  <sub>[POM](https://repo1.maven.org/maven2/net/bytebuddy/byte-buddy-parent/1.18.10/byte-buddy-parent-1.18.10.pom)</sub>
+- `net.bytebuddy:byte-buddy:1.18.11`  
+  <sub>[POM](https://repo1.maven.org/maven2/net/bytebuddy/byte-buddy-parent/1.18.11/byte-buddy-parent-1.18.11.pom)</sub>
 - `net.logstash.logback:logstash-logback-encoder:9.0` — elected, see above  
   <sub>[POM](https://repo1.maven.org/maven2/net/logstash/logback/logstash-logback-encoder/9.0/logstash-logback-encoder-9.0.pom)</sub>
 - `org.apache.commons:commons-lang3:3.20.0`  
@@ -144,18 +144,18 @@ No dependency is under a strong copyleft license (the GPL/AGPL/SSPL family); non
   <sub>[POM](https://repo1.maven.org/maven2/org/apache/logging/log4j/log4j-api/2.25.5/log4j-api-2.25.5.pom)</sub>
 - `org.apache.logging.log4j:log4j-to-slf4j:2.25.5`  
   <sub>[POM](https://repo1.maven.org/maven2/org/apache/logging/log4j/log4j-to-slf4j/2.25.5/log4j-to-slf4j-2.25.5.pom)</sub>
-- `org.apache.tomcat.embed:tomcat-embed-core:11.0.24`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/apache/tomcat/embed/tomcat-embed-core/11.0.24/tomcat-embed-core-11.0.24.pom)</sub>
-- `org.apache.tomcat.embed:tomcat-embed-el:11.0.24`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/apache/tomcat/embed/tomcat-embed-el/11.0.24/tomcat-embed-el-11.0.24.pom)</sub>
-- `org.apache.tomcat.embed:tomcat-embed-websocket:11.0.24`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/apache/tomcat/embed/tomcat-embed-websocket/11.0.24/tomcat-embed-websocket-11.0.24.pom)</sub>
+- `org.apache.tomcat.embed:tomcat-embed-core:11.0.25`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/apache/tomcat/embed/tomcat-embed-core/11.0.25/tomcat-embed-core-11.0.25.pom)</sub>
+- `org.apache.tomcat.embed:tomcat-embed-el:11.0.25`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/apache/tomcat/embed/tomcat-embed-el/11.0.25/tomcat-embed-el-11.0.25.pom)</sub>
+- `org.apache.tomcat.embed:tomcat-embed-websocket:11.0.25`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/apache/tomcat/embed/tomcat-embed-websocket/11.0.25/tomcat-embed-websocket-11.0.25.pom)</sub>
 - `org.hibernate.models:hibernate-models:1.1.1`  
   <sub>[POM](https://repo1.maven.org/maven2/org/hibernate/models/hibernate-models/1.1.1/hibernate-models-1.1.1.pom)</sub>
-- `org.hibernate.orm:hibernate-core:7.4.1.Final`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/hibernate/orm/hibernate-core/7.4.1.Final/hibernate-core-7.4.1.Final.pom)</sub>
-- `org.hibernate.validator:hibernate-validator:9.1.0.Final`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/hibernate/validator/hibernate-validator/9.1.0.Final/hibernate-validator-9.1.0.Final.pom)</sub>
+- `org.hibernate.orm:hibernate-core:7.4.5.Final`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/hibernate/orm/hibernate-core/7.4.5.Final/hibernate-core-7.4.5.Final.pom)</sub>
+- `org.hibernate.validator:hibernate-validator:9.1.3.Final`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/hibernate/validator/hibernate-validator/9.1.3.Final/hibernate-validator-9.1.3.Final.pom)</sub>
 - `org.jboss.logging:jboss-logging:3.6.3.Final`  
   <sub>[POM](https://repo1.maven.org/maven2/org/jboss/logging/jboss-logging/3.6.3.Final/jboss-logging-3.6.3.Final.pom)</sub>
 - `org.jetbrains.kotlin:kotlin-reflect:2.4.10`  
@@ -164,8 +164,8 @@ No dependency is under a strong copyleft license (the GPL/AGPL/SSPL family); non
   <sub>[POM](https://repo1.maven.org/maven2/org/jetbrains/kotlin/kotlin-stdlib/2.4.10/kotlin-stdlib-2.4.10.pom)</sub>
 - `org.jetbrains:annotations:13.0`  
   <sub>[POM](https://repo1.maven.org/maven2/org/jetbrains/annotations/13.0/annotations-13.0.pom)</sub>
-- `org.jspecify:jspecify:1.0.0`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/jspecify/jspecify/1.0.0/jspecify-1.0.0.pom)</sub>
+- `org.jspecify:jspecify:1.0.1`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/jspecify/jspecify/1.0.1/jspecify-1.0.1.pom)</sub>
 - `org.snakeyaml:snakeyaml-engine:3.0.1`  
   <sub>[POM](https://repo1.maven.org/maven2/org/snakeyaml/snakeyaml-engine/3.0.1/snakeyaml-engine-3.0.1.pom)</sub>
 - `org.springdoc:springdoc-openapi-starter-common:3.1.0`  
@@ -174,140 +174,140 @@ No dependency is under a strong copyleft license (the GPL/AGPL/SSPL family); non
   <sub>[POM](https://repo1.maven.org/maven2/org/springdoc/springdoc-openapi/3.1.0/springdoc-openapi-3.1.0.pom)</sub>
 - `org.springdoc:springdoc-openapi-starter-webmvc-ui:3.1.0`  
   <sub>[POM](https://repo1.maven.org/maven2/org/springdoc/springdoc-openapi/3.1.0/springdoc-openapi-3.1.0.pom)</sub>
-- `org.springframework.ai:mcp-spring-webmvc:2.0.0`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/ai/mcp-spring-webmvc/2.0.0/mcp-spring-webmvc-2.0.0.pom)</sub>
-- `org.springframework.ai:spring-ai-autoconfigure-mcp-server-common:2.0.0`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/ai/spring-ai-autoconfigure-mcp-server-common/2.0.0/spring-ai-autoconfigure-mcp-server-common-2.0.0.pom)</sub>
-- `org.springframework.ai:spring-ai-autoconfigure-mcp-server-webmvc:2.0.0`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/ai/spring-ai-autoconfigure-mcp-server-webmvc/2.0.0/spring-ai-autoconfigure-mcp-server-webmvc-2.0.0.pom)</sub>
-- `org.springframework.ai:spring-ai-commons:2.0.0`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/ai/spring-ai-commons/2.0.0/spring-ai-commons-2.0.0.pom)</sub>
-- `org.springframework.ai:spring-ai-mcp-annotations:2.0.0`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/ai/spring-ai-mcp-annotations/2.0.0/spring-ai-mcp-annotations-2.0.0.pom)</sub>
-- `org.springframework.ai:spring-ai-mcp:2.0.0`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/ai/spring-ai-mcp/2.0.0/spring-ai-mcp-2.0.0.pom)</sub>
-- `org.springframework.ai:spring-ai-model:2.0.0`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/ai/spring-ai-model/2.0.0/spring-ai-model-2.0.0.pom)</sub>
-- `org.springframework.ai:spring-ai-starter-mcp-server-webmvc:2.0.0`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/ai/spring-ai-starter-mcp-server-webmvc/2.0.0/spring-ai-starter-mcp-server-webmvc-2.0.0.pom)</sub>
-- `org.springframework.ai:spring-ai-template-st:2.0.0`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/ai/spring-ai-template-st/2.0.0/spring-ai-template-st-2.0.0.pom)</sub>
-- `org.springframework.boot:spring-boot-actuator-autoconfigure:4.1.0`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-actuator-autoconfigure/4.1.0/spring-boot-actuator-autoconfigure-4.1.0.pom)</sub>
-- `org.springframework.boot:spring-boot-actuator:4.1.0`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-actuator/4.1.0/spring-boot-actuator-4.1.0.pom)</sub>
-- `org.springframework.boot:spring-boot-autoconfigure:4.1.0`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-autoconfigure/4.1.0/spring-boot-autoconfigure-4.1.0.pom)</sub>
-- `org.springframework.boot:spring-boot-data-commons:4.1.0`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-data-commons/4.1.0/spring-boot-data-commons-4.1.0.pom)</sub>
-- `org.springframework.boot:spring-boot-data-jpa:4.1.0`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-data-jpa/4.1.0/spring-boot-data-jpa-4.1.0.pom)</sub>
-- `org.springframework.boot:spring-boot-health:4.1.0`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-health/4.1.0/spring-boot-health-4.1.0.pom)</sub>
-- `org.springframework.boot:spring-boot-hibernate:4.1.0`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-hibernate/4.1.0/spring-boot-hibernate-4.1.0.pom)</sub>
-- `org.springframework.boot:spring-boot-http-converter:4.1.0`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-http-converter/4.1.0/spring-boot-http-converter-4.1.0.pom)</sub>
-- `org.springframework.boot:spring-boot-jackson:4.1.0`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-jackson/4.1.0/spring-boot-jackson-4.1.0.pom)</sub>
-- `org.springframework.boot:spring-boot-jdbc:4.1.0`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-jdbc/4.1.0/spring-boot-jdbc-4.1.0.pom)</sub>
-- `org.springframework.boot:spring-boot-jpa:4.1.0`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-jpa/4.1.0/spring-boot-jpa-4.1.0.pom)</sub>
-- `org.springframework.boot:spring-boot-micrometer-metrics:4.1.0`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-micrometer-metrics/4.1.0/spring-boot-micrometer-metrics-4.1.0.pom)</sub>
-- `org.springframework.boot:spring-boot-micrometer-observation:4.1.0`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-micrometer-observation/4.1.0/spring-boot-micrometer-observation-4.1.0.pom)</sub>
-- `org.springframework.boot:spring-boot-persistence:4.1.0`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-persistence/4.1.0/spring-boot-persistence-4.1.0.pom)</sub>
-- `org.springframework.boot:spring-boot-security-oauth2-resource-server:4.1.0`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-security-oauth2-resource-server/4.1.0/spring-boot-security-oauth2-resource-server-4.1.0.pom)</sub>
-- `org.springframework.boot:spring-boot-security:4.1.0`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-security/4.1.0/spring-boot-security-4.1.0.pom)</sub>
-- `org.springframework.boot:spring-boot-servlet:4.1.0`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-servlet/4.1.0/spring-boot-servlet-4.1.0.pom)</sub>
-- `org.springframework.boot:spring-boot-sql:4.1.0`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-sql/4.1.0/spring-boot-sql-4.1.0.pom)</sub>
-- `org.springframework.boot:spring-boot-starter-actuator:4.1.0`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-starter-actuator/4.1.0/spring-boot-starter-actuator-4.1.0.pom)</sub>
-- `org.springframework.boot:spring-boot-starter-data-jpa:4.1.0`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-starter-data-jpa/4.1.0/spring-boot-starter-data-jpa-4.1.0.pom)</sub>
-- `org.springframework.boot:spring-boot-starter-jackson:4.1.0`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-starter-jackson/4.1.0/spring-boot-starter-jackson-4.1.0.pom)</sub>
-- `org.springframework.boot:spring-boot-starter-jdbc:4.1.0`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-starter-jdbc/4.1.0/spring-boot-starter-jdbc-4.1.0.pom)</sub>
-- `org.springframework.boot:spring-boot-starter-logging:4.1.0`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-starter-logging/4.1.0/spring-boot-starter-logging-4.1.0.pom)</sub>
-- `org.springframework.boot:spring-boot-starter-micrometer-metrics:4.1.0`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-starter-micrometer-metrics/4.1.0/spring-boot-starter-micrometer-metrics-4.1.0.pom)</sub>
-- `org.springframework.boot:spring-boot-starter-oauth2-resource-server:4.1.0`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-starter-oauth2-resource-server/4.1.0/spring-boot-starter-oauth2-resource-server-4.1.0.pom)</sub>
-- `org.springframework.boot:spring-boot-starter-security:4.1.0`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-starter-security/4.1.0/spring-boot-starter-security-4.1.0.pom)</sub>
-- `org.springframework.boot:spring-boot-starter-tomcat-runtime:4.1.0`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-starter-tomcat-runtime/4.1.0/spring-boot-starter-tomcat-runtime-4.1.0.pom)</sub>
-- `org.springframework.boot:spring-boot-starter-tomcat:4.1.0`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-starter-tomcat/4.1.0/spring-boot-starter-tomcat-4.1.0.pom)</sub>
-- `org.springframework.boot:spring-boot-starter-validation:4.1.0`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-starter-validation/4.1.0/spring-boot-starter-validation-4.1.0.pom)</sub>
-- `org.springframework.boot:spring-boot-starter-web:4.1.0`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-starter-web/4.1.0/spring-boot-starter-web-4.1.0.pom)</sub>
-- `org.springframework.boot:spring-boot-starter:4.1.0`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-starter/4.1.0/spring-boot-starter-4.1.0.pom)</sub>
-- `org.springframework.boot:spring-boot-tomcat:4.1.0`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-tomcat/4.1.0/spring-boot-tomcat-4.1.0.pom)</sub>
-- `org.springframework.boot:spring-boot-transaction:4.1.0`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-transaction/4.1.0/spring-boot-transaction-4.1.0.pom)</sub>
-- `org.springframework.boot:spring-boot-validation:4.1.0`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-validation/4.1.0/spring-boot-validation-4.1.0.pom)</sub>
-- `org.springframework.boot:spring-boot-web-server:4.1.0`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-web-server/4.1.0/spring-boot-web-server-4.1.0.pom)</sub>
-- `org.springframework.boot:spring-boot-webmvc:4.1.0`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-webmvc/4.1.0/spring-boot-webmvc-4.1.0.pom)</sub>
-- `org.springframework.boot:spring-boot:4.1.0`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot/4.1.0/spring-boot-4.1.0.pom)</sub>
-- `org.springframework.data:spring-data-commons:4.1.0`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/data/build/spring-data-parent/4.1.0/spring-data-parent-4.1.0.pom)</sub>
-- `org.springframework.data:spring-data-jpa:4.1.0`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/data/build/spring-data-parent/4.1.0/spring-data-parent-4.1.0.pom)</sub>
-- `org.springframework.security:spring-security-config:7.1.0`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/security/spring-security-config/7.1.0/spring-security-config-7.1.0.pom)</sub>
-- `org.springframework.security:spring-security-core:7.1.0`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/security/spring-security-core/7.1.0/spring-security-core-7.1.0.pom)</sub>
-- `org.springframework.security:spring-security-crypto:7.1.0`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/security/spring-security-crypto/7.1.0/spring-security-crypto-7.1.0.pom)</sub>
-- `org.springframework.security:spring-security-oauth2-core:7.1.0`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/security/spring-security-oauth2-core/7.1.0/spring-security-oauth2-core-7.1.0.pom)</sub>
-- `org.springframework.security:spring-security-oauth2-jose:7.1.0`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/security/spring-security-oauth2-jose/7.1.0/spring-security-oauth2-jose-7.1.0.pom)</sub>
-- `org.springframework.security:spring-security-oauth2-resource-server:7.1.0`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/security/spring-security-oauth2-resource-server/7.1.0/spring-security-oauth2-resource-server-7.1.0.pom)</sub>
-- `org.springframework.security:spring-security-web:7.1.0`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/security/spring-security-web/7.1.0/spring-security-web-7.1.0.pom)</sub>
-- `org.springframework:spring-aop:7.0.8`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/spring-aop/7.0.8/spring-aop-7.0.8.pom)</sub>
-- `org.springframework:spring-aspects:7.0.8`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/spring-aspects/7.0.8/spring-aspects-7.0.8.pom)</sub>
-- `org.springframework:spring-beans:7.0.8`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/spring-beans/7.0.8/spring-beans-7.0.8.pom)</sub>
-- `org.springframework:spring-context:7.0.8`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/spring-context/7.0.8/spring-context-7.0.8.pom)</sub>
-- `org.springframework:spring-core:7.0.8`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/spring-core/7.0.8/spring-core-7.0.8.pom)</sub>
-- `org.springframework:spring-expression:7.0.8`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/spring-expression/7.0.8/spring-expression-7.0.8.pom)</sub>
-- `org.springframework:spring-jdbc:7.0.8`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/spring-jdbc/7.0.8/spring-jdbc-7.0.8.pom)</sub>
-- `org.springframework:spring-messaging:7.0.8`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/spring-messaging/7.0.8/spring-messaging-7.0.8.pom)</sub>
-- `org.springframework:spring-orm:7.0.8`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/spring-orm/7.0.8/spring-orm-7.0.8.pom)</sub>
-- `org.springframework:spring-tx:7.0.8`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/spring-tx/7.0.8/spring-tx-7.0.8.pom)</sub>
-- `org.springframework:spring-web:7.0.8`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/spring-web/7.0.8/spring-web-7.0.8.pom)</sub>
-- `org.springframework:spring-webmvc:7.0.8`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/spring-webmvc/7.0.8/spring-webmvc-7.0.8.pom)</sub>
+- `org.springframework.ai:mcp-spring-webmvc:2.0.1`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/ai/mcp-spring-webmvc/2.0.1/mcp-spring-webmvc-2.0.1.pom)</sub>
+- `org.springframework.ai:spring-ai-autoconfigure-mcp-server-common:2.0.1`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/ai/spring-ai-autoconfigure-mcp-server-common/2.0.1/spring-ai-autoconfigure-mcp-server-common-2.0.1.pom)</sub>
+- `org.springframework.ai:spring-ai-autoconfigure-mcp-server-webmvc:2.0.1`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/ai/spring-ai-autoconfigure-mcp-server-webmvc/2.0.1/spring-ai-autoconfigure-mcp-server-webmvc-2.0.1.pom)</sub>
+- `org.springframework.ai:spring-ai-commons:2.0.1`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/ai/spring-ai-commons/2.0.1/spring-ai-commons-2.0.1.pom)</sub>
+- `org.springframework.ai:spring-ai-mcp-annotations:2.0.1`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/ai/spring-ai-mcp-annotations/2.0.1/spring-ai-mcp-annotations-2.0.1.pom)</sub>
+- `org.springframework.ai:spring-ai-mcp:2.0.1`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/ai/spring-ai-mcp/2.0.1/spring-ai-mcp-2.0.1.pom)</sub>
+- `org.springframework.ai:spring-ai-model:2.0.1`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/ai/spring-ai-model/2.0.1/spring-ai-model-2.0.1.pom)</sub>
+- `org.springframework.ai:spring-ai-starter-mcp-server-webmvc:2.0.1`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/ai/spring-ai-starter-mcp-server-webmvc/2.0.1/spring-ai-starter-mcp-server-webmvc-2.0.1.pom)</sub>
+- `org.springframework.ai:spring-ai-template-st:2.0.1`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/ai/spring-ai-template-st/2.0.1/spring-ai-template-st-2.0.1.pom)</sub>
+- `org.springframework.boot:spring-boot-actuator-autoconfigure:4.1.1`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-actuator-autoconfigure/4.1.1/spring-boot-actuator-autoconfigure-4.1.1.pom)</sub>
+- `org.springframework.boot:spring-boot-actuator:4.1.1`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-actuator/4.1.1/spring-boot-actuator-4.1.1.pom)</sub>
+- `org.springframework.boot:spring-boot-autoconfigure:4.1.1`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-autoconfigure/4.1.1/spring-boot-autoconfigure-4.1.1.pom)</sub>
+- `org.springframework.boot:spring-boot-data-commons:4.1.1`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-data-commons/4.1.1/spring-boot-data-commons-4.1.1.pom)</sub>
+- `org.springframework.boot:spring-boot-data-jpa:4.1.1`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-data-jpa/4.1.1/spring-boot-data-jpa-4.1.1.pom)</sub>
+- `org.springframework.boot:spring-boot-health:4.1.1`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-health/4.1.1/spring-boot-health-4.1.1.pom)</sub>
+- `org.springframework.boot:spring-boot-hibernate:4.1.1`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-hibernate/4.1.1/spring-boot-hibernate-4.1.1.pom)</sub>
+- `org.springframework.boot:spring-boot-http-converter:4.1.1`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-http-converter/4.1.1/spring-boot-http-converter-4.1.1.pom)</sub>
+- `org.springframework.boot:spring-boot-jackson:4.1.1`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-jackson/4.1.1/spring-boot-jackson-4.1.1.pom)</sub>
+- `org.springframework.boot:spring-boot-jdbc:4.1.1`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-jdbc/4.1.1/spring-boot-jdbc-4.1.1.pom)</sub>
+- `org.springframework.boot:spring-boot-jpa:4.1.1`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-jpa/4.1.1/spring-boot-jpa-4.1.1.pom)</sub>
+- `org.springframework.boot:spring-boot-micrometer-metrics:4.1.1`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-micrometer-metrics/4.1.1/spring-boot-micrometer-metrics-4.1.1.pom)</sub>
+- `org.springframework.boot:spring-boot-micrometer-observation:4.1.1`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-micrometer-observation/4.1.1/spring-boot-micrometer-observation-4.1.1.pom)</sub>
+- `org.springframework.boot:spring-boot-persistence:4.1.1`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-persistence/4.1.1/spring-boot-persistence-4.1.1.pom)</sub>
+- `org.springframework.boot:spring-boot-security-oauth2-resource-server:4.1.1`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-security-oauth2-resource-server/4.1.1/spring-boot-security-oauth2-resource-server-4.1.1.pom)</sub>
+- `org.springframework.boot:spring-boot-security:4.1.1`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-security/4.1.1/spring-boot-security-4.1.1.pom)</sub>
+- `org.springframework.boot:spring-boot-servlet:4.1.1`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-servlet/4.1.1/spring-boot-servlet-4.1.1.pom)</sub>
+- `org.springframework.boot:spring-boot-sql:4.1.1`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-sql/4.1.1/spring-boot-sql-4.1.1.pom)</sub>
+- `org.springframework.boot:spring-boot-starter-actuator:4.1.1`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-starter-actuator/4.1.1/spring-boot-starter-actuator-4.1.1.pom)</sub>
+- `org.springframework.boot:spring-boot-starter-data-jpa:4.1.1`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-starter-data-jpa/4.1.1/spring-boot-starter-data-jpa-4.1.1.pom)</sub>
+- `org.springframework.boot:spring-boot-starter-jackson:4.1.1`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-starter-jackson/4.1.1/spring-boot-starter-jackson-4.1.1.pom)</sub>
+- `org.springframework.boot:spring-boot-starter-jdbc:4.1.1`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-starter-jdbc/4.1.1/spring-boot-starter-jdbc-4.1.1.pom)</sub>
+- `org.springframework.boot:spring-boot-starter-logging:4.1.1`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-starter-logging/4.1.1/spring-boot-starter-logging-4.1.1.pom)</sub>
+- `org.springframework.boot:spring-boot-starter-micrometer-metrics:4.1.1`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-starter-micrometer-metrics/4.1.1/spring-boot-starter-micrometer-metrics-4.1.1.pom)</sub>
+- `org.springframework.boot:spring-boot-starter-oauth2-resource-server:4.1.1`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-starter-oauth2-resource-server/4.1.1/spring-boot-starter-oauth2-resource-server-4.1.1.pom)</sub>
+- `org.springframework.boot:spring-boot-starter-security:4.1.1`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-starter-security/4.1.1/spring-boot-starter-security-4.1.1.pom)</sub>
+- `org.springframework.boot:spring-boot-starter-tomcat-runtime:4.1.1`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-starter-tomcat-runtime/4.1.1/spring-boot-starter-tomcat-runtime-4.1.1.pom)</sub>
+- `org.springframework.boot:spring-boot-starter-tomcat:4.1.1`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-starter-tomcat/4.1.1/spring-boot-starter-tomcat-4.1.1.pom)</sub>
+- `org.springframework.boot:spring-boot-starter-validation:4.1.1`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-starter-validation/4.1.1/spring-boot-starter-validation-4.1.1.pom)</sub>
+- `org.springframework.boot:spring-boot-starter-web:4.1.1`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-starter-web/4.1.1/spring-boot-starter-web-4.1.1.pom)</sub>
+- `org.springframework.boot:spring-boot-starter:4.1.1`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-starter/4.1.1/spring-boot-starter-4.1.1.pom)</sub>
+- `org.springframework.boot:spring-boot-tomcat:4.1.1`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-tomcat/4.1.1/spring-boot-tomcat-4.1.1.pom)</sub>
+- `org.springframework.boot:spring-boot-transaction:4.1.1`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-transaction/4.1.1/spring-boot-transaction-4.1.1.pom)</sub>
+- `org.springframework.boot:spring-boot-validation:4.1.1`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-validation/4.1.1/spring-boot-validation-4.1.1.pom)</sub>
+- `org.springframework.boot:spring-boot-web-server:4.1.1`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-web-server/4.1.1/spring-boot-web-server-4.1.1.pom)</sub>
+- `org.springframework.boot:spring-boot-webmvc:4.1.1`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-webmvc/4.1.1/spring-boot-webmvc-4.1.1.pom)</sub>
+- `org.springframework.boot:spring-boot:4.1.1`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot/4.1.1/spring-boot-4.1.1.pom)</sub>
+- `org.springframework.data:spring-data-commons:4.1.1`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/data/build/spring-data-parent/4.1.1/spring-data-parent-4.1.1.pom)</sub>
+- `org.springframework.data:spring-data-jpa:4.1.1`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/data/build/spring-data-parent/4.1.1/spring-data-parent-4.1.1.pom)</sub>
+- `org.springframework.security:spring-security-config:7.1.1`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/security/spring-security-config/7.1.1/spring-security-config-7.1.1.pom)</sub>
+- `org.springframework.security:spring-security-core:7.1.1`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/security/spring-security-core/7.1.1/spring-security-core-7.1.1.pom)</sub>
+- `org.springframework.security:spring-security-crypto:7.1.1`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/security/spring-security-crypto/7.1.1/spring-security-crypto-7.1.1.pom)</sub>
+- `org.springframework.security:spring-security-oauth2-core:7.1.1`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/security/spring-security-oauth2-core/7.1.1/spring-security-oauth2-core-7.1.1.pom)</sub>
+- `org.springframework.security:spring-security-oauth2-jose:7.1.1`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/security/spring-security-oauth2-jose/7.1.1/spring-security-oauth2-jose-7.1.1.pom)</sub>
+- `org.springframework.security:spring-security-oauth2-resource-server:7.1.1`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/security/spring-security-oauth2-resource-server/7.1.1/spring-security-oauth2-resource-server-7.1.1.pom)</sub>
+- `org.springframework.security:spring-security-web:7.1.1`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/security/spring-security-web/7.1.1/spring-security-web-7.1.1.pom)</sub>
+- `org.springframework:spring-aop:7.0.9`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/spring-aop/7.0.9/spring-aop-7.0.9.pom)</sub>
+- `org.springframework:spring-aspects:7.0.9`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/spring-aspects/7.0.9/spring-aspects-7.0.9.pom)</sub>
+- `org.springframework:spring-beans:7.0.9`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/spring-beans/7.0.9/spring-beans-7.0.9.pom)</sub>
+- `org.springframework:spring-context:7.0.9`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/spring-context/7.0.9/spring-context-7.0.9.pom)</sub>
+- `org.springframework:spring-core:7.0.9`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/spring-core/7.0.9/spring-core-7.0.9.pom)</sub>
+- `org.springframework:spring-expression:7.0.9`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/spring-expression/7.0.9/spring-expression-7.0.9.pom)</sub>
+- `org.springframework:spring-jdbc:7.0.9`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/spring-jdbc/7.0.9/spring-jdbc-7.0.9.pom)</sub>
+- `org.springframework:spring-messaging:7.0.9`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/spring-messaging/7.0.9/spring-messaging-7.0.9.pom)</sub>
+- `org.springframework:spring-orm:7.0.9`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/spring-orm/7.0.9/spring-orm-7.0.9.pom)</sub>
+- `org.springframework:spring-tx:7.0.9`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/spring-tx/7.0.9/spring-tx-7.0.9.pom)</sub>
+- `org.springframework:spring-web:7.0.9`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/spring-web/7.0.9/spring-web-7.0.9.pom)</sub>
+- `org.springframework:spring-webmvc:7.0.9`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/spring-webmvc/7.0.9/spring-webmvc-7.0.9.pom)</sub>
 - `org.webjars:swagger-ui:5.32.11`  
   <sub>[POM](https://repo1.maven.org/maven2/org/webjars/swagger-ui/5.32.11/swagger-ui-5.32.11.pom)</sub>
 - `org.yaml:snakeyaml:2.6`  
@@ -316,8 +316,8 @@ No dependency is under a strong copyleft license (the GPL/AGPL/SSPL family); non
   <sub>[POM](https://repo1.maven.org/maven2/tools/jackson/core/jackson-core/3.2.1/jackson-core-3.2.1.pom)</sub>
 - `tools.jackson.core:jackson-databind:3.2.1`  
   <sub>[POM](https://repo1.maven.org/maven2/tools/jackson/core/jackson-databind/3.2.1/jackson-databind-3.2.1.pom)</sub>
-- `tools.jackson.dataformat:jackson-dataformat-yaml:3.1.4`  
-  <sub>[POM](https://repo1.maven.org/maven2/tools/jackson/dataformat/jackson-dataformat-yaml/3.1.4/jackson-dataformat-yaml-3.1.4.pom)</sub>
+- `tools.jackson.dataformat:jackson-dataformat-yaml:3.1.5`  
+  <sub>[POM](https://repo1.maven.org/maven2/tools/jackson/dataformat/jackson-dataformat-yaml/3.1.5/jackson-dataformat-yaml-3.1.5.pom)</sub>
 
 ### EDL-1.0 (https://www.eclipse.org/org/documents/edl-v10.php)
 
@@ -354,15 +354,15 @@ No dependency is under a strong copyleft license (the GPL/AGPL/SSPL family); non
   <sub>[POM](https://repo1.maven.org/maven2/org/slf4j/slf4j-bom/2.0.18/slf4j-bom-2.0.18.pom)</sub>
 - `org.slf4j:slf4j-api:2.0.18`  
   <sub>[POM](https://repo1.maven.org/maven2/org/slf4j/slf4j-bom/2.0.18/slf4j-bom-2.0.18.pom)</sub>
-- `org.webjars:webjars-locator-lite:1.1.3`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/webjars/webjars-locator-lite/1.1.3/webjars-locator-lite-1.1.3.pom)</sub>
+- `org.webjars:webjars-locator-lite:1.1.4`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/webjars/webjars-locator-lite/1.1.4/webjars-locator-lite-1.1.4.pom)</sub>
 
 ### EPL-2.0 (https://www.eclipse.org/legal/epl-2.0/)
 
-- `ch.qos.logback:logback-classic:1.5.34` — elected, see above  
-  <sub>[POM](https://repo1.maven.org/maven2/ch/qos/logback/logback-parent/1.5.34/logback-parent-1.5.34.pom)</sub>
-- `ch.qos.logback:logback-core:1.5.34` — elected, see above  
-  <sub>[POM](https://repo1.maven.org/maven2/ch/qos/logback/logback-parent/1.5.34/logback-parent-1.5.34.pom)</sub>
+- `ch.qos.logback:logback-classic:1.5.38` — elected, see above  
+  <sub>[POM](https://repo1.maven.org/maven2/ch/qos/logback/logback-parent/1.5.38/logback-parent-1.5.38.pom)</sub>
+- `ch.qos.logback:logback-core:1.5.38` — elected, see above  
+  <sub>[POM](https://repo1.maven.org/maven2/ch/qos/logback/logback-parent/1.5.38/logback-parent-1.5.38.pom)</sub>
 - `jakarta.annotation:jakarta.annotation-api:3.0.0` — elected, see above  
   <sub>[POM](https://repo1.maven.org/maven2/jakarta/annotation/jakarta.annotation-api/3.0.0/jakarta.annotation-api-3.0.0.pom)</sub>
 - `jakarta.transaction:jakarta.transaction-api:2.0.1` — elected, see above  
@@ -396,7 +396,7 @@ No dependency is under a strong copyleft license (the GPL/AGPL/SSPL family); non
 
 ## Bundled NOTICE files (Apache-2.0 section 4(d))
 
-86 of the distributed artifacts bundle a `META-INF/NOTICE` file. Their contents are reproduced below, deduplicated to 29 distinct notices — several artifacts from the same project ship byte-identical text.
+88 of the distributed artifacts bundle a `META-INF/NOTICE` file. Their contents are reproduced below, deduplicated to 31 distinct notices — several artifacts from the same project ship byte-identical text.
 
 <details>
 <summary><code>com.fasterxml.jackson.core:jackson-annotations:2.22 (+1 more)</code></summary>
@@ -483,12 +483,12 @@ See Schubfach-LICENSE.
 </details>
 
 <details>
-<summary><code>com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.21.4 (+1 more)</code></summary>
+<summary><code>com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.21.5 (+1 more)</code></summary>
 
 Applies to:
 
-- `com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.21.4`
-- `tools.jackson.dataformat:jackson-dataformat-yaml:3.1.4`
+- `com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.21.5`
+- `tools.jackson.dataformat:jackson-dataformat-yaml:3.1.5`
 
 ```text
 # Jackson JSON processor
@@ -517,7 +517,7 @@ from the source code management (SCM) system project uses.
 </details>
 
 <details>
-<summary><code>com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.21.4</code></summary>
+<summary><code>com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.21.5</code></summary>
 
 ```text
 # Jackson JSON processor
@@ -625,15 +625,15 @@ package in the Spring Framework library, distributed by VMware, Inc:
 </details>
 
 <details>
-<summary><code>io.micrometer:micrometer-commons:1.17.0 (+4 more)</code></summary>
+<summary><code>io.micrometer:micrometer-commons:1.17.1 (+4 more)</code></summary>
 
 Applies to:
 
-- `io.micrometer:micrometer-commons:1.17.0`
-- `io.micrometer:micrometer-core:1.17.0`
-- `io.micrometer:micrometer-jakarta9:1.17.0`
-- `io.micrometer:micrometer-observation:1.17.0`
-- `io.micrometer:micrometer-registry-prometheus:1.17.0`
+- `io.micrometer:micrometer-commons:1.17.1`
+- `io.micrometer:micrometer-core:1.17.1`
+- `io.micrometer:micrometer-jakarta9:1.17.1`
+- `io.micrometer:micrometer-observation:1.17.1`
+- `io.micrometer:micrometer-registry-prometheus:1.17.1`
 
 ```text
 Micrometer
@@ -1097,7 +1097,7 @@ permitted.
 </details>
 
 <details>
-<summary><code>net.bytebuddy:byte-buddy:1.18.10</code></summary>
+<summary><code>net.bytebuddy:byte-buddy:1.18.11</code></summary>
 
 ```text
 Copyright 2014 - Present Rafael Winterhalter
@@ -1159,7 +1159,7 @@ The Apache Software Foundation (http://www.apache.org/).
 </details>
 
 <details>
-<summary><code>org.apache.tomcat.embed:tomcat-embed-core:11.0.24</code></summary>
+<summary><code>org.apache.tomcat.embed:tomcat-embed-core:11.0.25</code></summary>
 
 ```text
 Apache Tomcat
@@ -1198,12 +1198,12 @@ http://www.oracle.com/webfolder/technetwork/jsc/xml/ns/javaee/index.html
 </details>
 
 <details>
-<summary><code>org.apache.tomcat.embed:tomcat-embed-el:11.0.24 (+1 more)</code></summary>
+<summary><code>org.apache.tomcat.embed:tomcat-embed-el:11.0.25 (+1 more)</code></summary>
 
 Applies to:
 
-- `org.apache.tomcat.embed:tomcat-embed-el:11.0.24`
-- `org.apache.tomcat.embed:tomcat-embed-websocket:11.0.24`
+- `org.apache.tomcat.embed:tomcat-embed-el:11.0.25`
+- `org.apache.tomcat.embed:tomcat-embed-websocket:11.0.25`
 
 ```text
 Apache Tomcat
@@ -1473,50 +1473,50 @@ permitted.
 </details>
 
 <details>
-<summary><code>org.springframework.boot:spring-boot-actuator-autoconfigure:4.1.0 (+36 more)</code></summary>
+<summary><code>org.springframework.boot:spring-boot-actuator-autoconfigure:4.1.1 (+36 more)</code></summary>
 
 Applies to:
 
-- `org.springframework.boot:spring-boot-actuator-autoconfigure:4.1.0`
-- `org.springframework.boot:spring-boot-actuator:4.1.0`
-- `org.springframework.boot:spring-boot-autoconfigure:4.1.0`
-- `org.springframework.boot:spring-boot-data-commons:4.1.0`
-- `org.springframework.boot:spring-boot-data-jpa:4.1.0`
-- `org.springframework.boot:spring-boot-health:4.1.0`
-- `org.springframework.boot:spring-boot-hibernate:4.1.0`
-- `org.springframework.boot:spring-boot-http-converter:4.1.0`
-- `org.springframework.boot:spring-boot-jackson:4.1.0`
-- `org.springframework.boot:spring-boot-jdbc:4.1.0`
-- `org.springframework.boot:spring-boot-jpa:4.1.0`
-- `org.springframework.boot:spring-boot-micrometer-metrics:4.1.0`
-- `org.springframework.boot:spring-boot-micrometer-observation:4.1.0`
-- `org.springframework.boot:spring-boot-persistence:4.1.0`
-- `org.springframework.boot:spring-boot-security-oauth2-resource-server:4.1.0`
-- `org.springframework.boot:spring-boot-security:4.1.0`
-- `org.springframework.boot:spring-boot-servlet:4.1.0`
-- `org.springframework.boot:spring-boot-sql:4.1.0`
-- `org.springframework.boot:spring-boot-starter-actuator:4.1.0`
-- `org.springframework.boot:spring-boot-starter-data-jpa:4.1.0`
-- `org.springframework.boot:spring-boot-starter-jackson:4.1.0`
-- `org.springframework.boot:spring-boot-starter-jdbc:4.1.0`
-- `org.springframework.boot:spring-boot-starter-logging:4.1.0`
-- `org.springframework.boot:spring-boot-starter-micrometer-metrics:4.1.0`
-- `org.springframework.boot:spring-boot-starter-oauth2-resource-server:4.1.0`
-- `org.springframework.boot:spring-boot-starter-security:4.1.0`
-- `org.springframework.boot:spring-boot-starter-tomcat-runtime:4.1.0`
-- `org.springframework.boot:spring-boot-starter-tomcat:4.1.0`
-- `org.springframework.boot:spring-boot-starter-validation:4.1.0`
-- `org.springframework.boot:spring-boot-starter-web:4.1.0`
-- `org.springframework.boot:spring-boot-starter:4.1.0`
-- `org.springframework.boot:spring-boot-tomcat:4.1.0`
-- `org.springframework.boot:spring-boot-transaction:4.1.0`
-- `org.springframework.boot:spring-boot-validation:4.1.0`
-- `org.springframework.boot:spring-boot-web-server:4.1.0`
-- `org.springframework.boot:spring-boot-webmvc:4.1.0`
-- `org.springframework.boot:spring-boot:4.1.0`
+- `org.springframework.boot:spring-boot-actuator-autoconfigure:4.1.1`
+- `org.springframework.boot:spring-boot-actuator:4.1.1`
+- `org.springframework.boot:spring-boot-autoconfigure:4.1.1`
+- `org.springframework.boot:spring-boot-data-commons:4.1.1`
+- `org.springframework.boot:spring-boot-data-jpa:4.1.1`
+- `org.springframework.boot:spring-boot-health:4.1.1`
+- `org.springframework.boot:spring-boot-hibernate:4.1.1`
+- `org.springframework.boot:spring-boot-http-converter:4.1.1`
+- `org.springframework.boot:spring-boot-jackson:4.1.1`
+- `org.springframework.boot:spring-boot-jdbc:4.1.1`
+- `org.springframework.boot:spring-boot-jpa:4.1.1`
+- `org.springframework.boot:spring-boot-micrometer-metrics:4.1.1`
+- `org.springframework.boot:spring-boot-micrometer-observation:4.1.1`
+- `org.springframework.boot:spring-boot-persistence:4.1.1`
+- `org.springframework.boot:spring-boot-security-oauth2-resource-server:4.1.1`
+- `org.springframework.boot:spring-boot-security:4.1.1`
+- `org.springframework.boot:spring-boot-servlet:4.1.1`
+- `org.springframework.boot:spring-boot-sql:4.1.1`
+- `org.springframework.boot:spring-boot-starter-actuator:4.1.1`
+- `org.springframework.boot:spring-boot-starter-data-jpa:4.1.1`
+- `org.springframework.boot:spring-boot-starter-jackson:4.1.1`
+- `org.springframework.boot:spring-boot-starter-jdbc:4.1.1`
+- `org.springframework.boot:spring-boot-starter-logging:4.1.1`
+- `org.springframework.boot:spring-boot-starter-micrometer-metrics:4.1.1`
+- `org.springframework.boot:spring-boot-starter-oauth2-resource-server:4.1.1`
+- `org.springframework.boot:spring-boot-starter-security:4.1.1`
+- `org.springframework.boot:spring-boot-starter-tomcat-runtime:4.1.1`
+- `org.springframework.boot:spring-boot-starter-tomcat:4.1.1`
+- `org.springframework.boot:spring-boot-starter-validation:4.1.1`
+- `org.springframework.boot:spring-boot-starter-web:4.1.1`
+- `org.springframework.boot:spring-boot-starter:4.1.1`
+- `org.springframework.boot:spring-boot-tomcat:4.1.1`
+- `org.springframework.boot:spring-boot-transaction:4.1.1`
+- `org.springframework.boot:spring-boot-validation:4.1.1`
+- `org.springframework.boot:spring-boot-web-server:4.1.1`
+- `org.springframework.boot:spring-boot-webmvc:4.1.1`
+- `org.springframework.boot:spring-boot:4.1.1`
 
 ```text
-Spring Boot 4.1.0
+Spring Boot 4.1.1
 Copyright (c) 2012-2026 VMware, Inc.
 
 This product is licensed to you under the Apache License, Version 2.0
@@ -1527,25 +1527,62 @@ the License.
 </details>
 
 <details>
-<summary><code>org.springframework:spring-aop:7.0.8 (+11 more)</code></summary>
+<summary><code>org.springframework.data:spring-data-commons:4.1.1</code></summary>
+
+```text
+Spring Data Commons 4.1.1 (2026.0.1)
+Copyright (c) [2010-2026] Pivotal Software, Inc.
+
+This product is licensed to you under the Apache License, Version 2.0 (the "License").
+You may not use this product except in compliance with the License.
+
+This product may include a number of subcomponents with
+separate copyright notices and license terms. Your use of the source
+code for the these subcomponents is subject to the terms and
+conditions of the subcomponent's license, as noted in the LICENSE file.
+```
+
+</details>
+
+<details>
+<summary><code>org.springframework.data:spring-data-jpa:4.1.1</code></summary>
+
+```text
+Spring Data JPA 4.1.1 (2026.0.1)
+Copyright (c) 2015-2026 Pivotal Software, Inc.
+
+This product is licensed to you under the Apache License, Version 2.0
+(the "License"). You may not use this product except in compliance with
+the License.
+
+This product may include a number of subcomponents with separate
+copyright notices and license terms. Your use of the source code for
+these subcomponents is subject to the terms and conditions of the
+subcomponent's license, as noted in the license.txt file.
+```
+
+</details>
+
+<details>
+<summary><code>org.springframework:spring-aop:7.0.9 (+11 more)</code></summary>
 
 Applies to:
 
-- `org.springframework:spring-aop:7.0.8`
-- `org.springframework:spring-aspects:7.0.8`
-- `org.springframework:spring-beans:7.0.8`
-- `org.springframework:spring-context:7.0.8`
-- `org.springframework:spring-core:7.0.8`
-- `org.springframework:spring-expression:7.0.8`
-- `org.springframework:spring-jdbc:7.0.8`
-- `org.springframework:spring-messaging:7.0.8`
-- `org.springframework:spring-orm:7.0.8`
-- `org.springframework:spring-tx:7.0.8`
-- `org.springframework:spring-web:7.0.8`
-- `org.springframework:spring-webmvc:7.0.8`
+- `org.springframework:spring-aop:7.0.9`
+- `org.springframework:spring-aspects:7.0.9`
+- `org.springframework:spring-beans:7.0.9`
+- `org.springframework:spring-context:7.0.9`
+- `org.springframework:spring-core:7.0.9`
+- `org.springframework:spring-expression:7.0.9`
+- `org.springframework:spring-jdbc:7.0.9`
+- `org.springframework:spring-messaging:7.0.9`
+- `org.springframework:spring-orm:7.0.9`
+- `org.springframework:spring-tx:7.0.9`
+- `org.springframework:spring-web:7.0.9`
+- `org.springframework:spring-webmvc:7.0.9`
 
 ```text
-Spring Framework 7.0.8
+Spring Framework 7.0.9
 Copyright (c) 2002-2026 Pivotal, Inc.
 
 This product is licensed to you under the Apache License, Version 2.0
