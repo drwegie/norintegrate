@@ -15,7 +15,10 @@
 #
 # Exit 0 = list matches. Exit 1 = drift; the diff names what moved. On drift:
 #   1. update the ARTIFACTS block in scripts/generate-third-party-notices.sh
-#   2. scripts/generate-third-party-notices.sh
+#   2. scripts/generate-third-party-notices.sh — needs the jars in the Gradle
+#      cache, which this check does not download; if it reports missing jars,
+#      run ./gradlew :norintegrate-api:bootJar :norintegrate-mcp:bootJar
+#      :norintegrate-common:jar -x test first
 #   3. scripts/render-third-party-notices.py
 # Step 1 is deliberately manual: it defines what ships.
 

@@ -309,7 +309,11 @@ resolve_one() {
 }
 
 # Finds the artifact's jar in the Gradle module cache and, if it bundles a
-# META-INF/NOTICE(.txt|.md), extracts it to $NOTICE_DIR.
+# META-INF/NOTICE(.txt|.md), extracts it to $NOTICE_DIR. Returns 2 when the
+# jar itself is missing, which is not the same as "has no NOTICE": resolving
+# the dependency graph (as check-third-party-drift.sh does) caches POMs but
+# not jars, and treating that as "no NOTICE" once silently dropped ~30
+# Apache-2.0 NOTICE sections from a regenerated file.
 extract_notice() {
   local gav="$1" group artifact version
   group="${gav%%:*}"
@@ -318,7 +322,7 @@ extract_notice() {
   version="${rest#*:}"
   local jar
   jar="$(find "$GRADLE_CACHE/$group/$artifact/$version" -type f -name "${artifact}-${version}.jar" 2>/dev/null | head -1)"
-  [ -z "$jar" ] && return 1
+  [ -z "$jar" ] && return 2
   local entry
   # Case-insensitive on purpose: the JAR spec does not fix the casing, and
   # Spring Framework ships META-INF/notice.txt in lower case. Matching only
@@ -341,21 +345,37 @@ for gav in $ARTIFACTS; do
   total=$((total + 1))
 done
 
+missing_jars=""
 for gav in $ARTIFACTS; do
   [ -z "$gav" ] && continue
   count=$((count + 1))
   resolve_one "$gav"
   extract_notice "$gav"
+  [ $? -eq 2 ] && missing_jars="${missing_jars}${gav}
+"
   printf '[%d/%d] %s\n' "$count" "$total" "$gav" >&2
 done
 
 unresolved="$(grep -cE 'UNRESOLVED|FETCH_FAILED' "$REPORT" || true)"
 notice_count="$(find "$NOTICE_DIR" -type f -name '*.NOTICE.txt' | wc -l | tr -d ' ')"
+missing_count="$(printf '%s' "$missing_jars" | grep -c . || true)"
 
 echo "" >&2
 echo "Resolved $((total - unresolved))/$total artifacts; $unresolved need manual follow-up." >&2
 echo "Extracted $notice_count META-INF/NOTICE file(s) to $NOTICE_DIR" >&2
 echo "Report: $REPORT" >&2
+
+# A missing jar means its NOTICE could not be checked, so the rendered file
+# would silently lack any NOTICE that jar carries. Fail instead.
+if [ "$missing_count" -gt 0 ]; then
+  echo "" >&2
+  echo "ERROR: $missing_count artifact jar(s) not found in $GRADLE_CACHE:" >&2
+  printf '%s' "$missing_jars" | sed 's/^/  /' >&2
+  echo "Download them first, e.g.:" >&2
+  echo "  ./gradlew :norintegrate-api:bootJar :norintegrate-mcp:bootJar :norintegrate-common:jar -x test" >&2
+  echo "Do not render THIRD-PARTY-NOTICES.md until every jar is present." >&2
+  exit 1
+fi
 
 # Exit non-zero when any artifact's license could not be established, so a
 # caller (or CI) fails loudly instead of rendering a notices file with holes
