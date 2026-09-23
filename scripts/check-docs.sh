@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Detect documentation drift before it reaches main.
 #
-# Three checks:
+# Four checks:
 #   1. ADR index completeness  — every docs/adr/ADR-*.md file is listed in
 #      both README.md and CLAUDE.md's ADR tables, and vice versa.
 #   2. Broken relative links   — every relative markdown link target in a
@@ -13,6 +13,9 @@
 #      the failure mode is a red CI run, never a silently shipped drift.
 #   3. Version claim consistency — the CLAUDE.md technology stack table
 #      matches the versions actually declared in the build files.
+#   4. Merge conflict markers  — no tracked file contains an unresolved
+#      `<<<<<<<` / `=======` / `>>>>>>>` marker (a bad merge/rebase that
+#      slipped past review).
 #
 # Portability: this script targets macOS bash 3.2 (the default /bin/bash on
 # macOS) and the bash shipped with ubuntu-latest. Concretely that means:
@@ -188,6 +191,29 @@ extract_badge_value() {
   return 0
 }
 
+# Same idea as extract_badge_value, but for a badge whose shields.io LABEL
+# segment is not the bare component name. The Kotlin badge is scoped to the
+# one module that actually uses Kotlin, so its label is the module name and
+# the component name is a suffix of the MESSAGE instead:
+#   .../badge/norintegrate--mcp-Kotlin_2.4-7F52FF
+#   LABEL = "norintegrate-mcp" ("--" is shields.io's escape for a literal
+#           "-" inside a label), MESSAGE = "Kotlin_2.4".
+# $1 is the bare component name ("Kotlin") to find as a MESSAGE prefix
+# before the "_" that starts the version. Same not-found / empty-after-
+# truncation handling as extract_badge_value: a miss is a FAIL, never a
+# silent pass.
+extract_badge_value_suffix() {
+  local label="$1" file="$2"
+  local line message
+  line="$(grep -E "badge/[^)]*-${label}_" "$file" | head -1)"
+  [ -z "$line" ] && return 1
+  message="$(echo "$line" | sed -E "s/.*-${label}_([^-]+)-[a-zA-Z0-9]+\\).*/\\1/")"
+  message="${message%%_*}"
+  [ -z "$message" ] && return 1
+  printf '%s' "$message"
+  return 0
+}
+
 # --- Java: table claims an exact major version; badge claims a prefix ---
 java_actual=""
 actual_line="$(grep -E 'JavaLanguageVersion\.of\([0-9]+\)' build.gradle.kts || true)"
@@ -216,20 +242,33 @@ else
   fail "README.md: Java badge (img.shields.io/badge/Java-...) not found — cannot verify version claim"
 fi
 
-# --- Kotlin: exact version, compared against kotlin("jvm") version "X" ---
-# (no README badge exists for Kotlin)
+# --- Kotlin: table claims an exact version, compared against
+# kotlin("jvm") version "X"; badge claims a prefix (module-scoped label,
+# see extract_badge_value_suffix above) ---
+kotlin_actual=""
+actual_line="$(grep -E 'kotlin\("jvm"\) version "[0-9][^"]*"' build.gradle.kts || true)"
+if [ -n "$actual_line" ]; then
+  kotlin_actual="$(echo "$actual_line" | sed -E 's/.*kotlin\("jvm"\) version "([^"]*)".*/\1/')"
+fi
+
 if claim="$(extract_col2 'Kotlin' CLAUDE.md)"; then
-  actual_line="$(grep -E 'kotlin\("jvm"\) version "[0-9][^"]*"' build.gradle.kts || true)"
-  if [ -z "$actual_line" ]; then
+  if [ -z "$kotlin_actual" ]; then
     fail 'build.gradle.kts: kotlin("jvm") version "..." not found — cannot verify the CLAUDE.md Kotlin version claim'
-  else
-    actual="$(echo "$actual_line" | sed -E 's/.*kotlin\("jvm"\) version "([^"]*)".*/\1/')"
-    if [ "$claim" != "$actual" ]; then
-      fail "CLAUDE.md claims Kotlin $claim, but build.gradle.kts declares kotlin(\"jvm\") version \"$actual\""
-    fi
+  elif [ "$claim" != "$kotlin_actual" ]; then
+    fail "CLAUDE.md claims Kotlin $claim, but build.gradle.kts declares kotlin(\"jvm\") version \"$kotlin_actual\""
   fi
 else
   fail "CLAUDE.md: technology stack table has no 'Kotlin' row — cannot verify version claim"
+fi
+
+if badge_claim="$(extract_badge_value_suffix 'Kotlin' README.md)"; then
+  if [ -z "$kotlin_actual" ]; then
+    fail 'build.gradle.kts: kotlin("jvm") version "..." not found — cannot verify the README.md Kotlin badge claim'
+  elif ! version_prefix_match "$badge_claim" "$kotlin_actual"; then
+    fail "README.md Kotlin badge claims $badge_claim, but build.gradle.kts declares kotlin(\"jvm\") version \"$kotlin_actual\""
+  fi
+else
+  fail "README.md: Kotlin badge (img.shields.io/badge/...-Kotlin_...) not found — cannot verify version claim"
 fi
 
 # --- Spring Boot: table claims an exact version; badge claims a prefix ---
@@ -288,6 +327,26 @@ if badge_claim="$(extract_badge_value 'Next\.js' README.md)"; then
   fi
 else
   fail "README.md: Next.js badge (img.shields.io/badge/Next.js-...) not found — cannot verify version claim"
+fi
+
+echo "== Check 4: merge conflict markers =="
+
+# git grep -I behaves like GNU grep -I: it skips files git considers binary
+# (images, jars, ...), so this never chokes on non-text tracked content.
+# Anchoring "=======" as the *entire* line (not a substring) is deliberate:
+# a plain `grep '======='` over this repo also matches the "===...===" rule
+# lines inside THIRD-PARTY-NOTICES-WEB.md and scripts/license-texts/ (they
+# are far longer than 7 characters), and the box-drawing header/footer
+# comments in docs/schema.sql. None of those are ever a bare 7-character
+# "=======" line on their own, so this check does not false-positive on
+# main. Real Git conflict markers always keep the trailing ref name after
+# `<<<<<<< ` / `>>>>>>> `, so those two are anchored with a trailing space.
+CONFLICT_HITS="$(git grep -I -nE '^(<<<<<<< |=======$|>>>>>>> )' -- . || true)"
+if [ -n "$CONFLICT_HITS" ]; then
+  while IFS= read -r hit; do
+    [ -z "$hit" ] && continue
+    fail "$hit — looks like an unresolved merge conflict marker"
+  done <<< "$CONFLICT_HITS"
 fi
 
 echo "=================================="

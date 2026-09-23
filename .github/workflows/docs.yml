@@ -23,6 +23,14 @@ jobs:
       - name: Check docs for drift
         run: bash scripts/check-docs.sh
 
+      # Regression harness for check-docs.sh itself: injects known-bad docs
+      # edits into disposable clones and asserts check-docs.sh actually
+      # catches each one (and for the right reason). Runs in ~10s locally;
+      # keeping it in the same job avoids a second checkout for a script
+      # that, like check-docs.sh, needs nothing but git and bash.
+      - name: Test the docs drift checker
+        run: bash scripts/test-check-docs.sh
+
   # Separate job because this one needs a JDK to ask Gradle what actually
   # resolves onto runtimeClasspath. check-docs.sh is deliberately dependency
   # free and runs without one, so folding this check into it would have meant
