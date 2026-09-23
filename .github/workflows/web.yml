@@ -7,12 +7,20 @@ on:
       - 'norintegrate-web/**'
       - 'THIRD-PARTY-NOTICES-WEB.md'
       - 'scripts/check-third-party-notices-web-drift.sh'
+      - 'scripts/generate-third-party-notices-web.sh'
+      - 'scripts/lib/third-party-notices-web-inventory.js'
+      - 'scripts/lib/generate-third-party-notices-web.js'
+      - 'scripts/license-texts/**'
   pull_request:
     branches: [main]
     paths:
       - 'norintegrate-web/**'
       - 'THIRD-PARTY-NOTICES-WEB.md'
       - 'scripts/check-third-party-notices-web-drift.sh'
+      - 'scripts/generate-third-party-notices-web.sh'
+      - 'scripts/lib/third-party-notices-web-inventory.js'
+      - 'scripts/lib/generate-third-party-notices-web.js'
+      - 'scripts/license-texts/**'
 
 concurrency:
   group: web-${{ github.ref }}

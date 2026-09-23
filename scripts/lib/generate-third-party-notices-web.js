@@ -140,13 +140,6 @@ function escapeMd(s) {
 }
 
 function render(rows) {
-  const byFamily = {};
-  for (const r of rows) {
-    const family = FAMILY_TEXT_FILE[r.license] ? r.license : r.license;
-    byFamily[family] = byFamily[family] || [];
-    byFamily[family].push(r);
-  }
-
   const out = [];
   const w = (s = "") => out.push(s);
 
