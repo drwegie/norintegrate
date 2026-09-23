@@ -341,7 +341,13 @@ echo "== Check 4: merge conflict markers =="
 # "=======" line on their own, so this check does not false-positive on
 # main. Real Git conflict markers always keep the trailing ref name after
 # `<<<<<<< ` / `>>>>>>> `, so those two are anchored with a trailing space.
-CONFLICT_HITS="$(git grep -I -nE '^(<<<<<<< |=======$|>>>>>>> )' -- . || true)"
+# git grep exits 1 for "no match" and >1 for an actual error; only the
+# former is a pass, otherwise a broken git state would silently skip this check.
+grep_rc=0
+CONFLICT_HITS="$(git grep -I -nE '^(<<<<<<< |=======$|>>>>>>> )' -- .)" || grep_rc=$?
+if [ "$grep_rc" -gt 1 ]; then
+  fail "git grep exited $grep_rc — cannot verify merge conflict markers"
+fi
 if [ -n "$CONFLICT_HITS" ]; then
   while IFS= read -r hit; do
     [ -z "$hit" ] && continue

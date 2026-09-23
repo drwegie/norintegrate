@@ -59,6 +59,10 @@ copy_tree() {
 # appear (grep -F) somewhere in check-docs.sh's combined stdout+stderr for
 # the scenario to pass — this is what rules out a FAIL for the wrong
 # reason.
+# Remove the in-flight scenario's temp clone if the harness is interrupted.
+cur_tmp=""
+trap 'if [ -n "$cur_tmp" ]; then rm -rf "$cur_tmp"; fi' EXIT
+
 run_scenario() {
   local name="$1" expect_exit="$2" mutator="$3"
   shift 3
@@ -66,6 +70,7 @@ run_scenario() {
 
   local tmp out rc ok=1 n
   tmp="$(mktemp -d)"
+  cur_tmp="$tmp"
   copy_tree "$tmp"
 
   if [ -n "$mutator" ]; then
@@ -101,6 +106,7 @@ run_scenario() {
   fi
 
   rm -rf "$tmp"
+  cur_tmp=""
 }
 
 # --- Scenarios -------------------------------------------------------
