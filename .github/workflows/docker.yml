@@ -51,6 +51,10 @@ jobs:
           GRAFANA_ADMIN_PASSWORD: build-only
 
   # Push job disabled — AWS infra suspended (ADR-016). Re-enable when deploying.
+  # Before re-enabling: THIRD-PARTY-NOTICES-WEB.md must be current and
+  # `scripts/check-third-party-notices-web-drift.sh` must exit 0 (R-1 gate) —
+  # do not push an image whose bundled LGPL notices no longer match what it
+  # actually ships.
   # push:
   #   needs: build
   #   if: github.ref == 'refs/heads/main'

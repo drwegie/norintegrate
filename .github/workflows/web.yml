@@ -5,10 +5,14 @@ on:
     branches: [main]
     paths:
       - 'norintegrate-web/**'
+      - 'THIRD-PARTY-NOTICES-WEB.md'
+      - 'scripts/check-third-party-notices-web-drift.sh'
   pull_request:
     branches: [main]
     paths:
       - 'norintegrate-web/**'
+      - 'THIRD-PARTY-NOTICES-WEB.md'
+      - 'scripts/check-third-party-notices-web-drift.sh'
 
 concurrency:
   group: web-${{ github.ref }}
@@ -31,6 +35,8 @@ jobs:
       - run: npm run lint
       - run: npm test
       - run: npm run build
+      - name: Check THIRD-PARTY-NOTICES-WEB.md drift
+        run: bash ../scripts/check-third-party-notices-web-drift.sh
 
   e2e:
     runs-on: ubuntu-latest
