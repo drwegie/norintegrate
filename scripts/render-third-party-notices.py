@@ -240,9 +240,9 @@ def main():
     w(
         "**Out of scope:** the npm dependencies of `norintegrate-web`. The web "
         "image ships a Next.js `.next/standalone` bundle, so it does carry "
-        "third-party npm code. Its copyleft (LGPL) components are covered by "
-        "`THIRD-PARTY-NOTICES-WEB.md` instead; the inventory of its "
-        "*permissive*-licensed npm dependencies is not covered by either file."
+        "third-party npm code. Both its copyleft (LGPL) components and, since "
+        "NOR-31, its permissive- and CC-BY-4.0-licensed npm dependencies are "
+        "covered by `THIRD-PARTY-NOTICES-WEB.md` instead."
     )
     w("")
     w(

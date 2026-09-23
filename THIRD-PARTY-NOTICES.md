@@ -6,7 +6,7 @@ This file lists the third-party software distributed with norintegrate, together
 
 **In scope:** the runtime dependencies (Gradle `runtimeClasspath`) of the three JVM modules — `norintegrate-api`, `norintegrate-common` and `norintegrate-mcp`. These modules are shipped as fat JARs inside the `api` and `mcp` Docker images, so every artifact listed here is actually redistributed.
 
-**Out of scope:** the npm dependencies of `norintegrate-web`. The web image ships a Next.js `.next/standalone` bundle, so it does carry third-party npm code. Its copyleft (LGPL) components are covered by `THIRD-PARTY-NOTICES-WEB.md` instead; the inventory of its *permissive*-licensed npm dependencies is not covered by either file.
+**Out of scope:** the npm dependencies of `norintegrate-web`. The web image ships a Next.js `.next/standalone` bundle, so it does carry third-party npm code. Both its copyleft (LGPL) components and, since NOR-31, its permissive- and CC-BY-4.0-licensed npm dependencies are covered by `THIRD-PARTY-NOTICES-WEB.md` instead.
 
 **Not included:** build-only dependencies (ktlint, JaCoCo, the Kotlin Gradle plugin, and the rest of the build classpath). They are not part of any distributed artifact, so they carry no redistribution notice obligation.
 
@@ -30,7 +30,7 @@ scripts/check-third-party-drift.sh
 It re-resolves `runtimeClasspath` and diffs it against the recorded list, exiting non-zero on any drift.
 
 - Generated: 2026-09-23
-- Source commit: `e084042`
+- Source commit: `a8fd259`
 - Artifacts covered: **152**
 
 ## Summary
