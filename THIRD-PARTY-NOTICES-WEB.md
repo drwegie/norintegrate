@@ -88,19 +88,25 @@ Reproduced verbatim from
 > Please report any errors or omissions via
 > https://github.com/lovell/sharp-libvips/issues/new
 
-`cairo` is MPL-2.0, a file-level weak-copyleft license distinct from LGPL;
-`norintegrate-web` consumes it only as an unmodified binary inside the
-prebuilt `libvips-cpp.so.*`, so no separate obligation attaches to
-`norintegrate-web`'s own code.
+`cairo` 1.18.4 is distributed here only in Executable Form, compiled into
+`libvips-cpp.so.*`; per MPL-2.0 §3.2(a), its Source Code Form is available at
+https://gitlab.freedesktop.org/cairo/cairo/-/tree/1.18.4 (the version pinned
+by sharp-libvips v1.3.3, per `versions.properties`).
 
 ## Copyright notice (LGPL-3.0 §4(c))
 
-The upstream `libvips` repository's `LICENSE` file (reproduced verbatim
-below, under "License texts") contains the GNU LGPL v2.1 license text and
-no separate standalone copyright-holder statement; libvips is copyright its
-authors — see the project's own history at
-https://github.com/libvips/libvips/blob/v8.18.6/ChangeLog and
-https://github.com/libvips/libvips.
+LGPL-3.0 §4(c) applies only if the Combined Work displays copyright notices
+during execution. `norintegrate-web` does not display copyright notices at
+runtime, so the condition is not triggered; the following notice is given
+for completeness.
+
+libvips is Copyright the libvips authors (see
+https://github.com/libvips/libvips/graphs/contributors and
+https://github.com/libvips/libvips/blob/v8.18.6/ChangeLog). The upstream
+`LICENSE` file (reproduced verbatim below, under "License texts") contains
+the GNU LGPL v2.1 license text only; its copyright line is the Free Software
+Foundation's notice on the license document itself, not a libvips
+copyright-holder statement.
 
 ## Corresponding source (LGPL-3.0 §4(d))
 
@@ -111,6 +117,13 @@ https://github.com/libvips/libvips.
   https://github.com/lovell/sharp-libvips/tree/v1.3.3
 - `sharp` (the npm package that loads the shared library):
   https://github.com/lovell/sharp/tree/v0.35.4
+
+The `sharp-libvips` packaging repository linked above
+(https://github.com/lovell/sharp-libvips/tree/v1.3.3) also pins and builds
+glib 2.89.4, pango 1.58.2, librsvg 2.62.91, libexif 0.6.26, libheif 1.23.2,
+fribidi 1.0.16, and proxy-libintl 0.5 (see `versions.properties`) — the same
+repository is the Corresponding Source location for all LGPLv3-covered
+libraries statically compiled into `libvips-cpp.so`, not only libvips itself.
 
 ## Artifacts shipped in the Docker image vs. lockfile-only
 
