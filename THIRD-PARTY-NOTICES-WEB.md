@@ -23,11 +23,19 @@ build-only exclusion list and other-platform optional binaries. See
 exclusion list, and entries.
 
 **Not included:** dev-only dependencies (e.g. `lightningcss*`, `axe-core`,
-both MPL-2.0) — they are never installed in the runtime image, only on
-developer machines and in CI, so they carry no redistribution notice
-obligation for the image this file describes. Also excluded: the reviewed
-build-only tooling list in the permissive section below (test runners,
-platform-specific compilers, and their exclusive dependencies).
+both MPL-2.0) are excluded, except for the documented force-included
+exceptions below (`typescript`, `tailwindcss`) — a devDependency does not
+carry no redistribution obligation by default, only when it's actually
+absent from what ships. Most dev-only packages genuinely are dev-only (only
+installed on developer machines and in CI, never reaching the built image
+or its static output), but that has to be verified per package, not assumed
+from the `devDependencies` label alone — see "One documented exception" in
+the permissive section below for the two cases found to reach the build
+output despite being devDependencies, and
+`scripts/check-third-party-notices-web-build.sh` for the check that catches
+a third one automatically. Also excluded: the reviewed build-only tooling
+list in the permissive section below (test runners, platform-specific
+compilers, and their exclusive dependencies).
 
 ## Prominent notice (LGPL-3.0 §4(a))
 
@@ -238,11 +246,12 @@ The table below is the **SUPERSET** of `norintegrate-web/package-lock.json`'s no
 | `sharp` | 0.35.4 | Apache-2.0 | Lovell Fuller <npm@lovell.info> (npm package.json `author`) |
 | `source-map-js` | 1.2.1 | BSD-3-Clause | Copyright (c) 2009-2011, Mozilla Foundation and contributors |
 | `styled-jsx` | 5.1.6 | MIT | Copyright (c) 2016-present Vercel, Inc. |
+| `tailwindcss` | 4.3.3 | MIT | Copyright (c) Tailwind Labs, Inc. |
 | `tslib` | 2.8.1 | 0BSD | Copyright (c) Microsoft Corporation. |
 | `typescript` | 6.0.3 | Apache-2.0 | Microsoft Corp. (npm package.json `author`) |
 | `use-intl` | 4.14.2 | MIT | Copyright (c) 2024 Jan Amann |
 
-1 of 43 entries are `UNVERIFIED` (no LICENSE file present locally and no npm author/maintainer metadata found).
+1 of 44 entries are `UNVERIFIED` (no LICENSE file present locally and no npm author/maintainer metadata found).
 
 - `client-only@0.0.1`: UNVERIFIED — no `author` field in package.json, no bundled LICENSE file; registry `maintainers` reflects only the publishing npm account (sebmarkbage), not an asserted copyright holder; upstream request to add a LICENSE file was closed "not planned" (facebook/react#27242, verified 2026-09-23)
 
@@ -1198,6 +1207,7 @@ semver@7.8.5	ISC
 sharp@0.35.4	Apache-2.0
 source-map-js@1.2.1	BSD-3-Clause
 styled-jsx@5.1.6	MIT
+tailwindcss@4.3.3	MIT
 tslib@2.8.1	0BSD
 typescript@6.0.3	Apache-2.0
 use-intl@4.14.2	MIT
