@@ -1,4 +1,4 @@
-name: Docker Build
+name: Docker Build & Push
 
 on:
   workflow_dispatch:
@@ -50,44 +50,68 @@ jobs:
           GOOGLE_CLIENT_SECRET: build-only
           GRAFANA_ADMIN_PASSWORD: build-only
 
-  # Push job disabled — AWS infra suspended (ADR-016). Re-enable when deploying.
-  # Before re-enabling: THIRD-PARTY-NOTICES-WEB.md must be current and
-  # `scripts/check-third-party-notices-web-drift.sh` must exit 0 (R-1 gate) —
-  # do not push an image whose bundled LGPL notices no longer match what it
-  # actually ships.
-  # push:
-  #   needs: build
-  #   if: github.ref == 'refs/heads/main'
-  #   runs-on: ubuntu-latest
-  #   permissions:
-  #     packages: write
-  #     contents: read
-  #   strategy:
-  #     matrix:
-  #       include:
-  #         - service: api
-  #           dockerfile: docker/api.Dockerfile
-  #         - service: mcp
-  #           dockerfile: docker/mcp.Dockerfile
-  #         - service: web
-  #           dockerfile: docker/web.Dockerfile
-  #   steps:
-  #     - name: Checkout repository
-  #       uses: actions/checkout@v7
-  #
-  #     - name: Log in to GHCR
-  #       uses: docker/login-action@v4
-  #       with:
-  #         registry: ghcr.io
-  #         username: ${{ github.actor }}
-  #         password: ${{ secrets.GITHUB_TOKEN }}
-  #
-  #     - name: Build and push image
-  #       uses: docker/build-push-action@v7
-  #       with:
-  #         context: ${{ matrix.context || '.' }}
-  #         file: ${{ matrix.dockerfile }}
-  #         push: true
-  #         tags: |
-  #           ghcr.io/${{ github.repository_owner }}/norintegrate-${{ matrix.service }}:latest
-  #           ghcr.io/${{ github.repository_owner }}/norintegrate-${{ matrix.service }}:${{ github.sha }}
+  # R-1 legal gate: the web image must not be pushed unless the web
+  # third-party notices checks (same invocations as .github/workflows/web.yml)
+  # pass in this run. See notices-gate below and push's `needs`.
+  notices-gate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    defaults:
+      run:
+        working-directory: norintegrate-web
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: norintegrate-web/.nvmrc
+          cache: npm
+          cache-dependency-path: norintegrate-web/package-lock.json
+
+      - run: npm ci
+      - run: npm run build
+
+      - name: Check THIRD-PARTY-NOTICES-WEB.md covers the built output
+        run: bash ../scripts/check-third-party-notices-web-build.sh
+
+      - name: Check THIRD-PARTY-NOTICES-WEB.md drift
+        run: bash ../scripts/check-third-party-notices-web-drift.sh
+
+  push:
+    needs: [build, notices-gate]
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      packages: write
+      contents: read
+    strategy:
+      matrix:
+        include:
+          - service: api
+            dockerfile: docker/api.Dockerfile
+          - service: mcp
+            dockerfile: docker/mcp.Dockerfile
+          - service: web
+            dockerfile: docker/web.Dockerfile
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v7
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v4
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push image
+        uses: docker/build-push-action@v7
+        with:
+          context: .
+          file: ${{ matrix.dockerfile }}
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository_owner }}/norintegrate-${{ matrix.service }}:latest
+            ghcr.io/${{ github.repository_owner }}/norintegrate-${{ matrix.service }}:${{ github.sha }}
