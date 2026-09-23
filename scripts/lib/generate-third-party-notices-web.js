@@ -135,6 +135,13 @@ function readTypescriptNotice() {
   return fs.readFileSync(file, "utf8").trim();
 }
 
+// Reviewed evidence for entries whose copyright holder cannot be verified
+// (legal, 2026-09-23). Printed under the table so the gap is explained, not hidden.
+const UNVERIFIED_NOTES = {
+  "client-only":
+    "UNVERIFIED — no `author` field in package.json, no bundled LICENSE file; registry `maintainers` reflects only the publishing npm account (sebmarkbage), not an asserted copyright holder; upstream request to add a LICENSE file was closed \"not planned\" (facebook/react#27242, verified 2026-09-23)",
+};
+
 function escapeMd(s) {
   return s.replace(/\|/g, "\\|");
 }
@@ -227,6 +234,11 @@ function render(rows) {
   w("");
   w(`${unverifiedCount} of ${sorted.length} entries are \`UNVERIFIED\` (no LICENSE file present locally and no npm author/maintainer metadata found).`);
   w("");
+  for (const r of sorted) {
+    const note = UNVERIFIED_NOTES[r.name];
+    if (note && !resolveCopyright(r.name).verified) w(`- \`${r.name}@${r.version}\`: ${note}`);
+  }
+  w("");
 
   w("### Apache-2.0 NOTICE reproduction");
   w("");
@@ -237,8 +249,12 @@ function render(rows) {
       "form of the `NOTICE.txt` published at " +
       "https://github.com/microsoft/TypeScript). Per Apache-2.0 §4(d), its " +
       "content is reproduced verbatim below. The other Apache-2.0 packages " +
-      "(`sharp`, `@img/sharp-darwin-arm64`, `detect-libc`, `@swc/helpers`, " +
-      "`@swc/types`, `@swc/counter`) do not bundle a `NOTICE` file, so §4(d) " +
+      "(" +
+      sorted
+        .filter((r) => r.license === "Apache-2.0" && r.name !== "typescript")
+        .map((r) => "`" + r.name + "`")
+        .join(", ") +
+      ") do not bundle a `NOTICE` file, so §4(d) " +
       "imposes no additional-notice obligation for them."
   );
   w("");

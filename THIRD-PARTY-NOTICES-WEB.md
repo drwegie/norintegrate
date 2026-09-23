@@ -244,9 +244,11 @@ The table below is the **SUPERSET** of `norintegrate-web/package-lock.json`'s no
 
 1 of 43 entries are `UNVERIFIED` (no LICENSE file present locally and no npm author/maintainer metadata found).
 
+- `client-only@0.0.1`: UNVERIFIED — no `author` field in package.json, no bundled LICENSE file; registry `maintainers` reflects only the publishing npm account (sebmarkbage), not an asserted copyright holder; upstream request to add a LICENSE file was closed "not planned" (facebook/react#27242, verified 2026-09-23)
+
 ### Apache-2.0 NOTICE reproduction
 
-Of the Apache-2.0 packages above, only `typescript` bundles a `NOTICE`-equivalent file with its published npm package (`node_modules/typescript/ThirdPartyNoticeText.txt`, the npm-distributed form of the `NOTICE.txt` published at https://github.com/microsoft/TypeScript). Per Apache-2.0 §4(d), its content is reproduced verbatim below. The other Apache-2.0 packages (`sharp`, `@img/sharp-darwin-arm64`, `detect-libc`, `@swc/helpers`, `@swc/types`, `@swc/counter`) do not bundle a `NOTICE` file, so §4(d) imposes no additional-notice obligation for them.
+Of the Apache-2.0 packages above, only `typescript` bundles a `NOTICE`-equivalent file with its published npm package (`node_modules/typescript/ThirdPartyNoticeText.txt`, the npm-distributed form of the `NOTICE.txt` published at https://github.com/microsoft/TypeScript). Per Apache-2.0 §4(d), its content is reproduced verbatim below. The other Apache-2.0 packages (`@img/sharp-linuxmusl-arm64`, `@img/sharp-linuxmusl-x64`, `@img/sharp-webcontainers-wasm32`, `@swc/counter`, `@swc/helpers`, `@swc/types`, `detect-libc`, `sharp`) do not bundle a `NOTICE` file, so §4(d) imposes no additional-notice obligation for them.
 
 <details>
 <summary><code>typescript@6.0.3 — ThirdPartyNoticeText.txt</code></summary>
