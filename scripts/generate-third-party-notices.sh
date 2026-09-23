@@ -282,7 +282,11 @@ resolve_one() {
     pomfile="$(fetch_pom "$cg" "$ca" "$cv")"
     url="$(pom_url_of "$cg" "$ca" "$cv")"
     if [ -z "$pomfile" ]; then
-      printf '%s\tFETCH_FAILED\tFETCH_FAILED\t%s\n' "$gav" "$depth" "$url" >> "$REPORT"
+      # 4 columns to match every other row written to $REPORT: gav, raw
+      # license, resolution source, pom url. The previous format string had
+      # only 2 "%s" for 3 args, so printf silently recycled it — writing a
+      # bogus extra line instead of one well-formed 4-column row.
+      printf '%s\tFETCH_FAILED\tFETCH_FAILED(depth-%s)\t%s\n' "$gav" "$depth" "$url" >> "$REPORT"
       return
     fi
     names="$(extract_license_names "$pomfile")"
@@ -331,8 +335,14 @@ extract_notice() {
   # section 4(d) requires us to carry.
   entry="$(unzip -l "$jar" 2>/dev/null | tr -s ' ' | cut -d' ' -f5 | grep -iE '^META-INF/NOTICE(\.txt|\.md)?$' | head -1)"
   [ -z "$entry" ] && return 1
+  # Encode the gav into a filesystem-safe name. Using "_" here would be
+  # ambiguous: an artifact whose own name or version contains "_" (e.g.
+  # some Kotlin/Scala-published artifacts) would decode back to the wrong
+  # gav. "+" and "~" are not valid inside a Maven groupId/artifactId/version,
+  # so this mapping is unambiguous and losslessly reversible — see the
+  # matching decode in render-third-party-notices.py's collect_notices().
   local safe_name notice_file
-  safe_name="$(printf '%s' "$gav" | tr ':/' '__')"
+  safe_name="$(printf '%s' "$gav" | tr ':/' '+~')"
   notice_file="$NOTICE_DIR/${safe_name}.NOTICE.txt"
   unzip -p "$jar" "$entry" > "$notice_file" 2>/dev/null
   [ -s "$notice_file" ] || rm -f "$notice_file"

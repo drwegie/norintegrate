@@ -6,7 +6,7 @@ This file lists the third-party software distributed with norintegrate, together
 
 **In scope:** the runtime dependencies (Gradle `runtimeClasspath`) of the three JVM modules — `norintegrate-api`, `norintegrate-common` and `norintegrate-mcp`. These modules are shipped as fat JARs inside the `api` and `mcp` Docker images, so every artifact listed here is actually redistributed.
 
-**Out of scope:** the npm dependencies of `norintegrate-web`. The web image ships a Next.js `.next/standalone` bundle, so it does carry third-party npm code; that inventory is being handled separately and is *not* covered by this file.
+**Out of scope:** the npm dependencies of `norintegrate-web`. The web image ships a Next.js `.next/standalone` bundle, so it does carry third-party npm code. Its copyleft (LGPL) components are covered by `THIRD-PARTY-NOTICES-WEB.md` instead; the inventory of its *permissive*-licensed npm dependencies is not covered by either file.
 
 **Not included:** build-only dependencies (ktlint, JaCoCo, the Kotlin Gradle plugin, and the rest of the build classpath). They are not part of any distributed artifact, so they carry no redistribution notice obligation.
 
@@ -29,8 +29,8 @@ scripts/check-third-party-drift.sh
 
 It re-resolves `runtimeClasspath` and diffs it against the recorded list, exiting non-zero on any drift.
 
-- Generated: 2026-09-14
-- Source commit: `72c0a21`
+- Generated: 2026-09-23
+- Source commit: `e084042`
 - Artifacts covered: **152**
 
 ## Summary
@@ -42,8 +42,7 @@ It re-resolves `runtimeClasspath` and diffs it against the recorded list, exitin
 | MIT | 8 |
 | EPL-2.0 | 5 |
 | BSD-3-Clause | 3 |
-| BSD-2-Clause | 1 |
-| CC0-1.0 | 1 |
+| BSD-2-Clause | 2 |
 | MIT-0 | 1 |
 | **Total** | **152** |
 
@@ -57,7 +56,7 @@ No dependency is under a strong copyleft license (the GPL/AGPL/SSPL family); non
 - **`jakarta.persistence:jakarta.persistence-api:3.2.0`** → elected **EDL-1.0**. Dual-licensed EPL-2.0 or EDL-1.0. **EDL-1.0 is elected** (the BSD-3-Clause-equivalent option).
 - **`jakarta.transaction:jakarta.transaction-api:2.0.1`** → elected **EPL-2.0**. Dual-licensed EPL-2.0 or GPL-2.0-only WITH Classpath-exception-2.0. **EPL-2.0 is elected**; the GPL option is not taken.
 - **`net.logstash.logback:logstash-logback-encoder:9.0`** → elected **Apache-2.0**. Dual-licensed Apache-2.0 or MIT. **Apache-2.0 is elected.**
-- **`org.hdrhistogram:HdrHistogram:2.2.2`** → elected **CC0-1.0**. Offered as CC0-1.0 (public domain dedication) or BSD-2-Clause. **CC0-1.0 is elected**; the BSD-2-Clause text is reproduced below as well, since the upstream POM presents the two together.
+- **`org.hdrhistogram:HdrHistogram:2.2.2`** → elected **BSD-2-Clause**. Offered as CC0-1.0 (public domain dedication) or BSD-2-Clause. CC0-1.0 grants no patent license (CC0 §4(a) disclaims any patent rights the affirmer might hold), so **BSD-2-Clause is elected** instead.
 
 ## Dependencies with an imprecise upstream license declaration
 
@@ -381,13 +380,10 @@ No dependency is under a strong copyleft license (the GPL/AGPL/SSPL family); non
 
 ### BSD-2-Clause (https://opensource.org/license/bsd-2-clause)
 
-- `org.postgresql:postgresql:42.7.13`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/postgresql/postgresql/42.7.13/postgresql-42.7.13.pom)</sub>
-
-### CC0-1.0 (https://creativecommons.org/publicdomain/zero/1.0/legalcode)
-
 - `org.hdrhistogram:HdrHistogram:2.2.2` — elected, see above  
   <sub>[POM](https://repo1.maven.org/maven2/org/hdrhistogram/HdrHistogram/2.2.2/HdrHistogram-2.2.2.pom)</sub>
+- `org.postgresql:postgresql:42.7.13`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/postgresql/postgresql/42.7.13/postgresql-42.7.13.pom)</sub>
 
 ### MIT-0 (https://opensource.org/license/mit-0)
 
@@ -397,6 +393,23 @@ No dependency is under a strong copyleft license (the GPL/AGPL/SSPL family); non
 ## Bundled NOTICE files (Apache-2.0 section 4(d))
 
 88 of the distributed artifacts bundle a `META-INF/NOTICE` file. Their contents are reproduced below, deduplicated to 31 distinct notices — several artifacts from the same project ship byte-identical text.
+
+<details>
+<summary><code>com.fasterxml:classmate:1.7.3</code></summary>
+
+```text
+Java ClassMate library was originally written by Tatu Saloranta (tatu.saloranta@iki.fi)
+
+Other developers who have contributed code are:
+
+* Brian Langel
+
+## Copyright
+
+Copyright 2007-, Tatu Saloranta (tatu.saloranta@iki.fi)
+```
+
+</details>
 
 <details>
 <summary><code>com.fasterxml.jackson.core:jackson-annotations:2.22 (+1 more)</code></summary>
@@ -537,23 +550,6 @@ as per accompanying LICENSE file.
 A list of contributors may be found from CREDITS file, which is included
 in some artifacts (usually source distributions); but is always available
 from the source code management (SCM) system project uses.
-```
-
-</details>
-
-<details>
-<summary><code>com.fasterxml:classmate:1.7.3</code></summary>
-
-```text
-Java ClassMate library was originally written by Tatu Saloranta (tatu.saloranta@iki.fi)
-
-Other developers who have contributed code are:
-
-* Brian Langel
-
-## Copyright
-
-Copyright 2007-, Tatu Saloranta (tatu.saloranta@iki.fi)
 ```
 
 </details>
@@ -1473,6 +1469,40 @@ permitted.
 </details>
 
 <details>
+<summary><code>org.springframework:spring-aop:7.0.9 (+11 more)</code></summary>
+
+Applies to:
+
+- `org.springframework:spring-aop:7.0.9`
+- `org.springframework:spring-aspects:7.0.9`
+- `org.springframework:spring-beans:7.0.9`
+- `org.springframework:spring-context:7.0.9`
+- `org.springframework:spring-core:7.0.9`
+- `org.springframework:spring-expression:7.0.9`
+- `org.springframework:spring-jdbc:7.0.9`
+- `org.springframework:spring-messaging:7.0.9`
+- `org.springframework:spring-orm:7.0.9`
+- `org.springframework:spring-tx:7.0.9`
+- `org.springframework:spring-web:7.0.9`
+- `org.springframework:spring-webmvc:7.0.9`
+
+```text
+Spring Framework 7.0.9
+Copyright (c) 2002-2026 Pivotal, Inc.
+
+This product is licensed to you under the Apache License, Version 2.0
+(the "License"). You may not use this product except in compliance with
+the License.
+
+This product may include a number of subcomponents with separate
+copyright notices and license terms. Your use of the source code for
+these subcomponents is subject to the terms and conditions of the
+subcomponent's license, as noted in the license.txt file.
+```
+
+</details>
+
+<details>
 <summary><code>org.springframework.boot:spring-boot-actuator-autoconfigure:4.1.1 (+36 more)</code></summary>
 
 Applies to:
@@ -1550,40 +1580,6 @@ conditions of the subcomponent's license, as noted in the LICENSE file.
 ```text
 Spring Data JPA 4.1.1 (2026.0.1)
 Copyright (c) 2015-2026 Pivotal Software, Inc.
-
-This product is licensed to you under the Apache License, Version 2.0
-(the "License"). You may not use this product except in compliance with
-the License.
-
-This product may include a number of subcomponents with separate
-copyright notices and license terms. Your use of the source code for
-these subcomponents is subject to the terms and conditions of the
-subcomponent's license, as noted in the license.txt file.
-```
-
-</details>
-
-<details>
-<summary><code>org.springframework:spring-aop:7.0.9 (+11 more)</code></summary>
-
-Applies to:
-
-- `org.springframework:spring-aop:7.0.9`
-- `org.springframework:spring-aspects:7.0.9`
-- `org.springframework:spring-beans:7.0.9`
-- `org.springframework:spring-context:7.0.9`
-- `org.springframework:spring-core:7.0.9`
-- `org.springframework:spring-expression:7.0.9`
-- `org.springframework:spring-jdbc:7.0.9`
-- `org.springframework:spring-messaging:7.0.9`
-- `org.springframework:spring-orm:7.0.9`
-- `org.springframework:spring-tx:7.0.9`
-- `org.springframework:spring-web:7.0.9`
-- `org.springframework:spring-webmvc:7.0.9`
-
-```text
-Spring Framework 7.0.9
-Copyright (c) 2002-2026 Pivotal, Inc.
 
 This product is licensed to you under the Apache License, Version 2.0
 (the "License"). You may not use this product except in compliance with
@@ -2039,10 +2035,6 @@ If it is not possible or desirable to put the notice in a particular file, then 
 
 You may add additional accurate notices of copyright ownership.
 ```
-
-### CC0-1.0
-
-Full text: https://creativecommons.org/publicdomain/zero/1.0/legalcode
 
 ### MIT-0
 

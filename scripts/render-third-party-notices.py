@@ -96,10 +96,11 @@ ELECTIONS = {
         "Dual-licensed Apache-2.0 or MIT. **Apache-2.0 is elected.**",
     ),
     "org.hdrhistogram:HdrHistogram:2.2.2": (
-        "CC0-1.0",
+        "BSD-2-Clause",
         "Offered as CC0-1.0 (public domain dedication) or BSD-2-Clause. "
-        "**CC0-1.0 is elected**; the BSD-2-Clause text is reproduced below "
-        "as well, since the upstream POM presents the two together.",
+        "CC0-1.0 grants no patent license (CC0 §4(a) disclaims any patent "
+        "rights the affirmer might hold), so **BSD-2-Clause is elected** "
+        "instead.",
     ),
 }
 
@@ -182,7 +183,11 @@ def collect_notices():
             body = fh.read().strip()
         if not body:
             continue
-        gav = name.replace(".NOTICE.txt", "").replace("_", ":")
+        # Reverse of generate-third-party-notices.sh's `tr ':/' '+~'`
+        # encoding. "+" and "~" cannot appear inside a Maven
+        # groupId/artifactId/version, so this decode is unambiguous — unlike
+        # the "_" it replaces, which real artifact names can contain.
+        gav = name.replace(".NOTICE.txt", "").replace("+", ":").replace("~", "/")
         digest = hashlib.sha256(body.encode("utf-8")).hexdigest()
         by_hash.setdefault(digest, {"body": body, "gavs": []})["gavs"].append(gav)
     return by_hash
@@ -235,8 +240,9 @@ def main():
     w(
         "**Out of scope:** the npm dependencies of `norintegrate-web`. The web "
         "image ships a Next.js `.next/standalone` bundle, so it does carry "
-        "third-party npm code; that inventory is being handled separately and "
-        "is *not* covered by this file."
+        "third-party npm code. Its copyleft (LGPL) components are covered by "
+        "`THIRD-PARTY-NOTICES-WEB.md` instead; the inventory of its "
+        "*permissive*-licensed npm dependencies is not covered by either file."
     )
     w("")
     w(
