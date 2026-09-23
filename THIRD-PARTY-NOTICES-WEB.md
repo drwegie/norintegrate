@@ -162,7 +162,7 @@ file, for the same combination reasons described above.
 ### GNU Lesser General Public License v3.0
 
 ```text
-GNU LESSER GENERAL PUBLIC LICENSE
+                   GNU LESSER GENERAL PUBLIC LICENSE
                        Version 3, 29 June 2007
 
  Copyright (C) 2007 Free Software Foundation, Inc. <https://fsf.org/>
@@ -337,7 +337,7 @@ terms) and LGPL-3.0 §4(d)(1)'s combined-work option requires GPL terms for
 non-LGPL-covered parts of the combination.
 
 ```text
-GNU GENERAL PUBLIC LICENSE
+                    GNU GENERAL PUBLIC LICENSE
                        Version 3, 29 June 2007
 
  Copyright (C) 2007 Free Software Foundation, Inc. <https://fsf.org/>
@@ -1023,7 +1023,7 @@ text is included below for completeness and to document what "or later"
 starts from.
 
 ```text
-GNU LESSER GENERAL PUBLIC LICENSE
+                  GNU LESSER GENERAL PUBLIC LICENSE
                        Version 2.1, February 1999
 
  Copyright (C) 1991, 1999 Free Software Foundation, Inc.
