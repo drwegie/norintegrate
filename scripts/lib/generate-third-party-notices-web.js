@@ -46,11 +46,20 @@ const INVENTORY_SCRIPT = path.join(__dirname, "third-party-notices-web-inventory
 // re-review if a listed package's upstream author changes).
 const COPYRIGHT_OVERRIDES = {
   // Apache-2.0's canonical license text has no copyright-holder line (only
-  // a "Licensor" definition); these five all resolve via their own
-  // package.json `author` field.
+  // a "Licensor" definition); these all resolve via their own
+  // package.json `author` field (sharp, detect-libc) or, for the
+  // platform-specific @img/sharp-* binaries not installed in this
+  // machine's node_modules (the permissive inventory is filtered to what
+  // can ship in the linux+musl Docker image, not this host's platform —
+  // see scripts/lib/third-party-notices-web-inventory.js), the same
+  // `author` read from registry.npmjs.org (2026-09-23; all @img/sharp-*
+  // platform packages are published by the sharp project under the same
+  // author as `sharp` itself).
   sharp: "Lovell Fuller <npm@lovell.info> (npm package.json `author`)",
   "detect-libc": "Lovell Fuller <npm@lovell.info> (npm package.json `author`)",
-  "@img/sharp-darwin-arm64": "Lovell Fuller <npm@lovell.info> (npm package.json `author`)",
+  "@img/sharp-linuxmusl-arm64": "Lovell Fuller <npm@lovell.info> (npm registry `author`, package not installed under this platform's node_modules)",
+  "@img/sharp-linuxmusl-x64": "Lovell Fuller <npm@lovell.info> (npm registry `author`, package not installed under this platform's node_modules)",
+  "@img/sharp-webcontainers-wasm32": "Lovell Fuller <npm@lovell.info> (npm registry `author`, package not installed under this platform's node_modules)",
   typescript: "Microsoft Corp. (npm package.json `author`)",
   "@swc/types": "강동윤 (Kang Dong-yoon) <kdy1997.dev@gmail.com> (npm package.json `author`)",
   "@swc/helpers": "강동윤 (Kang Dong-yoon) <kdy1997.dev@gmail.com> (npm package.json `author`)",
@@ -181,15 +190,23 @@ function render(rows) {
   w("");
   w(
     "**Excluded (other-platform optional binaries):** packages restricted via " +
-      "`package-lock.json`'s `os`/`cpu` fields to a platform other than the one " +
-      "this file was generated on (see \"Generated/verified\" below) are " +
-      "dropped — their `LICENSE` file isn't present in this machine's " +
-      "`node_modules` to read a copyright line from, and the platform actually " +
-      "shipped inside the Docker image (`linux`/`musl`) is a further subset of " +
-      "even that. `@img/sharp-<platform>` and `@img/sharp-libvips-<platform>` " +
-      "variants for platforms other than this one are the main packages this " +
+      "`package-lock.json`'s `os`/`libc` fields to something other than what " +
+      "`docker/web.Dockerfile`'s runtime image can run (`node:24-alpine` — " +
+      "`linux` + musl libc) are dropped. This rule is fixed to the image's " +
+      "platform, not the platform this file happens to be generated on — an " +
+      "earlier version of this rule used `process.platform`/`process.arch`, " +
+      "which produced a different (and wrong) list depending on which machine " +
+      "or CI runner generated it; see git history for the NOR-31 follow-up " +
+      "fix. `cpu` is ignored, so both `arm64` and `x64` musl variants are kept " +
+      "(superset, same as the copyleft block). `@img/sharp-<platform>` and " +
+      "`@img/sharp-libvips-<platform>` variants for non-`linux`/non-musl " +
+      "platforms (`darwin`, `win32`, glibc `linux`) are the main packages this " +
       "affects; the copyleft ones remain listed in full above regardless of " +
-      "platform, unaffected by this rule."
+      "platform, unaffected by this rule. Where a dropped package's " +
+      "`LICENSE` file also isn't present in this machine's `node_modules` " +
+      "(because it wasn't installed on this platform), its copyright line is " +
+      "a reviewed `COPYRIGHT_OVERRIDES` entry sourced from the npm registry " +
+      "instead — see the Entries table below."
   );
   w("");
   w(
@@ -323,7 +340,8 @@ function render(rows) {
   );
   w("");
   w(`- Generated/verified: ${new Date().toISOString().slice(0, 10)}`);
-  w(`- Platform used for the exclusion/copyright pass: \`${process.platform}\`/\`${process.arch}\``);
+  w("- Platform used for the exclusion pass: `linux`/musl (fixed — matches `docker/web.Dockerfile`'s `node:24-alpine`, independent of the host this was generated on)");
+  w(`- Host this file was generated on (copyright-line lookups only): \`${process.platform}\`/\`${process.arch}\``);
   w("");
   w("<!-- permissive-inventory:start -->");
   for (const r of runInventory("permissive")) {

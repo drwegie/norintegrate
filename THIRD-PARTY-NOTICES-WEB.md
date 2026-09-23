@@ -190,7 +190,7 @@ The table below is the **SUPERSET** of `norintegrate-web/package-lock.json`'s no
 
 **Excluded (build-only tooling, never in the runtime image, reviewed by name):** `@playwright/test`, `playwright`, `playwright-core` (E2E test runner); `@swc/core` and every platform variant (build-time compiler — absent from the actual image, confirmed by inspecting `/app/node_modules`); `@parcel/watcher` and every platform variant (`next dev` file watcher, unused by production builds); `next-intl-swc-plugin-extractor` (build-time SWC plugin); `@eloqnt/config`, `@eloqnt/format-json`, `@eloqnt/format-po`, `po-parser` (i18n message-extraction build tooling); `node-addon-api` (header-only, build-time only); `is-extglob`, `is-glob`, `picomatch` (glob matchers used only by the build tooling above, not on any runtime code path); `@next/swc-*` every platform variant (build-time compiler, confirmed absent from the actual image).
 
-**Excluded (other-platform optional binaries):** packages restricted via `package-lock.json`'s `os`/`cpu` fields to a platform other than the one this file was generated on (see "Generated/verified" below) are dropped — their `LICENSE` file isn't present in this machine's `node_modules` to read a copyright line from, and the platform actually shipped inside the Docker image (`linux`/`musl`) is a further subset of even that. `@img/sharp-<platform>` and `@img/sharp-libvips-<platform>` variants for platforms other than this one are the main packages this affects; the copyleft ones remain listed in full above regardless of platform, unaffected by this rule.
+**Excluded (other-platform optional binaries):** packages restricted via `package-lock.json`'s `os`/`libc` fields to something other than what `docker/web.Dockerfile`'s runtime image can run (`node:24-alpine` — `linux` + musl libc) are dropped. This rule is fixed to the image's platform, not the platform this file happens to be generated on — an earlier version of this rule used `process.platform`/`process.arch`, which produced a different (and wrong) list depending on which machine or CI runner generated it; see git history for the NOR-31 follow-up fix. `cpu` is ignored, so both `arm64` and `x64` musl variants are kept (superset, same as the copyleft block). `@img/sharp-<platform>` and `@img/sharp-libvips-<platform>` variants for non-`linux`/non-musl platforms (`darwin`, `win32`, glibc `linux`) are the main packages this affects; the copyleft ones remain listed in full above regardless of platform, unaffected by this rule. Where a dropped package's `LICENSE` file also isn't present in this machine's `node_modules` (because it wasn't installed on this platform), its copyright line is a reviewed `COPYRIGHT_OVERRIDES` entry sourced from the npm registry instead — see the Entries table below.
 
 **One documented exception:** `typescript` is declared as a `devDependency` in `norintegrate-web/package.json` and recorded as `"dev": true` in `package-lock.json`, so the SUPERSET rule above would normally exclude it. It is force-included here because it was found inside the actual built runtime image's `/app/node_modules` (`docker run --entrypoint sh ... -c "find /app/node_modules -maxdepth 1"`, 2026-09-23) — a Next.js standalone-output tracing quirk that the lockfile's `dev` flag does not reflect.
 
@@ -206,7 +206,9 @@ The table below is the **SUPERSET** of `norintegrate-web/package-lock.json`'s no
 | `@formatjs/icu-skeleton-parser` | 2.1.11 | MIT | Copyright (c) 2023 FormatJS |
 | `@formatjs/intl-localematcher` | 0.8.4 | MIT | Copyright (c) 2023 FormatJS |
 | `@img/colour` | 1.1.0 | MIT | Copyright (c) 2012 Heather Arthur |
-| `@img/sharp-darwin-arm64` | 0.35.4 | Apache-2.0 | Lovell Fuller <npm@lovell.info> (npm package.json `author`) |
+| `@img/sharp-linuxmusl-arm64` | 0.35.4 | Apache-2.0 | Lovell Fuller <npm@lovell.info> (npm registry `author`, package not installed under this platform's node_modules) |
+| `@img/sharp-linuxmusl-x64` | 0.35.4 | Apache-2.0 | Lovell Fuller <npm@lovell.info> (npm registry `author`, package not installed under this platform's node_modules) |
+| `@img/sharp-webcontainers-wasm32` | 0.35.4 | Apache-2.0 | Lovell Fuller <npm@lovell.info> (npm registry `author`, package not installed under this platform's node_modules) |
 | `@next/env` | 15.5.25 | MIT | Next.js Team <support@vercel.com> (npm registry `author`, no local LICENSE file) |
 | `@panva/hkdf` | 1.2.1 | MIT | Copyright (c) 2021 Filip Skokan |
 | `@schummar/icu-type-parser` | 1.21.5 | MIT | Marco Schumacher <marco@schumacher.dev> (npm registry `author`, no local LICENSE file) |
@@ -240,7 +242,7 @@ The table below is the **SUPERSET** of `norintegrate-web/package-lock.json`'s no
 | `typescript` | 6.0.3 | Apache-2.0 | Microsoft Corp. (npm package.json `author`) |
 | `use-intl` | 4.14.2 | MIT | Copyright (c) 2024 Jan Amann |
 
-1 of 41 entries are `UNVERIFIED` (no LICENSE file present locally and no npm author/maintainer metadata found).
+1 of 43 entries are `UNVERIFIED` (no LICENSE file present locally and no npm author/maintainer metadata found).
 
 ### Apache-2.0 NOTICE reproduction
 
@@ -1150,7 +1152,8 @@ USE OR OTHER DEALINGS IN THE SOFTWARE.
 The list below is what `scripts/check-third-party-notices-web-drift.sh` compares against `norintegrate-web/package-lock.json` (permissive side). Every non-dev, non-excluded package (SUPERSET, see above), `name@version<TAB>license`, one per line.
 
 - Generated/verified: 2026-09-23
-- Platform used for the exclusion/copyright pass: `darwin`/`arm64`
+- Platform used for the exclusion pass: `linux`/musl (fixed — matches `docker/web.Dockerfile`'s `node:24-alpine`, independent of the host this was generated on)
+- Host this file was generated on (copyright-line lookups only): `darwin`/`arm64`
 
 <!-- permissive-inventory:start -->
 @auth/core@0.41.3	ISC
@@ -1161,7 +1164,9 @@ The list below is what `scripts/check-third-party-notices-web-drift.sh` compares
 @formatjs/icu-skeleton-parser@2.1.11	MIT
 @formatjs/intl-localematcher@0.8.4	MIT
 @img/colour@1.1.0	MIT
-@img/sharp-darwin-arm64@0.35.4	Apache-2.0
+@img/sharp-linuxmusl-arm64@0.35.4	Apache-2.0
+@img/sharp-linuxmusl-x64@0.35.4	Apache-2.0
+@img/sharp-webcontainers-wasm32@0.35.4	Apache-2.0
 @next/env@15.5.25	MIT
 @panva/hkdf@1.2.1	MIT
 @schummar/icu-type-parser@1.21.5	MIT

@@ -16,11 +16,18 @@
 //   - the build-only EXCLUDE list below (test runners, compilers, and their
 //     platform variants — never in the runtime image; legal reviewed this
 //     list by exact name)
-//   - optional-platform binaries whose declared os/cpu doesn't match the
-//     platform this script runs on (their LICENSE files aren't present in
-//     the local node_modules to read a copyright line from; the platform
-//     actually shipped in the Docker image is a strict subset handled the
-//     same way)
+//   - optional-platform binaries that cannot ship inside the Docker image
+//     (docker/web.Dockerfile is FROM node:24-alpine — linux + musl libc).
+//     This rule is host-independent (fixed: linux+musl), not tied to
+//     process.platform/process.arch, so the recorded inventory is the same
+//     regardless of what machine or CI runner generates/checks it (NOR-31
+//     follow-up, 2026-09-23: the original process.platform/arch filter
+//     produced a different, host-dependent list on every OS/arch — verified
+//     wrong both on macOS/darwin-arm64 and inside `docker run --platform
+//     linux/amd64 node:24-alpine`, which reports linux/x64 but is musl, not
+//     glibc). `cpu` is ignored entirely: both arm64 and x64 musl variants
+//     are kept, superset-style, matching how the copyleft block already
+//     lists every platform variant regardless of host.
 // Over-inclusion is intentional and harmless (extra attribution is not a
 // license violation); under-inclusion is not, so this errs wide.
 //
@@ -84,14 +91,26 @@ function bareName(key) {
   return parts[parts.length - 1];
 }
 
-// Whether to drop packages restricted (via lockfile os/cpu) to a platform
-// other than the one this script runs on. The existing copyleft-inventory
-// block predates NOR-31 and intentionally lists every platform variant
-// (e.g. every @img/sharp-libvips-<platform>) regardless of build host, so
-// the copyleft bucket must NOT be platform-filtered — only the new
-// permissive bucket is (see module header: "drop other-platform optional
-// binaries" is a NOR-31 permissive-section rule, not a copyleft one).
-function loadRows(filterPlatform) {
+// The runtime image's platform: docker/web.Dockerfile is FROM node:24-alpine
+// (linux, musl libc). Fixed, not derived from process.platform/process.arch,
+// so this rule gives the same answer on every machine/CI runner.
+const IMAGE_OS = "linux";
+const IMAGE_LIBC = "musl";
+
+function canShipInImage(meta) {
+  if (meta.os && !meta.os.includes(IMAGE_OS)) return false;
+  if (meta.libc && !meta.libc.includes(IMAGE_LIBC)) return false;
+  return true; // cpu is ignored on purpose — see module header.
+}
+
+// Whether to drop packages that cannot ship inside the Docker image (see
+// canShipInImage). The existing copyleft-inventory block predates NOR-31 and
+// intentionally lists every platform variant (e.g. every
+// @img/sharp-libvips-<platform>) regardless of build host, so the copyleft
+// bucket must NOT be filtered this way — only the new permissive bucket is
+// (see module header: "drop other-platform optional binaries" is a NOR-31
+// permissive-section rule, not a copyleft one).
+function loadRows(filterToImage) {
   const lock = JSON.parse(fs.readFileSync(LOCKFILE, "utf8"));
   const rows = new Map(); // "name@version" -> { name, version, license }
 
@@ -101,10 +120,7 @@ function loadRows(filterPlatform) {
     const forced = FORCE_INCLUDE.has(name);
     if (meta.dev && !forced) continue;
     if (isExcluded(name)) continue;
-    if (filterPlatform && !forced) {
-      if (meta.os && !meta.os.includes(process.platform)) continue;
-      if (meta.cpu && !meta.cpu.includes(process.arch)) continue;
-    }
+    if (filterToImage && !forced && !canShipInImage(meta)) continue;
     const id = `${name}@${meta.version}`;
     rows.set(id, { name, version: meta.version, license: meta.license || "" });
   }
