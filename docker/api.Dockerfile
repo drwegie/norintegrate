@@ -31,6 +31,7 @@ WORKDIR /app
 
 # Copy the built JAR from builder stage
 COPY --from=builder /workspace/norintegrate-api/build/libs/*.jar app.jar
+COPY THIRD-PARTY-NOTICES.md /app/
 
 # Set ownership
 RUN chown appuser:appgroup app.jar
