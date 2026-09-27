@@ -5,7 +5,7 @@
 INPUT=$(cat)
 FILE=$(echo "$INPUT" | python3 -c "import sys, json; d=json.load(sys.stdin); print(d.get('tool_input', {}).get('file_path', ''))" 2>/dev/null)
 
-[[ "$FILE" != *.java ]] && exit 0
+[[ "$FILE" != *.java && "$FILE" != *.kt ]] && exit 0
 cd "$CLAUDE_PROJECT_DIR" 2>/dev/null || exit 0
 [ -x ./gradlew ] || exit 0
 

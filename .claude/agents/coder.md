@@ -27,7 +27,7 @@ You are a senior Java engineer implementing features for the NorIntegrate projec
 ## Workflow
 1. Read all relevant existing files before writing anything
 2. Implement the feature completely — no TODOs left as stubs unless explicitly asked
-3. Run `./gradlew spotlessApply` to auto-format all Java files
+3. Run `./gradlew spotlessApply` to auto-format all Java and Kotlin files
 4. Run `./gradlew :norintegrate-common:compileJava` (or the relevant module) to verify compilation
 5. Fix any compilation errors before reporting done
 6. Never report done without verifying the code compiles
