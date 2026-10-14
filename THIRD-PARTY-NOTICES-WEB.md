@@ -210,38 +210,42 @@ The table below is the **SUPERSET** of `norintegrate-web/package-lock.json`'s no
 | `@emnapi/runtime` | 1.11.3 | MIT | toyobayashi (npm registry `author`, no local LICENSE file — package not installed under this platform's node_modules) |
 | `@formatjs/fast-memoize` | 3.1.2 | MIT | Copyright (c) 2023 FormatJS |
 | `@formatjs/fast-memoize` | 3.1.7 | MIT | Copyright (c) 2023 FormatJS |
-| `@formatjs/icu-messageformat-parser` | 3.5.17 | MIT | Copyright (c) 2023 FormatJS |
+| `@formatjs/icu-messageformat-parser` | 3.5.18 | MIT | Copyright (c) 2023 FormatJS |
+| `@formatjs/icu-messageformat-parser` | 3.5.20 | MIT | Copyright (c) 2023 FormatJS |
 | `@formatjs/icu-skeleton-parser` | 2.1.11 | MIT | Copyright (c) 2023 FormatJS |
+| `@formatjs/icu-skeleton-parser` | 2.1.12 | MIT | Copyright (c) 2023 FormatJS |
 | `@formatjs/intl-localematcher` | 0.8.4 | MIT | Copyright (c) 2023 FormatJS |
 | `@img/colour` | 1.1.0 | MIT | Copyright (c) 2012 Heather Arthur |
 | `@img/sharp-linuxmusl-arm64` | 0.35.4 | Apache-2.0 | Lovell Fuller <npm@lovell.info> (npm registry `author`, package not installed under this platform's node_modules) |
 | `@img/sharp-linuxmusl-x64` | 0.35.4 | Apache-2.0 | Lovell Fuller <npm@lovell.info> (npm registry `author`, package not installed under this platform's node_modules) |
 | `@img/sharp-webcontainers-wasm32` | 0.35.4 | Apache-2.0 | Lovell Fuller <npm@lovell.info> (npm registry `author`, package not installed under this platform's node_modules) |
-| `@next/env` | 15.5.25 | MIT | Next.js Team <support@vercel.com> (npm registry `author`, no local LICENSE file) |
+| `@next/env` | 15.5.26 | MIT | Next.js Team <support@vercel.com> (npm registry `author`, no local LICENSE file) |
 | `@panva/hkdf` | 1.2.1 | MIT | Copyright (c) 2021 Filip Skokan |
 | `@schummar/icu-type-parser` | 1.21.5 | MIT | Marco Schumacher <marco@schumacher.dev> (npm registry `author`, no local LICENSE file) |
 | `@swc/counter` | 0.1.3 | Apache-2.0 | 강동윤 (Kang Dong-yoon) <kdy1997.dev@gmail.com> (npm registry `author`, no local LICENSE file) |
 | `@swc/helpers` | 0.5.15 | Apache-2.0 | 강동윤 (Kang Dong-yoon) <kdy1997.dev@gmail.com> (npm package.json `author`) |
 | `@swc/types` | 0.1.28 | Apache-2.0 | 강동윤 (Kang Dong-yoon) <kdy1997.dev@gmail.com> (npm package.json `author`) |
+| `@types/react` | 19.3.0 | MIT | Copyright (c) Microsoft Corporation. |
 | `caniuse-lite` | 1.0.30001780 | CC-BY-4.0 | Ben Briggs <beneb.info@gmail.com> (npm package.json `author`) |
 | `client-only` | 0.0.1 | MIT | UNVERIFIED |
+| `csstype` | 3.2.3 | MIT | Copyright (c) 2017-2018 Fredrik Nicol |
 | `detect-libc` | 2.1.2 | Apache-2.0 | Lovell Fuller <npm@lovell.info> (npm package.json `author`) |
-| `icu-minify` | 4.14.2 | MIT | Copyright (c) 2024 Jan Amann |
-| `intl-messageformat` | 11.2.14 | BSD-3-Clause | Copyright (c) 2023, Oath Inc. |
+| `icu-minify` | 4.14.7 | MIT | Copyright (c) 2024 Jan Amann |
+| `intl-messageformat` | 11.2.15 | BSD-3-Clause | Copyright (c) 2023, Oath Inc. |
 | `jose` | 6.2.6 | MIT | Copyright (c) 2018 Filip Skokan |
 | `nanoid` | 3.3.18 | MIT | Copyright 2017 Andrey Sitnik <andrey@sitnik.ru> |
 | `negotiator` | 1.0.0 | MIT | Copyright (c) 2012-2014 Federico Romero |
-| `next` | 15.5.25 | MIT | Copyright (c) 2025 Vercel, Inc. |
+| `next` | 15.5.26 | MIT | Copyright (c) 2025 Vercel, Inc. |
 | `next-auth` | 5.0.0-beta.32 | ISC | Copyright (c) 2022-2024, Balázs Orbán |
-| `next-intl` | 4.14.2 | MIT | Copyright (c) 2024 Jan Amann |
+| `next-intl` | 4.14.7 | MIT | Copyright (c) 2024 Jan Amann |
 | `oauth4webapi` | 3.8.6 | MIT | Copyright (c) 2022 Filip Skokan |
 | `picocolors` | 1.1.1 | ISC | Copyright (c) 2021-2024 Oleksii Raspopov, Kostiantyn Denysov, Anton Verinov |
 | `postcss` | 8.5.25 | MIT | Copyright 2013 Andrey Sitnik <andrey@sitnik.es> |
 | `preact` | 10.24.3 | MIT | Copyright (c) 2015-present Jason Miller |
 | `preact-render-to-string` | 6.5.11 | MIT | Copyright (c) 2015 Jason Miller |
-| `react` | 19.2.8 | MIT | Copyright (c) Meta Platforms, Inc. and affiliates. |
-| `react-dom` | 19.2.8 | MIT | Copyright (c) Meta Platforms, Inc. and affiliates. |
-| `scheduler` | 0.27.0 | MIT | Copyright (c) Meta Platforms, Inc. and affiliates. |
+| `react` | 19.3.0 | MIT | Copyright (c) Meta Platforms, Inc. and affiliates. |
+| `react-dom` | 19.3.0 | MIT | Copyright (c) Meta Platforms, Inc. and affiliates. |
+| `scheduler` | 0.28.0 | MIT | Copyright (c) Meta Platforms, Inc. and affiliates. |
 | `semver` | 7.8.5 | ISC | Copyright (c) Isaac Z. Schlueter and Contributors |
 | `sharp` | 0.35.4 | Apache-2.0 | Lovell Fuller <npm@lovell.info> (npm package.json `author`) |
 | `source-map-js` | 1.2.1 | BSD-3-Clause | Copyright (c) 2009-2011, Mozilla Foundation and contributors |
@@ -249,9 +253,9 @@ The table below is the **SUPERSET** of `norintegrate-web/package-lock.json`'s no
 | `tailwindcss` | 4.3.3 | MIT | Copyright (c) Tailwind Labs, Inc. |
 | `tslib` | 2.8.1 | 0BSD | Copyright (c) Microsoft Corporation. |
 | `typescript` | 6.0.3 | Apache-2.0 | Microsoft Corp. (npm package.json `author`) |
-| `use-intl` | 4.14.2 | MIT | Copyright (c) 2024 Jan Amann |
+| `use-intl` | 4.14.7 | MIT | Copyright (c) 2024 Jan Amann |
 
-1 of 44 entries are `UNVERIFIED` (no LICENSE file present locally and no npm author/maintainer metadata found).
+1 of 48 entries are `UNVERIFIED` (no LICENSE file present locally and no npm author/maintainer metadata found).
 
 - `client-only@0.0.1`: UNVERIFIED — no `author` field in package.json, no bundled LICENSE file; registry `maintainers` reflects only the publishing npm account (sebmarkbage), not an asserted copyright holder; upstream request to add a LICENSE file was closed "not planned" (facebook/react#27242, verified 2026-09-23)
 
@@ -1162,7 +1166,7 @@ USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 The list below is what `scripts/check-third-party-notices-web-drift.sh` compares against `norintegrate-web/package-lock.json` (permissive side). Every non-dev, non-excluded package (SUPERSET, see above), `name@version<TAB>license`, one per line.
 
-- Generated/verified: 2026-09-23
+- Generated/verified: 2026-10-14
 - Platform used for the exclusion pass: `linux`/musl (fixed — matches `docker/web.Dockerfile`'s `node:24-alpine`, independent of the host this was generated on)
 - Host this file was generated on (copyright-line lookups only): `darwin`/`arm64`
 
@@ -1171,38 +1175,42 @@ The list below is what `scripts/check-third-party-notices-web-drift.sh` compares
 @emnapi/runtime@1.11.3	MIT
 @formatjs/fast-memoize@3.1.2	MIT
 @formatjs/fast-memoize@3.1.7	MIT
-@formatjs/icu-messageformat-parser@3.5.17	MIT
+@formatjs/icu-messageformat-parser@3.5.18	MIT
+@formatjs/icu-messageformat-parser@3.5.20	MIT
 @formatjs/icu-skeleton-parser@2.1.11	MIT
+@formatjs/icu-skeleton-parser@2.1.12	MIT
 @formatjs/intl-localematcher@0.8.4	MIT
 @img/colour@1.1.0	MIT
 @img/sharp-linuxmusl-arm64@0.35.4	Apache-2.0
 @img/sharp-linuxmusl-x64@0.35.4	Apache-2.0
 @img/sharp-webcontainers-wasm32@0.35.4	Apache-2.0
-@next/env@15.5.25	MIT
+@next/env@15.5.26	MIT
 @panva/hkdf@1.2.1	MIT
 @schummar/icu-type-parser@1.21.5	MIT
 @swc/counter@0.1.3	Apache-2.0
 @swc/helpers@0.5.15	Apache-2.0
 @swc/types@0.1.28	Apache-2.0
+@types/react@19.3.0	MIT
 caniuse-lite@1.0.30001780	CC-BY-4.0
 client-only@0.0.1	MIT
+csstype@3.2.3	MIT
 detect-libc@2.1.2	Apache-2.0
-icu-minify@4.14.2	MIT
-intl-messageformat@11.2.14	BSD-3-Clause
+icu-minify@4.14.7	MIT
+intl-messageformat@11.2.15	BSD-3-Clause
 jose@6.2.6	MIT
 nanoid@3.3.18	MIT
 negotiator@1.0.0	MIT
 next-auth@5.0.0-beta.32	ISC
-next-intl@4.14.2	MIT
-next@15.5.25	MIT
+next-intl@4.14.7	MIT
+next@15.5.26	MIT
 oauth4webapi@3.8.6	MIT
 picocolors@1.1.1	ISC
 postcss@8.5.25	MIT
 preact-render-to-string@6.5.11	MIT
 preact@10.24.3	MIT
-react-dom@19.2.8	MIT
-react@19.2.8	MIT
-scheduler@0.27.0	MIT
+react-dom@19.3.0	MIT
+react@19.3.0	MIT
+scheduler@0.28.0	MIT
 semver@7.8.5	ISC
 sharp@0.35.4	Apache-2.0
 source-map-js@1.2.1	BSD-3-Clause
@@ -1210,7 +1218,7 @@ styled-jsx@5.1.6	MIT
 tailwindcss@4.3.3	MIT
 tslib@2.8.1	0BSD
 typescript@6.0.3	Apache-2.0
-use-intl@4.14.2	MIT
+use-intl@4.14.7	MIT
 <!-- permissive-inventory:end -->
 
 <!-- permissive-section:end -->
