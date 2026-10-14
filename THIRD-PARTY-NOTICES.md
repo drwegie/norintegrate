@@ -29,8 +29,8 @@ scripts/check-third-party-drift.sh
 
 It re-resolves `runtimeClasspath` and diffs it against the recorded list, exiting non-zero on any drift.
 
-- Generated: 2026-09-23
-- Source commit: `a8fd259`
+- Generated: 2026-10-14
+- Source commit: `6ecf1fc`
 - Artifacts covered: **152**
 
 ## Summary
@@ -123,12 +123,12 @@ No dependency is under a strong copyleft license (the GPL/AGPL/SSPL family); non
   <sub>[POM](https://repo1.maven.org/maven2/io/prometheus/client_java_parent/1.7.0/client_java_parent-1.7.0.pom)</sub>
 - `io.swagger.core.v3:swagger-annotations-jakarta:2.2.38`  
   <sub>[POM](https://repo1.maven.org/maven2/io/swagger/core/v3/swagger-project-jakarta/2.2.38/swagger-project-jakarta-2.2.38.pom)</sub>
-- `io.swagger.core.v3:swagger-annotations-jakarta:2.2.52`  
-  <sub>[POM](https://repo1.maven.org/maven2/io/swagger/core/v3/swagger-project-jakarta/2.2.52/swagger-project-jakarta-2.2.52.pom)</sub>
-- `io.swagger.core.v3:swagger-core-jakarta:2.2.52`  
-  <sub>[POM](https://repo1.maven.org/maven2/io/swagger/core/v3/swagger-project-jakarta/2.2.52/swagger-project-jakarta-2.2.52.pom)</sub>
-- `io.swagger.core.v3:swagger-models-jakarta:2.2.52`  
-  <sub>[POM](https://repo1.maven.org/maven2/io/swagger/core/v3/swagger-project-jakarta/2.2.52/swagger-project-jakarta-2.2.52.pom)</sub>
+- `io.swagger.core.v3:swagger-annotations-jakarta:2.2.55`  
+  <sub>[POM](https://repo1.maven.org/maven2/io/swagger/core/v3/swagger-project-jakarta/2.2.55/swagger-project-jakarta-2.2.55.pom)</sub>
+- `io.swagger.core.v3:swagger-core-jakarta:2.2.55`  
+  <sub>[POM](https://repo1.maven.org/maven2/io/swagger/core/v3/swagger-project-jakarta/2.2.55/swagger-project-jakarta-2.2.55.pom)</sub>
+- `io.swagger.core.v3:swagger-models-jakarta:2.2.55`  
+  <sub>[POM](https://repo1.maven.org/maven2/io/swagger/core/v3/swagger-project-jakarta/2.2.55/swagger-project-jakarta-2.2.55.pom)</sub>
 - `jakarta.inject:jakarta.inject-api:2.0.1`  
   <sub>[POM](https://repo1.maven.org/maven2/jakarta/inject/jakarta.inject-api/2.0.1/jakarta.inject-api-2.0.1.pom)</sub>
 - `jakarta.validation:jakarta.validation-api:3.1.1`  
@@ -143,12 +143,12 @@ No dependency is under a strong copyleft license (the GPL/AGPL/SSPL family); non
   <sub>[POM](https://repo1.maven.org/maven2/org/apache/logging/log4j/log4j-api/2.25.5/log4j-api-2.25.5.pom)</sub>
 - `org.apache.logging.log4j:log4j-to-slf4j:2.25.5`  
   <sub>[POM](https://repo1.maven.org/maven2/org/apache/logging/log4j/log4j-to-slf4j/2.25.5/log4j-to-slf4j-2.25.5.pom)</sub>
-- `org.apache.tomcat.embed:tomcat-embed-core:11.0.25`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/apache/tomcat/embed/tomcat-embed-core/11.0.25/tomcat-embed-core-11.0.25.pom)</sub>
-- `org.apache.tomcat.embed:tomcat-embed-el:11.0.25`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/apache/tomcat/embed/tomcat-embed-el/11.0.25/tomcat-embed-el-11.0.25.pom)</sub>
-- `org.apache.tomcat.embed:tomcat-embed-websocket:11.0.25`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/apache/tomcat/embed/tomcat-embed-websocket/11.0.25/tomcat-embed-websocket-11.0.25.pom)</sub>
+- `org.apache.tomcat.embed:tomcat-embed-core:11.0.26`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/apache/tomcat/embed/tomcat-embed-core/11.0.26/tomcat-embed-core-11.0.26.pom)</sub>
+- `org.apache.tomcat.embed:tomcat-embed-el:11.0.26`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/apache/tomcat/embed/tomcat-embed-el/11.0.26/tomcat-embed-el-11.0.26.pom)</sub>
+- `org.apache.tomcat.embed:tomcat-embed-websocket:11.0.26`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/apache/tomcat/embed/tomcat-embed-websocket/11.0.26/tomcat-embed-websocket-11.0.26.pom)</sub>
 - `org.hibernate.models:hibernate-models:1.1.1`  
   <sub>[POM](https://repo1.maven.org/maven2/org/hibernate/models/hibernate-models/1.1.1/hibernate-models-1.1.1.pom)</sub>
 - `org.hibernate.orm:hibernate-core:7.4.5.Final`  
@@ -157,22 +157,22 @@ No dependency is under a strong copyleft license (the GPL/AGPL/SSPL family); non
   <sub>[POM](https://repo1.maven.org/maven2/org/hibernate/validator/hibernate-validator/9.1.3.Final/hibernate-validator-9.1.3.Final.pom)</sub>
 - `org.jboss.logging:jboss-logging:3.6.3.Final`  
   <sub>[POM](https://repo1.maven.org/maven2/org/jboss/logging/jboss-logging/3.6.3.Final/jboss-logging-3.6.3.Final.pom)</sub>
-- `org.jetbrains.kotlin:kotlin-reflect:2.4.10`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/jetbrains/kotlin/kotlin-reflect/2.4.10/kotlin-reflect-2.4.10.pom)</sub>
-- `org.jetbrains.kotlin:kotlin-stdlib:2.4.10`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/jetbrains/kotlin/kotlin-stdlib/2.4.10/kotlin-stdlib-2.4.10.pom)</sub>
+- `org.jetbrains.kotlin:kotlin-reflect:2.4.20`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/jetbrains/kotlin/kotlin-reflect/2.4.20/kotlin-reflect-2.4.20.pom)</sub>
+- `org.jetbrains.kotlin:kotlin-stdlib:2.4.20`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/jetbrains/kotlin/kotlin-stdlib/2.4.20/kotlin-stdlib-2.4.20.pom)</sub>
 - `org.jetbrains:annotations:13.0`  
   <sub>[POM](https://repo1.maven.org/maven2/org/jetbrains/annotations/13.0/annotations-13.0.pom)</sub>
 - `org.jspecify:jspecify:1.0.1`  
   <sub>[POM](https://repo1.maven.org/maven2/org/jspecify/jspecify/1.0.1/jspecify-1.0.1.pom)</sub>
 - `org.snakeyaml:snakeyaml-engine:3.0.1`  
   <sub>[POM](https://repo1.maven.org/maven2/org/snakeyaml/snakeyaml-engine/3.0.1/snakeyaml-engine-3.0.1.pom)</sub>
-- `org.springdoc:springdoc-openapi-starter-common:3.1.0`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springdoc/springdoc-openapi/3.1.0/springdoc-openapi-3.1.0.pom)</sub>
-- `org.springdoc:springdoc-openapi-starter-webmvc-api:3.1.0`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springdoc/springdoc-openapi/3.1.0/springdoc-openapi-3.1.0.pom)</sub>
-- `org.springdoc:springdoc-openapi-starter-webmvc-ui:3.1.0`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springdoc/springdoc-openapi/3.1.0/springdoc-openapi-3.1.0.pom)</sub>
+- `org.springdoc:springdoc-openapi-starter-common:3.1.1`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/springdoc/springdoc-openapi/3.1.1/springdoc-openapi-3.1.1.pom)</sub>
+- `org.springdoc:springdoc-openapi-starter-webmvc-api:3.1.1`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/springdoc/springdoc-openapi/3.1.1/springdoc-openapi-3.1.1.pom)</sub>
+- `org.springdoc:springdoc-openapi-starter-webmvc-ui:3.1.1`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/springdoc/springdoc-openapi/3.1.1/springdoc-openapi-3.1.1.pom)</sub>
 - `org.springframework.ai:mcp-spring-webmvc:2.0.1`  
   <sub>[POM](https://repo1.maven.org/maven2/org/springframework/ai/mcp-spring-webmvc/2.0.1/mcp-spring-webmvc-2.0.1.pom)</sub>
 - `org.springframework.ai:spring-ai-autoconfigure-mcp-server-common:2.0.1`  
@@ -307,8 +307,8 @@ No dependency is under a strong copyleft license (the GPL/AGPL/SSPL family); non
   <sub>[POM](https://repo1.maven.org/maven2/org/springframework/spring-web/7.0.9/spring-web-7.0.9.pom)</sub>
 - `org.springframework:spring-webmvc:7.0.9`  
   <sub>[POM](https://repo1.maven.org/maven2/org/springframework/spring-webmvc/7.0.9/spring-webmvc-7.0.9.pom)</sub>
-- `org.webjars:swagger-ui:5.32.11`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/webjars/swagger-ui/5.32.11/swagger-ui-5.32.11.pom)</sub>
+- `org.webjars:swagger-ui:5.32.14`  
+  <sub>[POM](https://repo1.maven.org/maven2/org/webjars/swagger-ui/5.32.14/swagger-ui-5.32.14.pom)</sub>
 - `org.yaml:snakeyaml:2.6`  
   <sub>[POM](https://repo1.maven.org/maven2/org/yaml/snakeyaml/2.6/snakeyaml-2.6.pom)</sub>
 - `tools.jackson.core:jackson-core:3.2.1`  
@@ -687,7 +687,7 @@ package in the Spring Framework library, distributed by VMware, Inc:
 Applies to:
 
 - `io.swagger.core.v3:swagger-annotations-jakarta:2.2.38`
-- `io.swagger.core.v3:swagger-annotations-jakarta:2.2.52`
+- `io.swagger.core.v3:swagger-annotations-jakarta:2.2.55`
 
 ```text
 Swagger Core - swagger-annotations
@@ -699,7 +699,7 @@ Copy of the Apache 2.0 license can be found in `LICENSE` file.
 </details>
 
 <details>
-<summary><code>io.swagger.core.v3:swagger-core-jakarta:2.2.52</code></summary>
+<summary><code>io.swagger.core.v3:swagger-core-jakarta:2.2.55</code></summary>
 
 ```text
 Swagger Core - swagger-core
@@ -711,7 +711,7 @@ Copy of the Apache 2.0 license can be found in `LICENSE` file.
 </details>
 
 <details>
-<summary><code>io.swagger.core.v3:swagger-models-jakarta:2.2.52</code></summary>
+<summary><code>io.swagger.core.v3:swagger-models-jakarta:2.2.55</code></summary>
 
 ```text
 Swagger Core - swagger-models
@@ -1155,7 +1155,7 @@ The Apache Software Foundation (http://www.apache.org/).
 </details>
 
 <details>
-<summary><code>org.apache.tomcat.embed:tomcat-embed-core:11.0.25</code></summary>
+<summary><code>org.apache.tomcat.embed:tomcat-embed-core:11.0.26</code></summary>
 
 ```text
 Apache Tomcat
@@ -1194,12 +1194,12 @@ http://www.oracle.com/webfolder/technetwork/jsc/xml/ns/javaee/index.html
 </details>
 
 <details>
-<summary><code>org.apache.tomcat.embed:tomcat-embed-el:11.0.25 (+1 more)</code></summary>
+<summary><code>org.apache.tomcat.embed:tomcat-embed-el:11.0.26 (+1 more)</code></summary>
 
 Applies to:
 
-- `org.apache.tomcat.embed:tomcat-embed-el:11.0.25`
-- `org.apache.tomcat.embed:tomcat-embed-websocket:11.0.25`
+- `org.apache.tomcat.embed:tomcat-embed-el:11.0.26`
+- `org.apache.tomcat.embed:tomcat-embed-websocket:11.0.26`
 
 ```text
 Apache Tomcat

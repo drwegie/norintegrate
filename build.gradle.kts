@@ -1,9 +1,9 @@
 plugins {
     id("org.springframework.boot") version "4.1.1" apply false
     id("io.spring.dependency-management") version "1.1.7" apply false
-    id("com.diffplug.spotless") version "8.10.0" apply false
-    kotlin("jvm") version "2.4.10" apply false
-    kotlin("plugin.spring") version "2.4.10" apply false
+    id("com.diffplug.spotless") version "8.10.2" apply false
+    kotlin("jvm") version "2.4.20" apply false
+    kotlin("plugin.spring") version "2.4.20" apply false
 }
 
 allprojects {
@@ -54,9 +54,9 @@ subprojects {
         }
         dependencies {
             dependency("org.postgresql:postgresql:42.7.13")
-            dependency("org.apache.tomcat.embed:tomcat-embed-core:11.0.25")
-            dependency("org.apache.tomcat.embed:tomcat-embed-el:11.0.25")
-            dependency("org.apache.tomcat.embed:tomcat-embed-websocket:11.0.25")
+            dependency("org.apache.tomcat.embed:tomcat-embed-core:11.0.26")
+            dependency("org.apache.tomcat.embed:tomcat-embed-el:11.0.26")
+            dependency("org.apache.tomcat.embed:tomcat-embed-websocket:11.0.26")
             // Jackson 3 (tools.jackson) still compiles against the 2.x annotations
             // artifact, so both families move together. Importing the Jackson BOMs
             // does not work here — the Spring Boot plugin's own managed versions
