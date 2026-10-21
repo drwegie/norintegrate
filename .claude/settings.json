@@ -7,8 +7,16 @@
       "Bash(mkdir -p *)",
       "Bash(java -version)"
     ],
+    "ask": [
+      "Edit(CLAUDE.md)",
+      "Edit(/docs/schema.sql)",
+      "Edit(/docs/seed.sql)",
+      "Bash(git push *)"
+    ],
     "deny": [
-      "Bash(git push*)",
+      "Edit(/.claude/hooks/**)",
+      "Edit(/.claude/settings.json)",
+      "Edit(/.claude/settings.local.json)",
       "Bash(git reset --hard*)",
       "Bash(git clean*)",
       "Bash(git checkout -- *)",
@@ -22,17 +30,6 @@
     ]
   },
   "hooks": {
-    "PreToolUse": [
-      {
-        "matcher": "Edit|Write",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash \"$CLAUDE_PROJECT_DIR\"/.claude/hooks/guard.sh"
-          }
-        ]
-      }
-    ],
     "PostToolUse": [
       {
         "matcher": "Edit|Write",
