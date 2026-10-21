@@ -14,6 +14,9 @@
       "Bash(git push *)"
     ],
     "deny": [
+      "Edit(/.claude/hooks/**)",
+      "Edit(/.claude/settings.json)",
+      "Edit(/.claude/settings.local.json)",
       "Bash(git reset --hard*)",
       "Bash(git clean*)",
       "Bash(git checkout -- *)",
