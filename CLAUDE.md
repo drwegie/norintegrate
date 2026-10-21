@@ -116,6 +116,7 @@ All ADRs live in `docs/adr/`. Use Michael Nygard's template (Status, Context, De
 | ADR-018 | Structured JSON Logging | Accepted |
 | ADR-019 | Kotlin Introduction for norintegrate-mcp | Accepted |
 | ADR-020 | Kubernetes Manifests Alongside ECS Fargate | Accepted |
+| ADR-021 | Decision Not to Introduce Kafka | Accepted |
 
 When a new architectural decision is made, add a row here and create the file in `docs/adr/` before marking the task complete.
 
