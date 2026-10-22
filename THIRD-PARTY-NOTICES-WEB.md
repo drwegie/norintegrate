@@ -64,12 +64,12 @@ The `libvips-cpp.so.*` shared library itself is not built from libvips
 source alone — the `sharp-libvips` project statically compiles libvips
 together with the third-party libraries below into that one shared object.
 Reproduced verbatim from
-[sharp-libvips THIRD-PARTY-NOTICES.md, tag v1.3.3](https://github.com/lovell/sharp-libvips/blob/v1.3.3/THIRD-PARTY-NOTICES.md):
+[sharp-libvips THIRD-PARTY-NOTICES.md, tag v1.3.4](https://github.com/lovell/sharp-libvips/blob/v1.3.4/THIRD-PARTY-NOTICES.md):
 
 | Library       | Used under the terms of                                                                                   |
 |---------------|-----------------------------------------------------------------------------------------------------------|
 | aom           | BSD 2-Clause + [Alliance for Open Media Patent License 1.0](https://aomedia.org/license/patent-license/)  |
-| cairo         | Mozilla Public License 2.0                                                                                |
+| cairo         | Mozilla Public License 1.1                                                                                |
 | cgif          | MIT License                                                                                               |
 | expat         | MIT License                                                                                               |
 | fontconfig    | [fontconfig License](https://gitlab.freedesktop.org/fontconfig/fontconfig/blob/main/COPYING) (BSD-like)   |
@@ -104,10 +104,13 @@ Reproduced verbatim from
 > Please report any errors or omissions via
 > https://github.com/lovell/sharp-libvips/issues/new
 
-`cairo` 1.18.4 is distributed here only in Executable Form, compiled into
-`libvips-cpp.so.*`; per MPL-2.0 §3.2(a), its Source Code Form is available at
-https://gitlab.freedesktop.org/cairo/cairo/-/tree/1.18.4 (the version pinned
-by sharp-libvips v1.3.3, per `versions.properties`).
+`cairo` 1.18.6 is distributed here only in Executable form, compiled into
+`libvips-cpp.so.*`; per MPL-1.1 §3.2 ("Availability of Source Code"), its
+Source Code is available at
+https://gitlab.freedesktop.org/cairo/cairo/-/tree/1.18.6 (the version pinned
+by sharp-libvips v1.3.4, per `versions.properties`). sharp-libvips v1.3.3
+recorded cairo as MPL-2.0; upstream corrected that to MPL-1.1 in v1.3.4, and
+cairo itself is offered under LGPL-2.1 or MPL-1.1 — MPL-2.0 is not on offer.
 
 ## Copyright notice (LGPL-3.0 §4(c))
 
@@ -118,7 +121,7 @@ for completeness.
 
 libvips is Copyright the libvips authors (see
 https://github.com/libvips/libvips/graphs/contributors and
-https://github.com/libvips/libvips/blob/v8.18.6/ChangeLog). The upstream
+https://github.com/libvips/libvips/blob/v8.18.7/ChangeLog). The upstream
 `LICENSE` file (reproduced verbatim below, under "License texts") contains
 the GNU LGPL v2.1 license text only; its copyright line is the Free Software
 Foundation's notice on the license document itself, not a libvips
@@ -127,17 +130,17 @@ copyright-holder statement.
 ## Corresponding source (LGPL-3.0 §4(d))
 
 - libvips source (the version compiled into the shared library shipped
-  here): https://github.com/libvips/libvips/tree/v8.18.6
+  here): https://github.com/libvips/libvips/tree/v8.18.7
 - Packaging/build scripts that produce the `libvips-cpp.so.*` shared
   library and the `@img/sharp-libvips-*` npm packages:
-  https://github.com/lovell/sharp-libvips/tree/v1.3.3
+  https://github.com/lovell/sharp-libvips/tree/v1.3.4
 - `sharp` (the npm package that loads the shared library):
-  https://github.com/lovell/sharp/tree/v0.35.4
+  https://github.com/lovell/sharp/tree/v0.35.5
 
 The `sharp-libvips` packaging repository linked above
-(https://github.com/lovell/sharp-libvips/tree/v1.3.3) also pins and builds
-glib 2.89.4, pango 1.58.2, librsvg 2.62.91, libexif 0.6.26, libheif 1.23.2,
-fribidi 1.0.16, and proxy-libintl 0.5 (see `versions.properties`) — the same
+(https://github.com/lovell/sharp-libvips/tree/v1.3.4) also pins and builds
+glib 2.90.0, pango 1.58.2, librsvg 2.63.2, libexif 0.6.26, libheif 1.23.5,
+fribidi 1.0.17, and proxy-libintl 0.5 (see `versions.properties`) — the same
 repository is the Corresponding Source location for all LGPLv3-covered
 libraries statically compiled into `libvips-cpp.so`, not only libvips itself.
 
@@ -150,8 +153,8 @@ architecture `docker build -f docker/web.Dockerfile` runs on:
 
 | Package | Version | License | npm registry |
 |---------|---------|---------|---------------|
-| `@img/sharp-libvips-linuxmusl-x64` | 1.3.3 | LGPL-3.0-or-later | https://www.npmjs.com/package/@img/sharp-libvips-linuxmusl-x64/v/1.3.3 |
-| `@img/sharp-libvips-linuxmusl-arm64` | 1.3.3 | LGPL-3.0-or-later | https://www.npmjs.com/package/@img/sharp-libvips-linuxmusl-arm64/v/1.3.3 |
+| `@img/sharp-libvips-linuxmusl-x64` | 1.3.4 | LGPL-3.0-or-later | https://www.npmjs.com/package/@img/sharp-libvips-linuxmusl-x64/v/1.3.4 |
+| `@img/sharp-libvips-linuxmusl-arm64` | 1.3.4 | LGPL-3.0-or-later | https://www.npmjs.com/package/@img/sharp-libvips-linuxmusl-arm64/v/1.3.4 |
 
 The `node:24-alpine` base image is musl-libc, which is why the `linuxmusl-*`
 variant is the one npm installs inside the container regardless of build
@@ -167,18 +170,18 @@ copied into, or shipped inside, the `norintegrate-web` Docker image**:
 
 | Package | Version | License | npm registry |
 |---------|---------|---------|---------------|
-| `@img/sharp-libvips-darwin-arm64` | 1.3.3 | LGPL-3.0-or-later | https://www.npmjs.com/package/@img/sharp-libvips-darwin-arm64/v/1.3.3 |
-| `@img/sharp-libvips-darwin-x64` | 1.3.3 | LGPL-3.0-or-later | https://www.npmjs.com/package/@img/sharp-libvips-darwin-x64/v/1.3.3 |
-| `@img/sharp-libvips-linux-arm` | 1.3.3 | LGPL-3.0-or-later | https://www.npmjs.com/package/@img/sharp-libvips-linux-arm/v/1.3.3 |
-| `@img/sharp-libvips-linux-arm64` | 1.3.3 | LGPL-3.0-or-later | https://www.npmjs.com/package/@img/sharp-libvips-linux-arm64/v/1.3.3 |
-| `@img/sharp-libvips-linux-ppc64` | 1.3.3 | LGPL-3.0-or-later | https://www.npmjs.com/package/@img/sharp-libvips-linux-ppc64/v/1.3.3 |
-| `@img/sharp-libvips-linux-riscv64` | 1.3.3 | LGPL-3.0-or-later | https://www.npmjs.com/package/@img/sharp-libvips-linux-riscv64/v/1.3.3 |
-| `@img/sharp-libvips-linux-s390x` | 1.3.3 | LGPL-3.0-or-later | https://www.npmjs.com/package/@img/sharp-libvips-linux-s390x/v/1.3.3 |
-| `@img/sharp-libvips-linux-x64` | 1.3.3 | LGPL-3.0-or-later | https://www.npmjs.com/package/@img/sharp-libvips-linux-x64/v/1.3.3 |
-| `@img/sharp-wasm32` | 0.35.4 | Apache-2.0 AND LGPL-3.0-or-later AND MIT | https://www.npmjs.com/package/@img/sharp-wasm32/v/0.35.4 |
-| `@img/sharp-win32-arm64` | 0.35.4 | Apache-2.0 AND LGPL-3.0-or-later | https://www.npmjs.com/package/@img/sharp-win32-arm64/v/0.35.4 |
-| `@img/sharp-win32-ia32` | 0.35.4 | Apache-2.0 AND LGPL-3.0-or-later | https://www.npmjs.com/package/@img/sharp-win32-ia32/v/0.35.4 |
-| `@img/sharp-win32-x64` | 0.35.4 | Apache-2.0 AND LGPL-3.0-or-later | https://www.npmjs.com/package/@img/sharp-win32-x64/v/0.35.4 |
+| `@img/sharp-libvips-darwin-arm64` | 1.3.4 | LGPL-3.0-or-later | https://www.npmjs.com/package/@img/sharp-libvips-darwin-arm64/v/1.3.4 |
+| `@img/sharp-libvips-darwin-x64` | 1.3.4 | LGPL-3.0-or-later | https://www.npmjs.com/package/@img/sharp-libvips-darwin-x64/v/1.3.4 |
+| `@img/sharp-libvips-linux-arm` | 1.3.4 | LGPL-3.0-or-later | https://www.npmjs.com/package/@img/sharp-libvips-linux-arm/v/1.3.4 |
+| `@img/sharp-libvips-linux-arm64` | 1.3.4 | LGPL-3.0-or-later | https://www.npmjs.com/package/@img/sharp-libvips-linux-arm64/v/1.3.4 |
+| `@img/sharp-libvips-linux-ppc64` | 1.3.4 | LGPL-3.0-or-later | https://www.npmjs.com/package/@img/sharp-libvips-linux-ppc64/v/1.3.4 |
+| `@img/sharp-libvips-linux-riscv64` | 1.3.4 | LGPL-3.0-or-later | https://www.npmjs.com/package/@img/sharp-libvips-linux-riscv64/v/1.3.4 |
+| `@img/sharp-libvips-linux-s390x` | 1.3.4 | LGPL-3.0-or-later | https://www.npmjs.com/package/@img/sharp-libvips-linux-s390x/v/1.3.4 |
+| `@img/sharp-libvips-linux-x64` | 1.3.4 | LGPL-3.0-or-later | https://www.npmjs.com/package/@img/sharp-libvips-linux-x64/v/1.3.4 |
+| `@img/sharp-wasm32` | 0.35.5 | Apache-2.0 AND LGPL-3.0-or-later AND MIT | https://www.npmjs.com/package/@img/sharp-wasm32/v/0.35.5 |
+| `@img/sharp-win32-arm64` | 0.35.5 | Apache-2.0 AND LGPL-3.0-or-later | https://www.npmjs.com/package/@img/sharp-win32-arm64/v/0.35.5 |
+| `@img/sharp-win32-ia32` | 0.35.5 | Apache-2.0 AND LGPL-3.0-or-later | https://www.npmjs.com/package/@img/sharp-win32-ia32/v/0.35.5 |
+| `@img/sharp-win32-x64` | 0.35.5 | Apache-2.0 AND LGPL-3.0-or-later | https://www.npmjs.com/package/@img/sharp-win32-x64/v/0.35.5 |
 
 `@img/sharp-wasm32` and the `@img/sharp-win32-*` packages carry a
 multi-license expression because they bundle a WASM/Windows build of the
@@ -216,10 +219,10 @@ The table below is the **SUPERSET** of `norintegrate-web/package-lock.json`'s no
 | `@formatjs/icu-skeleton-parser` | 2.1.12 | MIT | Copyright (c) 2023 FormatJS |
 | `@formatjs/intl-localematcher` | 0.8.4 | MIT | Copyright (c) 2023 FormatJS |
 | `@img/colour` | 1.1.0 | MIT | Copyright (c) 2012 Heather Arthur |
-| `@img/sharp-linuxmusl-arm64` | 0.35.4 | Apache-2.0 | Lovell Fuller <npm@lovell.info> (npm registry `author`, package not installed under this platform's node_modules) |
-| `@img/sharp-linuxmusl-x64` | 0.35.4 | Apache-2.0 | Lovell Fuller <npm@lovell.info> (npm registry `author`, package not installed under this platform's node_modules) |
-| `@img/sharp-webcontainers-wasm32` | 0.35.4 | Apache-2.0 | Lovell Fuller <npm@lovell.info> (npm registry `author`, package not installed under this platform's node_modules) |
-| `@next/env` | 15.5.26 | MIT | Next.js Team <support@vercel.com> (npm registry `author`, no local LICENSE file) |
+| `@img/sharp-linuxmusl-arm64` | 0.35.5 | Apache-2.0 | Lovell Fuller <npm@lovell.info> (npm registry `author`, package not installed under this platform's node_modules) |
+| `@img/sharp-linuxmusl-x64` | 0.35.5 | Apache-2.0 | Lovell Fuller <npm@lovell.info> (npm registry `author`, package not installed under this platform's node_modules) |
+| `@img/sharp-webcontainers-wasm32` | 0.35.5 | Apache-2.0 | Lovell Fuller <npm@lovell.info> (npm registry `author`, package not installed under this platform's node_modules) |
+| `@next/env` | 15.5.28 | MIT | Next.js Team <support@vercel.com> (npm registry `author`, no local LICENSE file) |
 | `@panva/hkdf` | 1.2.1 | MIT | Copyright (c) 2021 Filip Skokan |
 | `@schummar/icu-type-parser` | 1.21.5 | MIT | Marco Schumacher <marco@schumacher.dev> (npm registry `author`, no local LICENSE file) |
 | `@swc/counter` | 0.1.3 | Apache-2.0 | 강동윤 (Kang Dong-yoon) <kdy1997.dev@gmail.com> (npm registry `author`, no local LICENSE file) |
@@ -235,7 +238,7 @@ The table below is the **SUPERSET** of `norintegrate-web/package-lock.json`'s no
 | `jose` | 6.2.6 | MIT | Copyright (c) 2018 Filip Skokan |
 | `nanoid` | 3.3.18 | MIT | Copyright 2017 Andrey Sitnik <andrey@sitnik.ru> |
 | `negotiator` | 1.0.0 | MIT | Copyright (c) 2012-2014 Federico Romero |
-| `next` | 15.5.26 | MIT | Copyright (c) 2025 Vercel, Inc. |
+| `next` | 15.5.28 | MIT | Copyright (c) 2025 Vercel, Inc. |
 | `next-auth` | 5.0.0-beta.32 | ISC | Copyright (c) 2022-2024, Balázs Orbán |
 | `next-intl` | 4.14.7 | MIT | Copyright (c) 2024 Jan Amann |
 | `oauth4webapi` | 3.8.6 | MIT | Copyright (c) 2022 Filip Skokan |
@@ -247,8 +250,8 @@ The table below is the **SUPERSET** of `norintegrate-web/package-lock.json`'s no
 | `react-dom` | 19.3.0 | MIT | Copyright (c) Meta Platforms, Inc. and affiliates. |
 | `scheduler` | 0.28.0 | MIT | Copyright (c) Meta Platforms, Inc. and affiliates. |
 | `semver` | 7.8.5 | ISC | Copyright (c) Isaac Z. Schlueter and Contributors |
-| `sharp` | 0.35.4 | Apache-2.0 | Lovell Fuller <npm@lovell.info> (npm package.json `author`) |
-| `source-map-js` | 1.2.1 | BSD-3-Clause | Copyright (c) 2009-2011, Mozilla Foundation and contributors |
+| `sharp` | 0.35.5 | Apache-2.0 | Lovell Fuller <npm@lovell.info> (npm package.json `author`) |
+| `source-map-js` | 1.2.2 | BSD-3-Clause | Copyright (c) 2009-2011, Mozilla Foundation and contributors |
 | `styled-jsx` | 5.1.6 | MIT | Copyright (c) 2016-present Vercel, Inc. |
 | `tailwindcss` | 4.3.3 | MIT | Copyright (c) Tailwind Labs, Inc. |
 | `tslib` | 2.8.1 | 0BSD | Copyright (c) Microsoft Corporation. |
@@ -1166,7 +1169,7 @@ USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 The list below is what `scripts/check-third-party-notices-web-drift.sh` compares against `norintegrate-web/package-lock.json` (permissive side). Every non-dev, non-excluded package (SUPERSET, see above), `name@version<TAB>license`, one per line.
 
-- Generated/verified: 2026-10-14
+- Generated/verified: 2026-10-22
 - Platform used for the exclusion pass: `linux`/musl (fixed — matches `docker/web.Dockerfile`'s `node:24-alpine`, independent of the host this was generated on)
 - Host this file was generated on (copyright-line lookups only): `darwin`/`arm64`
 
@@ -1181,10 +1184,10 @@ The list below is what `scripts/check-third-party-notices-web-drift.sh` compares
 @formatjs/icu-skeleton-parser@2.1.12	MIT
 @formatjs/intl-localematcher@0.8.4	MIT
 @img/colour@1.1.0	MIT
-@img/sharp-linuxmusl-arm64@0.35.4	Apache-2.0
-@img/sharp-linuxmusl-x64@0.35.4	Apache-2.0
-@img/sharp-webcontainers-wasm32@0.35.4	Apache-2.0
-@next/env@15.5.26	MIT
+@img/sharp-linuxmusl-arm64@0.35.5	Apache-2.0
+@img/sharp-linuxmusl-x64@0.35.5	Apache-2.0
+@img/sharp-webcontainers-wasm32@0.35.5	Apache-2.0
+@next/env@15.5.28	MIT
 @panva/hkdf@1.2.1	MIT
 @schummar/icu-type-parser@1.21.5	MIT
 @swc/counter@0.1.3	Apache-2.0
@@ -1202,7 +1205,7 @@ nanoid@3.3.18	MIT
 negotiator@1.0.0	MIT
 next-auth@5.0.0-beta.32	ISC
 next-intl@4.14.7	MIT
-next@15.5.26	MIT
+next@15.5.28	MIT
 oauth4webapi@3.8.6	MIT
 picocolors@1.1.1	ISC
 postcss@8.5.25	MIT
@@ -1212,8 +1215,8 @@ react-dom@19.3.0	MIT
 react@19.3.0	MIT
 scheduler@0.28.0	MIT
 semver@7.8.5	ISC
-sharp@0.35.4	Apache-2.0
-source-map-js@1.2.1	BSD-3-Clause
+sharp@0.35.5	Apache-2.0
+source-map-js@1.2.2	BSD-3-Clause
 styled-jsx@5.1.6	MIT
 tailwindcss@4.3.3	MIT
 tslib@2.8.1	0BSD
@@ -2082,7 +2085,7 @@ Public License instead of this License.  But first, please read
 ### libvips upstream license (LGPL-2.1, "or later")
 
 The libvips repository's own `LICENSE` file states LGPL v2.1; sharp-libvips
-1.3.3 additionally declares its compiled artifact "LGPL-3.0-or-later", which
+1.3.4 additionally declares its compiled artifact "LGPL-3.0-or-later", which
 is libvips' "any later version" clause exercised. Both are reproduced: the
 GNU LGPL v3.0 above is the effective, elected version; the upstream v2.1
 text is included below for completeness and to document what "or later"
@@ -2605,18 +2608,18 @@ appear here, `name@version<TAB>license`, one per line.
 - Source commit: `afcfe41`
 
 <!-- copyleft-inventory:start -->
-@img/sharp-libvips-darwin-arm64@1.3.3	LGPL-3.0-or-later
-@img/sharp-libvips-darwin-x64@1.3.3	LGPL-3.0-or-later
-@img/sharp-libvips-linux-arm@1.3.3	LGPL-3.0-or-later
-@img/sharp-libvips-linux-arm64@1.3.3	LGPL-3.0-or-later
-@img/sharp-libvips-linux-ppc64@1.3.3	LGPL-3.0-or-later
-@img/sharp-libvips-linux-riscv64@1.3.3	LGPL-3.0-or-later
-@img/sharp-libvips-linux-s390x@1.3.3	LGPL-3.0-or-later
-@img/sharp-libvips-linux-x64@1.3.3	LGPL-3.0-or-later
-@img/sharp-libvips-linuxmusl-arm64@1.3.3	LGPL-3.0-or-later
-@img/sharp-libvips-linuxmusl-x64@1.3.3	LGPL-3.0-or-later
-@img/sharp-wasm32@0.35.4	Apache-2.0 AND LGPL-3.0-or-later AND MIT
-@img/sharp-win32-arm64@0.35.4	Apache-2.0 AND LGPL-3.0-or-later
-@img/sharp-win32-ia32@0.35.4	Apache-2.0 AND LGPL-3.0-or-later
-@img/sharp-win32-x64@0.35.4	Apache-2.0 AND LGPL-3.0-or-later
+@img/sharp-libvips-darwin-arm64@1.3.4	LGPL-3.0-or-later
+@img/sharp-libvips-darwin-x64@1.3.4	LGPL-3.0-or-later
+@img/sharp-libvips-linux-arm@1.3.4	LGPL-3.0-or-later
+@img/sharp-libvips-linux-arm64@1.3.4	LGPL-3.0-or-later
+@img/sharp-libvips-linux-ppc64@1.3.4	LGPL-3.0-or-later
+@img/sharp-libvips-linux-riscv64@1.3.4	LGPL-3.0-or-later
+@img/sharp-libvips-linux-s390x@1.3.4	LGPL-3.0-or-later
+@img/sharp-libvips-linux-x64@1.3.4	LGPL-3.0-or-later
+@img/sharp-libvips-linuxmusl-arm64@1.3.4	LGPL-3.0-or-later
+@img/sharp-libvips-linuxmusl-x64@1.3.4	LGPL-3.0-or-later
+@img/sharp-wasm32@0.35.5	Apache-2.0 AND LGPL-3.0-or-later AND MIT
+@img/sharp-win32-arm64@0.35.5	Apache-2.0 AND LGPL-3.0-or-later
+@img/sharp-win32-ia32@0.35.5	Apache-2.0 AND LGPL-3.0-or-later
+@img/sharp-win32-x64@0.35.5	Apache-2.0 AND LGPL-3.0-or-later
 <!-- copyleft-inventory:end -->

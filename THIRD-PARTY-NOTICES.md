@@ -29,8 +29,8 @@ scripts/check-third-party-drift.sh
 
 It re-resolves `runtimeClasspath` and diffs it against the recorded list, exiting non-zero on any drift.
 
-- Generated: 2026-10-14
-- Source commit: `6ecf1fc`
+- Generated: 2026-10-23
+- Source commit: `9c9e218`
 - Artifacts covered: **152**
 
 ## Summary
@@ -71,10 +71,10 @@ No dependency is under a strong copyleft license (the GPL/AGPL/SSPL family); non
   <sub>[POM](https://repo1.maven.org/maven2/com/ethlo/time/itu/1.14.0/itu-1.14.0.pom)</sub>
 - `com.fasterxml.jackson.core:jackson-annotations:2.22`  
   <sub>[POM](https://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.pom)</sub>
-- `com.fasterxml.jackson.core:jackson-core:2.22.1`  
-  <sub>[POM](https://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-core/2.22.1/jackson-core-2.22.1.pom)</sub>
-- `com.fasterxml.jackson.core:jackson-databind:2.22.1`  
-  <sub>[POM](https://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-databind/2.22.1/jackson-databind-2.22.1.pom)</sub>
+- `com.fasterxml.jackson.core:jackson-core:2.22.4`  
+  <sub>[POM](https://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-core/2.22.4/jackson-core-2.22.4.pom)</sub>
+- `com.fasterxml.jackson.core:jackson-databind:2.22.4`  
+  <sub>[POM](https://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-databind/2.22.4/jackson-databind-2.22.4.pom)</sub>
 - `com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.21.5`  
   <sub>[POM](https://repo1.maven.org/maven2/com/fasterxml/jackson/dataformat/jackson-dataformats-text/2.21.5/jackson-dataformats-text-2.21.5.pom)</sub>
 - `com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.21.5`  
@@ -311,10 +311,10 @@ No dependency is under a strong copyleft license (the GPL/AGPL/SSPL family); non
   <sub>[POM](https://repo1.maven.org/maven2/org/webjars/swagger-ui/5.32.14/swagger-ui-5.32.14.pom)</sub>
 - `org.yaml:snakeyaml:2.6`  
   <sub>[POM](https://repo1.maven.org/maven2/org/yaml/snakeyaml/2.6/snakeyaml-2.6.pom)</sub>
-- `tools.jackson.core:jackson-core:3.2.1`  
-  <sub>[POM](https://repo1.maven.org/maven2/tools/jackson/core/jackson-core/3.2.1/jackson-core-3.2.1.pom)</sub>
-- `tools.jackson.core:jackson-databind:3.2.1`  
-  <sub>[POM](https://repo1.maven.org/maven2/tools/jackson/core/jackson-databind/3.2.1/jackson-databind-3.2.1.pom)</sub>
+- `tools.jackson.core:jackson-core:3.2.4`  
+  <sub>[POM](https://repo1.maven.org/maven2/tools/jackson/core/jackson-core/3.2.4/jackson-core-3.2.4.pom)</sub>
+- `tools.jackson.core:jackson-databind:3.2.4`  
+  <sub>[POM](https://repo1.maven.org/maven2/tools/jackson/core/jackson-databind/3.2.4/jackson-databind-3.2.4.pom)</sub>
 - `tools.jackson.dataformat:jackson-dataformat-yaml:3.1.5`  
   <sub>[POM](https://repo1.maven.org/maven2/tools/jackson/dataformat/jackson-dataformat-yaml/3.1.5/jackson-dataformat-yaml-3.1.5.pom)</sub>
 
@@ -417,7 +417,7 @@ Copyright 2007-, Tatu Saloranta (tatu.saloranta@iki.fi)
 Applies to:
 
 - `com.fasterxml.jackson.core:jackson-annotations:2.22`
-- `com.fasterxml.jackson.core:jackson-databind:2.22.1`
+- `com.fasterxml.jackson.core:jackson-databind:2.22.4`
 
 ```text
 # Jackson JSON processor
@@ -446,7 +446,7 @@ from the source code management (SCM) system project uses.
 </details>
 
 <details>
-<summary><code>com.fasterxml.jackson.core:jackson-core:2.22.1</code></summary>
+<summary><code>com.fasterxml.jackson.core:jackson-core:2.22.4</code></summary>
 
 ```text
 # Jackson JSON processor
@@ -1594,7 +1594,7 @@ subcomponent's license, as noted in the license.txt file.
 </details>
 
 <details>
-<summary><code>tools.jackson.core:jackson-core:3.2.1</code></summary>
+<summary><code>tools.jackson.core:jackson-core:3.2.4</code></summary>
 
 ```text
 # Jackson JSON processor
@@ -1644,7 +1644,7 @@ See Schubfach-LICENSE.
 </details>
 
 <details>
-<summary><code>tools.jackson.core:jackson-databind:3.2.1</code></summary>
+<summary><code>tools.jackson.core:jackson-databind:3.2.4</code></summary>
 
 ```text
 # Jackson JSON processor
