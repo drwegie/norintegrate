@@ -68,19 +68,19 @@ subprojects {
             // (MapMessage JSON serialization of non-finite floats). Only
             // log4j-api is flagged, but api and to-slf4j ship as one release
             // train, so both move together for the same reason Jackson does.
-            dependencySet("org.apache.logging.log4j:2.25.5") {
-                entry("log4j-api")
-                entry("log4j-to-slf4j")
-            }
+            //
+            // Every pin here spells out group:artifact:version. dependencySet
+            // splits the coordinate from the version, so no group:artifact:version
+            // string was left for Dependabot to match and it answered the Jackson
+            // alerts with dependency_not_found instead of a security PR — while
+            // the full-coordinate tomcat entries above did get one (#110).
+            dependency("org.apache.logging.log4j:log4j-api:2.25.5")
+            dependency("org.apache.logging.log4j:log4j-to-slf4j:2.25.5")
             dependency("com.fasterxml.jackson.core:jackson-annotations:2.22")
-            dependencySet("com.fasterxml.jackson.core:2.22.1") {
-                entry("jackson-core")
-                entry("jackson-databind")
-            }
-            dependencySet("tools.jackson.core:3.2.1") {
-                entry("jackson-core")
-                entry("jackson-databind")
-            }
+            dependency("com.fasterxml.jackson.core:jackson-core:2.22.4")
+            dependency("com.fasterxml.jackson.core:jackson-databind:2.22.4")
+            dependency("tools.jackson.core:jackson-core:3.2.4")
+            dependency("tools.jackson.core:jackson-databind:3.2.4")
         }
     }
 
