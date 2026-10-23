@@ -68,8 +68,8 @@ ch.qos.logback:logback-classic:1.5.38
 ch.qos.logback:logback-core:1.5.38
 com.ethlo.time:itu:1.14.0
 com.fasterxml.jackson.core:jackson-annotations:2.22
-com.fasterxml.jackson.core:jackson-core:2.22.1
-com.fasterxml.jackson.core:jackson-databind:2.22.1
+com.fasterxml.jackson.core:jackson-core:2.22.4
+com.fasterxml.jackson.core:jackson-databind:2.22.4
 com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.21.5
 com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.21.5
 com.fasterxml:classmate:1.7.3
@@ -213,8 +213,8 @@ org.springframework:spring-webmvc:7.0.9
 org.webjars:swagger-ui:5.32.14
 org.webjars:webjars-locator-lite:1.1.4
 org.yaml:snakeyaml:2.6
-tools.jackson.core:jackson-core:3.2.1
-tools.jackson.core:jackson-databind:3.2.1
+tools.jackson.core:jackson-core:3.2.4
+tools.jackson.core:jackson-databind:3.2.4
 tools.jackson.dataformat:jackson-dataformat-yaml:3.1.5
 "
 
