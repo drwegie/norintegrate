@@ -10,7 +10,22 @@
 //   node scripts/lib/third-party-notices-web-inventory.js copyleft
 //   node scripts/lib/third-party-notices-web-inventory.js permissive
 //
-// Prints "name@version<TAB>license", one per line, sorted.
+// Prints one line per entry, sorted:
+//   copyleft:   "name@version<TAB>license"
+//   permissive: "name<TAB>license"
+//
+// Why the permissive block carries no version (ADR-022): it is a *generated*
+// list, and a version-bearing generated list drifts on every single
+// dependency bump — including the routine patch bumps Dependabot opens,
+// which it cannot regenerate, so every one of those PRs failed the drift
+// gate and had to be folded into a human branch by hand. Attribution does
+// not depend on the version: what the licence obliges us to reproduce is the
+// package, its licence and its copyright line. Dropping the version makes
+// the gate fire only when the package SET or a LICENCE changes — exactly the
+// cases that need a human to re-read the prose. The copyleft block keeps its
+// versions on purpose: there the version IS the obligation (LGPL-3.0 §4(d)
+// corresponding source is pinned to a specific libvips/sharp-libvips tag),
+// so a sharp bump must still stop a PR and get read.
 //
 // Scope (NOR-31 legal entry, 2026-09-23): the SUPERSET of
 // norintegrate-web/package-lock.json's non-dev packages, minus:
@@ -209,9 +224,15 @@ function main() {
   }
 
   const rows = getInventory(kind);
-  const lines = rows
-    .map((r) => `${r.name}@${r.version}\t${r.license || "(missing)"}`)
-    .sort();
+  const lines = [
+    ...new Set(
+      rows.map((r) =>
+        kind === "permissive"
+          ? `${r.name}\t${r.license || "(missing)"}`
+          : `${r.name}@${r.version}\t${r.license || "(missing)"}`
+      )
+    ),
+  ].sort();
   process.stdout.write(lines.join("\n") + (lines.length ? "\n" : ""));
 }
 

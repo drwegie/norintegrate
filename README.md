@@ -176,6 +176,7 @@ All screenshots: [`docs/screenshots/`](docs/screenshots/)
 | [ADR-019](docs/adr/ADR-019-kotlin-introduction-for-mcp.md) | Kotlin for norintegrate-mcp |
 | [ADR-020](docs/adr/ADR-020-kubernetes-manifests-alongside-ecs-fargate.md) | Kubernetes manifests alongside ECS Fargate |
 | [ADR-021](docs/adr/ADR-021-decision-not-to-introduce-kafka.md) | No Kafka (no event-streaming driver in the domain) |
+| [ADR-022](docs/adr/ADR-022-version-free-third-party-notices.md) | Both notices files record dependency + licence, not version |
 
 ---
 

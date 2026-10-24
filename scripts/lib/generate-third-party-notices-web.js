@@ -92,6 +92,9 @@ const FAMILY_TEXT_FILE = {
   "CC-BY-4.0": "CC-BY-4.0.txt",
 };
 
+// The permissive block is "name<TAB>license"; the copyleft block is still
+// "name@version<TAB>license" — see the inventory script's header for why
+// they differ.
 function runInventory(kind) {
   const out = execFileSync("node", [INVENTORY_SCRIPT, kind], { encoding: "utf8" });
   return out
@@ -99,6 +102,7 @@ function runInventory(kind) {
     .filter(Boolean)
     .map((line) => {
       const [id, license] = line.split("\t");
+      if (kind === "permissive") return { name: id, license };
       const at = id.lastIndexOf("@");
       return { name: id.slice(0, at), version: id.slice(at + 1), license };
     });
@@ -229,21 +233,32 @@ function render(rows) {
   w("");
   w("### Entries");
   w("");
-  w("| Package | Version | SPDX license | Copyright |");
-  w("|---------|---------|--------------|-----------|");
-  const sorted = [...rows].sort((a, b) => (a.name < b.name ? -1 : a.name > b.name ? 1 : a.version < b.version ? -1 : 1));
+  w(
+    "No version column, on purpose (ADR-022): the attribution an MIT/ISC/" +
+      "BSD/Apache-2.0/0BSD/CC-BY-4.0 licence obliges us to reproduce is the " +
+      "package, its licence and its copyright line — none of which is a " +
+      "function of the version. Pinning versions here only meant that every " +
+      "routine dependency bump invalidated a generated file Dependabot " +
+      "cannot regenerate. The copyleft section above does keep its versions, " +
+      "because there the version is the obligation (LGPL-3.0 §4(d) " +
+      "corresponding source)."
+  );
+  w("");
+  w("| Package | SPDX license | Copyright |");
+  w("|---------|--------------|-----------|");
+  const sorted = [...rows].sort((a, b) => (a.name < b.name ? -1 : a.name > b.name ? 1 : a.license < b.license ? -1 : 1));
   let unverifiedCount = 0;
   for (const r of sorted) {
     const { text, verified } = resolveCopyright(r.name);
     if (!verified) unverifiedCount++;
-    w(`| \`${escapeMd(r.name)}\` | ${r.version} | ${r.license} | ${escapeMd(text)} |`);
+    w(`| \`${escapeMd(r.name)}\` | ${r.license} | ${escapeMd(text)} |`);
   }
   w("");
   w(`${unverifiedCount} of ${sorted.length} entries are \`UNVERIFIED\` (no LICENSE file present locally and no npm author/maintainer metadata found).`);
   w("");
   for (const r of sorted) {
     const note = UNVERIFIED_NOTES[r.name];
-    if (note && !resolveCopyright(r.name).verified) w(`- \`${r.name}@${r.version}\`: ${note}`);
+    if (note && !resolveCopyright(r.name).verified) w(`- \`${r.name}\`: ${note}`);
   }
   w("");
 
@@ -268,7 +283,7 @@ function render(rows) {
   const notice = readTypescriptNotice();
   if (notice) {
     w("<details>");
-    w("<summary><code>typescript@" + (rows.find((r) => r.name === "typescript") || {}).version + " — ThirdPartyNoticeText.txt</code></summary>");
+    w("<summary><code>typescript — ThirdPartyNoticeText.txt</code></summary>");
     w("");
     w("```text");
     w(notice);
@@ -291,8 +306,7 @@ function render(rows) {
   );
   w("");
   w(
-    "> This product includes browser compatibility data from `caniuse-lite` " +
-      `${(rows.find((r) => r.name === "caniuse-lite") || {}).version}, ` +
+    "> This product includes browser compatibility data from `caniuse-lite`, " +
       "sourced from caniuse.com (https://caniuse.com), by Ben Briggs and " +
       "contributors, licensed under CC-BY-4.0 " +
       "(https://creativecommons.org/licenses/by/4.0/)."
@@ -352,7 +366,8 @@ function render(rows) {
     "The list below is what `scripts/check-third-party-notices-web-drift.sh` " +
       "compares against `norintegrate-web/package-lock.json` (permissive side). " +
       "Every non-dev, non-excluded package (SUPERSET, see above), " +
-      "`name@version<TAB>license`, one per line."
+      "`name<TAB>license`, one per line — no version, for the reason given " +
+      "under \"Entries\" above."
   );
   w("");
   w(`- Generated/verified: ${new Date().toISOString().slice(0, 10)}`);
@@ -361,7 +376,7 @@ function render(rows) {
   w("");
   w("<!-- permissive-inventory:start -->");
   for (const r of runInventory("permissive")) {
-    w(`${r.name}@${r.version}\t${r.license}`);
+    w(`${r.name}\t${r.license}`);
   }
   w("<!-- permissive-inventory:end -->");
   w("");

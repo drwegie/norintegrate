@@ -32,9 +32,20 @@
 # logic lives in one place).
 #
 # This script also checks that the Entries table in THIRD-PARTY-NOTICES-WEB.md
-# lists exactly the same name@version set as the permissive-inventory block —
-# the table is generated from the same data, but nothing stops someone from
+# lists exactly the same package set as the permissive-inventory block — the
+# table is generated from the same data, but nothing stops someone from
 # hand-editing just one of the two, so this catches that drift too.
+#
+# Version granularity (ADR-022): the copyleft block is compared at
+# name@version, the permissive block at name only. That is deliberate. The
+# permissive block is pure attribution, which does not depend on the version,
+# and comparing it at name@version made every routine dependency bump a
+# drift failure — including Dependabot's own PRs, which cannot rerun the
+# generator, so not one of them could ever go green on its own. Compared at
+# name, this gate now fires exactly when the package set or a licence
+# changes, which is when the hand-written prose actually needs re-reading.
+# The copyleft block keeps name@version because LGPL-3.0 §4(d) ties the
+# corresponding-source links to a specific libvips/sharp-libvips version.
 #
 # Usage:
 #   scripts/check-third-party-notices-web-drift.sh
@@ -106,7 +117,7 @@ check_block() {
 }
 
 check_entries_table_matches_permissive_inventory() {
-  # Entries table rows look like: | `name` | version | license | copyright |
+  # Entries table rows look like: | `name` | license | copyright |
   # Scoped to the "### Entries" section only (other sections of this file —
   # e.g. the copyleft "Artifacts shipped" tables — also have `name` |
   # version-shaped rows, just not the ones this check cares about).
@@ -117,11 +128,7 @@ check_entries_table_matches_permissive_inventory() {
       line=$0
       sub(/^\| `/, "", line)
       split(line, parts, "`")
-      name=parts[1]
-      rest=parts[2]
-      sub(/^ \| /, "", rest)
-      sub(/ \|.*$/, "", rest)
-      print name "@" rest
+      print parts[1]
     }
   ' "$NOTICES" | sort > "$WORK/entries-table.txt"
 
@@ -140,7 +147,7 @@ check_entries_table_matches_permissive_inventory() {
 
   echo "" >&2
   echo "DRIFT: THIRD-PARTY-NOTICES-WEB.md's \"### Entries\" table lists a different" >&2
-  echo "name@version set than its permissive-inventory block." >&2
+  echo "package set than its permissive-inventory block." >&2
   echo "  '-' = in the permissive-inventory block but not the Entries table" >&2
   echo "  '+' = in the Entries table but not the permissive-inventory block" >&2
   echo "" >&2
