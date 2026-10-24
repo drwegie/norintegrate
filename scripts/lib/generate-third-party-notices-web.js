@@ -54,9 +54,16 @@ const COPYRIGHT_OVERRIDES = {
   // see scripts/lib/third-party-notices-web-inventory.js), the same
   // `author` read from registry.npmjs.org (2026-09-23; all @img/sharp-*
   // platform packages are published by the sharp project under the same
-  // author as `sharp` itself).
+  // author as `sharp` itself; the @img/sharp-linux-* entries re-verified
+  // the same way 2026-10-24).
   sharp: "Lovell Fuller <npm@lovell.info> (npm package.json `author`)",
   "detect-libc": "Lovell Fuller <npm@lovell.info> (npm package.json `author`)",
+  "@img/sharp-linux-arm": "Lovell Fuller <npm@lovell.info> (npm registry `author`, package not installed under this platform's node_modules)",
+  "@img/sharp-linux-arm64": "Lovell Fuller <npm@lovell.info> (npm registry `author`, package not installed under this platform's node_modules)",
+  "@img/sharp-linux-ppc64": "Lovell Fuller <npm@lovell.info> (npm registry `author`, package not installed under this platform's node_modules)",
+  "@img/sharp-linux-riscv64": "Lovell Fuller <npm@lovell.info> (npm registry `author`, package not installed under this platform's node_modules)",
+  "@img/sharp-linux-s390x": "Lovell Fuller <npm@lovell.info> (npm registry `author`, package not installed under this platform's node_modules)",
+  "@img/sharp-linux-x64": "Lovell Fuller <npm@lovell.info> (npm registry `author`, package not installed under this platform's node_modules)",
   "@img/sharp-linuxmusl-arm64": "Lovell Fuller <npm@lovell.info> (npm registry `author`, package not installed under this platform's node_modules)",
   "@img/sharp-linuxmusl-x64": "Lovell Fuller <npm@lovell.info> (npm registry `author`, package not installed under this platform's node_modules)",
   "@img/sharp-webcontainers-wasm32": "Lovell Fuller <npm@lovell.info> (npm registry `author`, package not installed under this platform's node_modules)",
