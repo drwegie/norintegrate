@@ -210,7 +210,7 @@ The table below is the **SUPERSET** of `norintegrate-web/package-lock.json`'s no
 | Package | Version | SPDX license | Copyright |
 |---------|---------|--------------|-----------|
 | `@auth/core` | 0.41.3 | ISC | Copyright (c) 2022-2024, Balázs Orbán |
-| `@emnapi/runtime` | 1.11.3 | MIT | toyobayashi (npm registry `author`, no local LICENSE file — package not installed under this platform's node_modules) |
+| `@emnapi/runtime` | 1.11.3 | MIT | Copyright (c) 2021-present Toyobayashi |
 | `@formatjs/fast-memoize` | 3.1.2 | MIT | Copyright (c) 2023 FormatJS |
 | `@formatjs/fast-memoize` | 3.1.7 | MIT | Copyright (c) 2023 FormatJS |
 | `@formatjs/icu-messageformat-parser` | 3.5.18 | MIT | Copyright (c) 2023 FormatJS |
@@ -219,6 +219,12 @@ The table below is the **SUPERSET** of `norintegrate-web/package-lock.json`'s no
 | `@formatjs/icu-skeleton-parser` | 2.1.12 | MIT | Copyright (c) 2023 FormatJS |
 | `@formatjs/intl-localematcher` | 0.8.4 | MIT | Copyright (c) 2023 FormatJS |
 | `@img/colour` | 1.1.0 | MIT | Copyright (c) 2012 Heather Arthur |
+| `@img/sharp-linux-arm` | 0.35.5 | Apache-2.0 | Lovell Fuller <npm@lovell.info> (npm registry `author`, package not installed under this platform's node_modules) |
+| `@img/sharp-linux-arm64` | 0.35.5 | Apache-2.0 | Lovell Fuller <npm@lovell.info> (npm registry `author`, package not installed under this platform's node_modules) |
+| `@img/sharp-linux-ppc64` | 0.35.5 | Apache-2.0 | Lovell Fuller <npm@lovell.info> (npm registry `author`, package not installed under this platform's node_modules) |
+| `@img/sharp-linux-riscv64` | 0.35.5 | Apache-2.0 | Lovell Fuller <npm@lovell.info> (npm registry `author`, package not installed under this platform's node_modules) |
+| `@img/sharp-linux-s390x` | 0.35.5 | Apache-2.0 | Lovell Fuller <npm@lovell.info> (npm registry `author`, package not installed under this platform's node_modules) |
+| `@img/sharp-linux-x64` | 0.35.5 | Apache-2.0 | Lovell Fuller <npm@lovell.info> (npm registry `author`, package not installed under this platform's node_modules) |
 | `@img/sharp-linuxmusl-arm64` | 0.35.5 | Apache-2.0 | Lovell Fuller <npm@lovell.info> (npm registry `author`, package not installed under this platform's node_modules) |
 | `@img/sharp-linuxmusl-x64` | 0.35.5 | Apache-2.0 | Lovell Fuller <npm@lovell.info> (npm registry `author`, package not installed under this platform's node_modules) |
 | `@img/sharp-webcontainers-wasm32` | 0.35.5 | Apache-2.0 | Lovell Fuller <npm@lovell.info> (npm registry `author`, package not installed under this platform's node_modules) |
@@ -227,6 +233,7 @@ The table below is the **SUPERSET** of `norintegrate-web/package-lock.json`'s no
 | `@schummar/icu-type-parser` | 1.21.5 | MIT | Marco Schumacher <marco@schumacher.dev> (npm registry `author`, no local LICENSE file) |
 | `@swc/counter` | 0.1.3 | Apache-2.0 | 강동윤 (Kang Dong-yoon) <kdy1997.dev@gmail.com> (npm registry `author`, no local LICENSE file) |
 | `@swc/helpers` | 0.5.15 | Apache-2.0 | 강동윤 (Kang Dong-yoon) <kdy1997.dev@gmail.com> (npm package.json `author`) |
+| `@swc/helpers` | 0.5.23 | Apache-2.0 | 강동윤 (Kang Dong-yoon) <kdy1997.dev@gmail.com> (npm package.json `author`) |
 | `@swc/types` | 0.1.28 | Apache-2.0 | 강동윤 (Kang Dong-yoon) <kdy1997.dev@gmail.com> (npm package.json `author`) |
 | `@types/react` | 19.3.0 | MIT | Copyright (c) Microsoft Corporation. |
 | `caniuse-lite` | 1.0.30001780 | CC-BY-4.0 | Ben Briggs <beneb.info@gmail.com> (npm package.json `author`) |
@@ -258,13 +265,13 @@ The table below is the **SUPERSET** of `norintegrate-web/package-lock.json`'s no
 | `typescript` | 6.0.3 | Apache-2.0 | Microsoft Corp. (npm package.json `author`) |
 | `use-intl` | 4.14.7 | MIT | Copyright (c) 2024 Jan Amann |
 
-1 of 48 entries are `UNVERIFIED` (no LICENSE file present locally and no npm author/maintainer metadata found).
+1 of 55 entries are `UNVERIFIED` (no LICENSE file present locally and no npm author/maintainer metadata found).
 
 - `client-only@0.0.1`: UNVERIFIED — no `author` field in package.json, no bundled LICENSE file; registry `maintainers` reflects only the publishing npm account (sebmarkbage), not an asserted copyright holder; upstream request to add a LICENSE file was closed "not planned" (facebook/react#27242, verified 2026-09-23)
 
 ### Apache-2.0 NOTICE reproduction
 
-Of the Apache-2.0 packages above, only `typescript` bundles a `NOTICE`-equivalent file with its published npm package (`node_modules/typescript/ThirdPartyNoticeText.txt`, the npm-distributed form of the `NOTICE.txt` published at https://github.com/microsoft/TypeScript). Per Apache-2.0 §4(d), its content is reproduced verbatim below. The other Apache-2.0 packages (`@img/sharp-linuxmusl-arm64`, `@img/sharp-linuxmusl-x64`, `@img/sharp-webcontainers-wasm32`, `@swc/counter`, `@swc/helpers`, `@swc/types`, `detect-libc`, `sharp`) do not bundle a `NOTICE` file, so §4(d) imposes no additional-notice obligation for them.
+Of the Apache-2.0 packages above, only `typescript` bundles a `NOTICE`-equivalent file with its published npm package (`node_modules/typescript/ThirdPartyNoticeText.txt`, the npm-distributed form of the `NOTICE.txt` published at https://github.com/microsoft/TypeScript). Per Apache-2.0 §4(d), its content is reproduced verbatim below. The other Apache-2.0 packages (`@img/sharp-linux-arm`, `@img/sharp-linux-arm64`, `@img/sharp-linux-ppc64`, `@img/sharp-linux-riscv64`, `@img/sharp-linux-s390x`, `@img/sharp-linux-x64`, `@img/sharp-linuxmusl-arm64`, `@img/sharp-linuxmusl-x64`, `@img/sharp-webcontainers-wasm32`, `@swc/counter`, `@swc/helpers`, `@swc/helpers`, `@swc/types`, `detect-libc`, `sharp`) do not bundle a `NOTICE` file, so §4(d) imposes no additional-notice obligation for them.
 
 <details>
 <summary><code>typescript@6.0.3 — ThirdPartyNoticeText.txt</code></summary>
@@ -1169,7 +1176,7 @@ USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 The list below is what `scripts/check-third-party-notices-web-drift.sh` compares against `norintegrate-web/package-lock.json` (permissive side). Every non-dev, non-excluded package (SUPERSET, see above), `name@version<TAB>license`, one per line.
 
-- Generated/verified: 2026-10-22
+- Generated/verified: 2026-10-24
 - Platform used for the exclusion pass: `linux`/musl (fixed — matches `docker/web.Dockerfile`'s `node:24-alpine`, independent of the host this was generated on)
 - Host this file was generated on (copyright-line lookups only): `darwin`/`arm64`
 
@@ -1184,6 +1191,12 @@ The list below is what `scripts/check-third-party-notices-web-drift.sh` compares
 @formatjs/icu-skeleton-parser@2.1.12	MIT
 @formatjs/intl-localematcher@0.8.4	MIT
 @img/colour@1.1.0	MIT
+@img/sharp-linux-arm64@0.35.5	Apache-2.0
+@img/sharp-linux-arm@0.35.5	Apache-2.0
+@img/sharp-linux-ppc64@0.35.5	Apache-2.0
+@img/sharp-linux-riscv64@0.35.5	Apache-2.0
+@img/sharp-linux-s390x@0.35.5	Apache-2.0
+@img/sharp-linux-x64@0.35.5	Apache-2.0
 @img/sharp-linuxmusl-arm64@0.35.5	Apache-2.0
 @img/sharp-linuxmusl-x64@0.35.5	Apache-2.0
 @img/sharp-webcontainers-wasm32@0.35.5	Apache-2.0
@@ -1192,6 +1205,7 @@ The list below is what `scripts/check-third-party-notices-web-drift.sh` compares
 @schummar/icu-type-parser@1.21.5	MIT
 @swc/counter@0.1.3	Apache-2.0
 @swc/helpers@0.5.15	Apache-2.0
+@swc/helpers@0.5.23	Apache-2.0
 @swc/types@0.1.28	Apache-2.0
 @types/react@19.3.0	MIT
 caniuse-lite@1.0.30001780	CC-BY-4.0
