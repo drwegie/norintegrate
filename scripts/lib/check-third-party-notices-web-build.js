@@ -149,18 +149,21 @@ function main() {
   walkNodeModules(STANDALONE_NODE_MODULES, found);
   const foundIds = new Set(found.map((p) => `${p.name}@${p.version}`));
 
+  // The copyleft block records name@version, the permissive block records
+  // name only (ADR-022 — attribution does not depend on the version, and a
+  // version-pinned generated list made every dependency bump a CI failure).
+  // So a found package counts as documented if its exact name@version is in
+  // the copyleft block, or its bare name is in the permissive block.
   const noticesContent = fs.readFileSync(NOTICES, "utf8");
-  const recorded = new Set([
-    ...readBlock(noticesContent, "copyleft-inventory"),
-    ...readBlock(noticesContent, "permissive-inventory"),
-  ]);
+  const recordedIds = new Set(readBlock(noticesContent, "copyleft-inventory"));
+  const recordedNames = new Set(readBlock(noticesContent, "permissive-inventory"));
 
   const lockLookup = buildLockLookup();
 
   const gaps = [];
   const skipped = [];
   for (const id of [...foundIds].sort()) {
-    if (recorded.has(id)) continue;
+    if (recordedIds.has(id) || recordedNames.has(id.slice(0, id.lastIndexOf("@")))) continue;
     const meta = lockLookup.get(id);
     if (meta && !inventory.canShipInImage(meta)) {
       skipped.push({ id, reason: "cannot ship on linux+musl per lockfile os/libc — local-build-only artifact" });
@@ -170,7 +173,7 @@ function main() {
   }
 
   console.log(`Found ${foundIds.size} distinct package(s) under ${path.relative(REPO_ROOT, STANDALONE_NODE_MODULES)}.`);
-  console.log(`${recorded.size} recorded across both inventory blocks in ${path.relative(REPO_ROOT, NOTICES)}.`);
+  console.log(`${recordedIds.size + recordedNames.size} recorded across both inventory blocks in ${path.relative(REPO_ROOT, NOTICES)}.`);
   if (skipped.length) {
     console.log(`${skipped.length} found-but-unrecorded package(s) skipped (cannot ship on linux+musl, expected local-build artifact):`);
     for (const s of skipped) console.log(`  - ${s.id}`);

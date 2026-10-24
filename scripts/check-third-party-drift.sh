@@ -6,9 +6,19 @@
 # Why this exists: THIRD-PARTY-NOTICES.md is generated from a fixed, reviewed
 # artifact list rather than recomputed on every run, because mapping licenses
 # and electing one license for dual-licensed artifacts are human judgements.
-# The cost of that choice is drift — bump a dependency and the notices file
-# silently describes the old graph. This script is the guard against a
+# The cost of that choice is drift — add or drop a dependency and the notices
+# file silently describes the old graph. This script is the guard against a
 # notices file that quietly stops being true.
+#
+# Granularity: group:artifact, NOT group:artifact:version (ADR-022). The
+# reviewed list records WHICH artifacts ship, which is the human judgement;
+# their versions are resolved live from Gradle by the generator, so they are
+# never recorded anywhere a bump could invalidate. Comparing versions here
+# meant every routine dependency bump failed this check — and since
+# .github/workflows/docs.yml runs it on every push, and regenerating needs
+# the network and a populated Gradle cache, no Dependabot PR could ever go
+# green on its own. Now the check fires when the artifact SET changes, which
+# is when the licence mapping and elections actually need re-reviewing.
 #
 # Usage:
 #   scripts/check-third-party-drift.sh
@@ -31,56 +41,20 @@ GEN_SCRIPT="$SCRIPT_DIR/generate-third-party-notices.sh"
 WORK="$(mktemp -d)"
 trap 'rm -rf "$WORK"' EXIT
 
-# Ask Gradle for the resolved artifacts directly. The `dependencies` task's
-# tree output is NOT usable here: it prints BOM/platform pseudo-artifacts that
-# ship no code, and elides `(*)` conflict-resolved entries it has already
-# shown elsewhere. Reading it produced three different counts on three
-# attempts; resolvedArtifacts is the authoritative view of what lands in the
-# fat JAR.
-cat > "$WORK/deps.init.gradle" <<'EOF'
-allprojects {
-    tasks.register("printRuntimeDepsForDriftCheck") {
-        doLast {
-            def cfg = configurations.findByName("runtimeClasspath")
-            if (cfg == null || !cfg.canBeResolved) return
-            cfg.resolvedConfiguration.resolvedArtifacts.each { a ->
-                def id = a.moduleVersion.id
-                println "DEP\t${id.group}:${id.name}:${id.version}"
-            }
-        }
-    }
-}
-EOF
-
-echo "Resolving runtimeClasspath for the JVM modules..." >&2
-if ! "$REPO_ROOT/gradlew" -q -p "$REPO_ROOT" \
-  --init-script "$WORK/deps.init.gradle" \
-  :norintegrate-api:printRuntimeDepsForDriftCheck \
-  :norintegrate-common:printRuntimeDepsForDriftCheck \
-  :norintegrate-mcp:printRuntimeDepsForDriftCheck \
-  > "$WORK/gradle.out" 2>"$WORK/gradle.err"; then
-  echo "ERROR: Gradle resolution failed. Cannot verify the artifact list." >&2
-  tail -20 "$WORK/gradle.err" >&2
+# What actually ships, at group:artifact granularity. Shared with
+# scripts/generate-third-party-notices.sh — see that resolver's header for
+# why resolvedArtifacts is used rather than the `dependencies` tree output.
+if ! bash "$SCRIPT_DIR/lib/resolve-runtime-artifacts.sh" --no-version \
+  > "$WORK/actual.txt"; then
   exit 1
 fi
 
-# Drop this project's own modules — they need no third-party attribution.
-grep '^DEP' "$WORK/gradle.out" \
-  | cut -f2 \
-  | grep -v '^com\.norintegrate:' \
-  | sort -u > "$WORK/actual.txt"
-
-# The ARTIFACTS heredoc block from the generator.
+# The ARTIFACTS heredoc block from the generator (group:artifact, no version).
 awk '/^ARTIFACTS="/{f=1;next} f&&/^"$/{f=0} f&&NF' "$GEN_SCRIPT" \
   | sort -u > "$WORK/declared.txt"
 
-if [ ! -s "$WORK/actual.txt" ]; then
-  echo "ERROR: resolved no artifacts — the check itself is broken." >&2
-  exit 1
-fi
-
 if diff -u "$WORK/declared.txt" "$WORK/actual.txt" > "$WORK/diff.txt"; then
-  echo "OK: third-party artifact list matches runtimeClasspath ($(wc -l < "$WORK/actual.txt" | tr -d ' ') artifacts)."
+  echo "OK: third-party artifact list matches runtimeClasspath ($(wc -l < "$WORK/actual.txt" | tr -d ' ') artifacts, compared at group:artifact)."
   exit 0
 fi
 

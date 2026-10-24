@@ -19,7 +19,9 @@ scripts/render-third-party-notices.py     # render this file
 
 The first script resolves each artifact's license from its Maven Central POM (walking the `<parent>` chain when a POM declares none) and extracts any `META-INF/NOTICE` bundled in its JAR. The second applies the reviewed SPDX normalization and dual-license elections, both of which are explicit in the script rather than inferred.
 
-The dependency list itself is a reviewed snapshot captured from Gradle's `resolvedArtifacts` API, **not** from parsing `./gradlew dependencies` tree output — that text form both invents entries (BOM/platform pseudo-artifacts declare no code) and drops real ones (`(*)` conflict-resolved starters). If the dependency graph changes, re-capture the list and re-run both scripts.
+Which artifacts ship is a reviewed list of `group:artifact` coordinates in `scripts/generate-third-party-notices.sh`; their versions are not recorded anywhere, but resolved from Gradle's `resolvedArtifacts` API on every run — **not** by parsing `./gradlew dependencies` tree output, which both invents entries (BOM/platform pseudo-artifacts declare no code) and drops real ones (`(*)` conflict-resolved starters). The generator refuses to run if the resolved artifact set differs from the reviewed one.
+
+Artifacts are therefore listed below **without versions** (ADR-022). A version-pinned list is invalidated by every routine dependency bump, and repairing it needs the network and a populated Gradle cache — which is why Dependabot could never make its own pull requests pass. What the licenses here oblige us to reproduce — the artifact, its license, its NOTICE text — does not depend on the version. The exact versions that shipped are recorded in `build/third-party-notices/report.tsv` at generation time, and are resolvable at any point from the committed Gradle build files.
 
 To check that this file still describes what actually ships — the failure mode a fixed list invites — run:
 
@@ -27,375 +29,373 @@ To check that this file still describes what actually ships — the failure mode
 scripts/check-third-party-drift.sh
 ```
 
-It re-resolves `runtimeClasspath` and diffs it against the recorded list, exiting non-zero on any drift.
+It re-resolves `runtimeClasspath` and diffs it against the recorded list at `group:artifact` granularity, exiting non-zero if an artifact has been added or dropped.
 
-- Generated: 2026-10-23
-- Source commit: `9c9e218`
-- Artifacts covered: **152**
+- Generated: 2026-10-24
+- Source commit: `76cb5a0`
+- Artifacts covered: **151**
 
 ## Summary
 
 | License | Artifacts |
 |---------|-----------|
-| Apache-2.0 | 125 |
+| Apache-2.0 | 124 |
 | EDL-1.0 | 8 |
 | MIT | 8 |
 | EPL-2.0 | 5 |
 | BSD-3-Clause | 3 |
 | BSD-2-Clause | 2 |
 | MIT-0 | 1 |
-| **Total** | **152** |
+| **Total** | **151** |
 
 No dependency is under a strong copyleft license (the GPL/AGPL/SSPL family); none is present. 5 dependencies are under EPL-2.0, which is *weak* copyleft: its reciprocal obligations attach to modifications of the EPL-licensed files themselves, not to code that merely depends on them. norintegrate consumes all of them as unmodified binaries from Maven Central, so no source-disclosure obligation attaches to norintegrate's own code. Where an artifact is offered under a choice of licenses, the elected license is stated explicitly with the artifact.
 
 ## Dual-licensed dependencies and elected licenses
 
-- **`ch.qos.logback:logback-classic:1.5.38`** → elected **EPL-2.0**. Dual-licensed EPL-2.0 or LGPL-2.1-only. **EPL-2.0 is elected.** The LGPL-2.1-only option is expressly *not* taken, so LGPL's relinking/source-substitution obligations do not apply here.
-- **`ch.qos.logback:logback-core:1.5.38`** → elected **EPL-2.0**. Dual-licensed EPL-2.0 or LGPL-2.1-only. **EPL-2.0 is elected.** The LGPL-2.1-only option is expressly *not* taken, so LGPL's relinking/source-substitution obligations do not apply here.
-- **`jakarta.annotation:jakarta.annotation-api:3.0.0`** → elected **EPL-2.0**. Dual-licensed EPL-2.0 or GPL-2.0-only WITH Classpath-exception-2.0. **EPL-2.0 is elected**; the GPL option is not taken.
-- **`jakarta.persistence:jakarta.persistence-api:3.2.0`** → elected **EDL-1.0**. Dual-licensed EPL-2.0 or EDL-1.0. **EDL-1.0 is elected** (the BSD-3-Clause-equivalent option).
-- **`jakarta.transaction:jakarta.transaction-api:2.0.1`** → elected **EPL-2.0**. Dual-licensed EPL-2.0 or GPL-2.0-only WITH Classpath-exception-2.0. **EPL-2.0 is elected**; the GPL option is not taken.
-- **`net.logstash.logback:logstash-logback-encoder:9.0`** → elected **Apache-2.0**. Dual-licensed Apache-2.0 or MIT. **Apache-2.0 is elected.**
-- **`org.hdrhistogram:HdrHistogram:2.2.2`** → elected **BSD-2-Clause**. Offered as CC0-1.0 (public domain dedication) or BSD-2-Clause. CC0-1.0 grants no patent license (CC0 §4(a) disclaims any patent rights the affirmer might hold), so **BSD-2-Clause is elected** instead.
+- **`ch.qos.logback:logback-classic`** → elected **EPL-2.0**. Dual-licensed EPL-2.0 or LGPL-2.1-only. **EPL-2.0 is elected.** The LGPL-2.1-only option is expressly *not* taken, so LGPL's relinking/source-substitution obligations do not apply here.
+- **`ch.qos.logback:logback-core`** → elected **EPL-2.0**. Dual-licensed EPL-2.0 or LGPL-2.1-only. **EPL-2.0 is elected.** The LGPL-2.1-only option is expressly *not* taken, so LGPL's relinking/source-substitution obligations do not apply here.
+- **`jakarta.annotation:jakarta.annotation-api`** → elected **EPL-2.0**. Dual-licensed EPL-2.0 or GPL-2.0-only WITH Classpath-exception-2.0. **EPL-2.0 is elected**; the GPL option is not taken.
+- **`jakarta.persistence:jakarta.persistence-api`** → elected **EDL-1.0**. Dual-licensed EPL-2.0 or EDL-1.0. **EDL-1.0 is elected** (the BSD-3-Clause-equivalent option).
+- **`jakarta.transaction:jakarta.transaction-api`** → elected **EPL-2.0**. Dual-licensed EPL-2.0 or GPL-2.0-only WITH Classpath-exception-2.0. **EPL-2.0 is elected**; the GPL option is not taken.
+- **`net.logstash.logback:logstash-logback-encoder`** → elected **Apache-2.0**. Dual-licensed Apache-2.0 or MIT. **Apache-2.0 is elected.**
+- **`org.hdrhistogram:HdrHistogram`** → elected **BSD-2-Clause**. Offered as CC0-1.0 (public domain dedication) or BSD-2-Clause. CC0-1.0 grants no patent license (CC0 §4(a) disclaims any patent rights the affirmer might hold), so **BSD-2-Clause is elected** instead.
 
 ## Dependencies with an imprecise upstream license declaration
 
-- **`org.antlr:ST4:4.3.4`** — POM declares only "The BSD License" without naming the clause count; recorded as BSD-3-Clause (stricter reading).
-- **`org.antlr:antlr-runtime:3.5.3`** — POM declares only "BSD licence" without naming the clause count; recorded as BSD-3-Clause (stricter reading).
+- **`org.antlr:ST4`** — POM declares only "The BSD License" without naming the clause count; recorded as BSD-3-Clause (stricter reading).
+- **`org.antlr:antlr-runtime`** — POM declares only "BSD licence" without naming the clause count; recorded as BSD-3-Clause (stricter reading).
 
 ## Dependencies by license
 
 ### Apache-2.0 (https://www.apache.org/licenses/LICENSE-2.0)
 
-- `com.ethlo.time:itu:1.14.0`  
-  <sub>[POM](https://repo1.maven.org/maven2/com/ethlo/time/itu/1.14.0/itu-1.14.0.pom)</sub>
-- `com.fasterxml.jackson.core:jackson-annotations:2.22`  
-  <sub>[POM](https://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-annotations/2.22/jackson-annotations-2.22.pom)</sub>
-- `com.fasterxml.jackson.core:jackson-core:2.22.4`  
-  <sub>[POM](https://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-core/2.22.4/jackson-core-2.22.4.pom)</sub>
-- `com.fasterxml.jackson.core:jackson-databind:2.22.4`  
-  <sub>[POM](https://repo1.maven.org/maven2/com/fasterxml/jackson/core/jackson-databind/2.22.4/jackson-databind-2.22.4.pom)</sub>
-- `com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.21.5`  
-  <sub>[POM](https://repo1.maven.org/maven2/com/fasterxml/jackson/dataformat/jackson-dataformats-text/2.21.5/jackson-dataformats-text-2.21.5.pom)</sub>
-- `com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.21.5`  
-  <sub>[POM](https://repo1.maven.org/maven2/com/fasterxml/jackson/jackson-base/2.21.5/jackson-base-2.21.5.pom)</sub>
-- `com.fasterxml:classmate:1.7.3`  
-  <sub>[POM](https://repo1.maven.org/maven2/com/fasterxml/classmate/1.7.3/classmate-1.7.3.pom)</sub>
-- `com.github.victools:jsonschema-generator:5.0.0`  
-  <sub>[POM](https://repo1.maven.org/maven2/com/github/victools/jsonschema-generator-parent/5.0.0/jsonschema-generator-parent-5.0.0.pom)</sub>
-- `com.github.victools:jsonschema-module-jackson:5.0.0`  
-  <sub>[POM](https://repo1.maven.org/maven2/com/github/victools/jsonschema-generator-parent/5.0.0/jsonschema-generator-parent-5.0.0.pom)</sub>
-- `com.github.victools:jsonschema-module-swagger-2:5.0.0`  
-  <sub>[POM](https://repo1.maven.org/maven2/com/github/victools/jsonschema-generator-parent/5.0.0/jsonschema-generator-parent-5.0.0.pom)</sub>
-- `com.networknt:json-schema-validator:3.0.0`  
-  <sub>[POM](https://repo1.maven.org/maven2/com/networknt/json-schema-validator/3.0.0/json-schema-validator-3.0.0.pom)</sub>
-- `com.nimbusds:nimbus-jose-jwt:10.9.1`  
-  <sub>[POM](https://repo1.maven.org/maven2/com/nimbusds/nimbus-jose-jwt/10.9.1/nimbus-jose-jwt-10.9.1.pom)</sub>
-- `com.zaxxer:HikariCP:7.0.2`  
-  <sub>[POM](https://repo1.maven.org/maven2/com/zaxxer/HikariCP/7.0.2/HikariCP-7.0.2.pom)</sub>
-- `commons-logging:commons-logging:1.3.6`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/apache/apache/37/apache-37.pom)</sub>
-- `io.micrometer:context-propagation:1.2.1`  
-  <sub>[POM](https://repo1.maven.org/maven2/io/micrometer/context-propagation/1.2.1/context-propagation-1.2.1.pom)</sub>
-- `io.micrometer:micrometer-commons:1.17.1`  
-  <sub>[POM](https://repo1.maven.org/maven2/io/micrometer/micrometer-commons/1.17.1/micrometer-commons-1.17.1.pom)</sub>
-- `io.micrometer:micrometer-core:1.17.1`  
-  <sub>[POM](https://repo1.maven.org/maven2/io/micrometer/micrometer-core/1.17.1/micrometer-core-1.17.1.pom)</sub>
-- `io.micrometer:micrometer-jakarta9:1.17.1`  
-  <sub>[POM](https://repo1.maven.org/maven2/io/micrometer/micrometer-jakarta9/1.17.1/micrometer-jakarta9-1.17.1.pom)</sub>
-- `io.micrometer:micrometer-observation:1.17.1`  
-  <sub>[POM](https://repo1.maven.org/maven2/io/micrometer/micrometer-observation/1.17.1/micrometer-observation-1.17.1.pom)</sub>
-- `io.micrometer:micrometer-registry-prometheus:1.17.1`  
-  <sub>[POM](https://repo1.maven.org/maven2/io/micrometer/micrometer-registry-prometheus/1.17.1/micrometer-registry-prometheus-1.17.1.pom)</sub>
-- `io.projectreactor:reactor-core:3.8.7`  
-  <sub>[POM](https://repo1.maven.org/maven2/io/projectreactor/reactor-core/3.8.7/reactor-core-3.8.7.pom)</sub>
-- `io.prometheus:prometheus-metrics-config:1.7.0`  
-  <sub>[POM](https://repo1.maven.org/maven2/io/prometheus/client_java_parent/1.7.0/client_java_parent-1.7.0.pom)</sub>
-- `io.prometheus:prometheus-metrics-core:1.7.0`  
-  <sub>[POM](https://repo1.maven.org/maven2/io/prometheus/client_java_parent/1.7.0/client_java_parent-1.7.0.pom)</sub>
-- `io.prometheus:prometheus-metrics-exposition-formats:1.7.0`  
-  <sub>[POM](https://repo1.maven.org/maven2/io/prometheus/client_java_parent/1.7.0/client_java_parent-1.7.0.pom)</sub>
-- `io.prometheus:prometheus-metrics-exposition-textformats:1.7.0`  
-  <sub>[POM](https://repo1.maven.org/maven2/io/prometheus/client_java_parent/1.7.0/client_java_parent-1.7.0.pom)</sub>
-- `io.prometheus:prometheus-metrics-model:1.7.0`  
-  <sub>[POM](https://repo1.maven.org/maven2/io/prometheus/client_java_parent/1.7.0/client_java_parent-1.7.0.pom)</sub>
-- `io.prometheus:prometheus-metrics-tracer-common:1.7.0`  
-  <sub>[POM](https://repo1.maven.org/maven2/io/prometheus/client_java_parent/1.7.0/client_java_parent-1.7.0.pom)</sub>
-- `io.swagger.core.v3:swagger-annotations-jakarta:2.2.38`  
-  <sub>[POM](https://repo1.maven.org/maven2/io/swagger/core/v3/swagger-project-jakarta/2.2.38/swagger-project-jakarta-2.2.38.pom)</sub>
-- `io.swagger.core.v3:swagger-annotations-jakarta:2.2.55`  
-  <sub>[POM](https://repo1.maven.org/maven2/io/swagger/core/v3/swagger-project-jakarta/2.2.55/swagger-project-jakarta-2.2.55.pom)</sub>
-- `io.swagger.core.v3:swagger-core-jakarta:2.2.55`  
-  <sub>[POM](https://repo1.maven.org/maven2/io/swagger/core/v3/swagger-project-jakarta/2.2.55/swagger-project-jakarta-2.2.55.pom)</sub>
-- `io.swagger.core.v3:swagger-models-jakarta:2.2.55`  
-  <sub>[POM](https://repo1.maven.org/maven2/io/swagger/core/v3/swagger-project-jakarta/2.2.55/swagger-project-jakarta-2.2.55.pom)</sub>
-- `jakarta.inject:jakarta.inject-api:2.0.1`  
-  <sub>[POM](https://repo1.maven.org/maven2/jakarta/inject/jakarta.inject-api/2.0.1/jakarta.inject-api-2.0.1.pom)</sub>
-- `jakarta.validation:jakarta.validation-api:3.1.1`  
-  <sub>[POM](https://repo1.maven.org/maven2/jakarta/validation/jakarta.validation-api/3.1.1/jakarta.validation-api-3.1.1.pom)</sub>
-- `net.bytebuddy:byte-buddy:1.18.11`  
-  <sub>[POM](https://repo1.maven.org/maven2/net/bytebuddy/byte-buddy-parent/1.18.11/byte-buddy-parent-1.18.11.pom)</sub>
-- `net.logstash.logback:logstash-logback-encoder:9.0` — elected, see above  
-  <sub>[POM](https://repo1.maven.org/maven2/net/logstash/logback/logstash-logback-encoder/9.0/logstash-logback-encoder-9.0.pom)</sub>
-- `org.apache.commons:commons-lang3:3.20.0`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/apache/apache/35/apache-35.pom)</sub>
-- `org.apache.logging.log4j:log4j-api:2.25.5`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/apache/logging/log4j/log4j-api/2.25.5/log4j-api-2.25.5.pom)</sub>
-- `org.apache.logging.log4j:log4j-to-slf4j:2.25.5`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/apache/logging/log4j/log4j-to-slf4j/2.25.5/log4j-to-slf4j-2.25.5.pom)</sub>
-- `org.apache.tomcat.embed:tomcat-embed-core:11.0.26`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/apache/tomcat/embed/tomcat-embed-core/11.0.26/tomcat-embed-core-11.0.26.pom)</sub>
-- `org.apache.tomcat.embed:tomcat-embed-el:11.0.26`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/apache/tomcat/embed/tomcat-embed-el/11.0.26/tomcat-embed-el-11.0.26.pom)</sub>
-- `org.apache.tomcat.embed:tomcat-embed-websocket:11.0.26`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/apache/tomcat/embed/tomcat-embed-websocket/11.0.26/tomcat-embed-websocket-11.0.26.pom)</sub>
-- `org.hibernate.models:hibernate-models:1.1.1`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/hibernate/models/hibernate-models/1.1.1/hibernate-models-1.1.1.pom)</sub>
-- `org.hibernate.orm:hibernate-core:7.4.5.Final`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/hibernate/orm/hibernate-core/7.4.5.Final/hibernate-core-7.4.5.Final.pom)</sub>
-- `org.hibernate.validator:hibernate-validator:9.1.3.Final`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/hibernate/validator/hibernate-validator/9.1.3.Final/hibernate-validator-9.1.3.Final.pom)</sub>
-- `org.jboss.logging:jboss-logging:3.6.3.Final`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/jboss/logging/jboss-logging/3.6.3.Final/jboss-logging-3.6.3.Final.pom)</sub>
-- `org.jetbrains.kotlin:kotlin-reflect:2.4.20`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/jetbrains/kotlin/kotlin-reflect/2.4.20/kotlin-reflect-2.4.20.pom)</sub>
-- `org.jetbrains.kotlin:kotlin-stdlib:2.4.20`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/jetbrains/kotlin/kotlin-stdlib/2.4.20/kotlin-stdlib-2.4.20.pom)</sub>
-- `org.jetbrains:annotations:13.0`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/jetbrains/annotations/13.0/annotations-13.0.pom)</sub>
-- `org.jspecify:jspecify:1.0.1`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/jspecify/jspecify/1.0.1/jspecify-1.0.1.pom)</sub>
-- `org.snakeyaml:snakeyaml-engine:3.0.1`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/snakeyaml/snakeyaml-engine/3.0.1/snakeyaml-engine-3.0.1.pom)</sub>
-- `org.springdoc:springdoc-openapi-starter-common:3.1.1`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springdoc/springdoc-openapi/3.1.1/springdoc-openapi-3.1.1.pom)</sub>
-- `org.springdoc:springdoc-openapi-starter-webmvc-api:3.1.1`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springdoc/springdoc-openapi/3.1.1/springdoc-openapi-3.1.1.pom)</sub>
-- `org.springdoc:springdoc-openapi-starter-webmvc-ui:3.1.1`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springdoc/springdoc-openapi/3.1.1/springdoc-openapi-3.1.1.pom)</sub>
-- `org.springframework.ai:mcp-spring-webmvc:2.0.1`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/ai/mcp-spring-webmvc/2.0.1/mcp-spring-webmvc-2.0.1.pom)</sub>
-- `org.springframework.ai:spring-ai-autoconfigure-mcp-server-common:2.0.1`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/ai/spring-ai-autoconfigure-mcp-server-common/2.0.1/spring-ai-autoconfigure-mcp-server-common-2.0.1.pom)</sub>
-- `org.springframework.ai:spring-ai-autoconfigure-mcp-server-webmvc:2.0.1`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/ai/spring-ai-autoconfigure-mcp-server-webmvc/2.0.1/spring-ai-autoconfigure-mcp-server-webmvc-2.0.1.pom)</sub>
-- `org.springframework.ai:spring-ai-commons:2.0.1`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/ai/spring-ai-commons/2.0.1/spring-ai-commons-2.0.1.pom)</sub>
-- `org.springframework.ai:spring-ai-mcp-annotations:2.0.1`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/ai/spring-ai-mcp-annotations/2.0.1/spring-ai-mcp-annotations-2.0.1.pom)</sub>
-- `org.springframework.ai:spring-ai-mcp:2.0.1`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/ai/spring-ai-mcp/2.0.1/spring-ai-mcp-2.0.1.pom)</sub>
-- `org.springframework.ai:spring-ai-model:2.0.1`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/ai/spring-ai-model/2.0.1/spring-ai-model-2.0.1.pom)</sub>
-- `org.springframework.ai:spring-ai-starter-mcp-server-webmvc:2.0.1`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/ai/spring-ai-starter-mcp-server-webmvc/2.0.1/spring-ai-starter-mcp-server-webmvc-2.0.1.pom)</sub>
-- `org.springframework.ai:spring-ai-template-st:2.0.1`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/ai/spring-ai-template-st/2.0.1/spring-ai-template-st-2.0.1.pom)</sub>
-- `org.springframework.boot:spring-boot-actuator-autoconfigure:4.1.1`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-actuator-autoconfigure/4.1.1/spring-boot-actuator-autoconfigure-4.1.1.pom)</sub>
-- `org.springframework.boot:spring-boot-actuator:4.1.1`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-actuator/4.1.1/spring-boot-actuator-4.1.1.pom)</sub>
-- `org.springframework.boot:spring-boot-autoconfigure:4.1.1`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-autoconfigure/4.1.1/spring-boot-autoconfigure-4.1.1.pom)</sub>
-- `org.springframework.boot:spring-boot-data-commons:4.1.1`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-data-commons/4.1.1/spring-boot-data-commons-4.1.1.pom)</sub>
-- `org.springframework.boot:spring-boot-data-jpa:4.1.1`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-data-jpa/4.1.1/spring-boot-data-jpa-4.1.1.pom)</sub>
-- `org.springframework.boot:spring-boot-health:4.1.1`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-health/4.1.1/spring-boot-health-4.1.1.pom)</sub>
-- `org.springframework.boot:spring-boot-hibernate:4.1.1`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-hibernate/4.1.1/spring-boot-hibernate-4.1.1.pom)</sub>
-- `org.springframework.boot:spring-boot-http-converter:4.1.1`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-http-converter/4.1.1/spring-boot-http-converter-4.1.1.pom)</sub>
-- `org.springframework.boot:spring-boot-jackson:4.1.1`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-jackson/4.1.1/spring-boot-jackson-4.1.1.pom)</sub>
-- `org.springframework.boot:spring-boot-jdbc:4.1.1`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-jdbc/4.1.1/spring-boot-jdbc-4.1.1.pom)</sub>
-- `org.springframework.boot:spring-boot-jpa:4.1.1`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-jpa/4.1.1/spring-boot-jpa-4.1.1.pom)</sub>
-- `org.springframework.boot:spring-boot-micrometer-metrics:4.1.1`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-micrometer-metrics/4.1.1/spring-boot-micrometer-metrics-4.1.1.pom)</sub>
-- `org.springframework.boot:spring-boot-micrometer-observation:4.1.1`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-micrometer-observation/4.1.1/spring-boot-micrometer-observation-4.1.1.pom)</sub>
-- `org.springframework.boot:spring-boot-persistence:4.1.1`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-persistence/4.1.1/spring-boot-persistence-4.1.1.pom)</sub>
-- `org.springframework.boot:spring-boot-security-oauth2-resource-server:4.1.1`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-security-oauth2-resource-server/4.1.1/spring-boot-security-oauth2-resource-server-4.1.1.pom)</sub>
-- `org.springframework.boot:spring-boot-security:4.1.1`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-security/4.1.1/spring-boot-security-4.1.1.pom)</sub>
-- `org.springframework.boot:spring-boot-servlet:4.1.1`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-servlet/4.1.1/spring-boot-servlet-4.1.1.pom)</sub>
-- `org.springframework.boot:spring-boot-sql:4.1.1`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-sql/4.1.1/spring-boot-sql-4.1.1.pom)</sub>
-- `org.springframework.boot:spring-boot-starter-actuator:4.1.1`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-starter-actuator/4.1.1/spring-boot-starter-actuator-4.1.1.pom)</sub>
-- `org.springframework.boot:spring-boot-starter-data-jpa:4.1.1`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-starter-data-jpa/4.1.1/spring-boot-starter-data-jpa-4.1.1.pom)</sub>
-- `org.springframework.boot:spring-boot-starter-jackson:4.1.1`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-starter-jackson/4.1.1/spring-boot-starter-jackson-4.1.1.pom)</sub>
-- `org.springframework.boot:spring-boot-starter-jdbc:4.1.1`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-starter-jdbc/4.1.1/spring-boot-starter-jdbc-4.1.1.pom)</sub>
-- `org.springframework.boot:spring-boot-starter-logging:4.1.1`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-starter-logging/4.1.1/spring-boot-starter-logging-4.1.1.pom)</sub>
-- `org.springframework.boot:spring-boot-starter-micrometer-metrics:4.1.1`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-starter-micrometer-metrics/4.1.1/spring-boot-starter-micrometer-metrics-4.1.1.pom)</sub>
-- `org.springframework.boot:spring-boot-starter-oauth2-resource-server:4.1.1`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-starter-oauth2-resource-server/4.1.1/spring-boot-starter-oauth2-resource-server-4.1.1.pom)</sub>
-- `org.springframework.boot:spring-boot-starter-security:4.1.1`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-starter-security/4.1.1/spring-boot-starter-security-4.1.1.pom)</sub>
-- `org.springframework.boot:spring-boot-starter-tomcat-runtime:4.1.1`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-starter-tomcat-runtime/4.1.1/spring-boot-starter-tomcat-runtime-4.1.1.pom)</sub>
-- `org.springframework.boot:spring-boot-starter-tomcat:4.1.1`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-starter-tomcat/4.1.1/spring-boot-starter-tomcat-4.1.1.pom)</sub>
-- `org.springframework.boot:spring-boot-starter-validation:4.1.1`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-starter-validation/4.1.1/spring-boot-starter-validation-4.1.1.pom)</sub>
-- `org.springframework.boot:spring-boot-starter-web:4.1.1`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-starter-web/4.1.1/spring-boot-starter-web-4.1.1.pom)</sub>
-- `org.springframework.boot:spring-boot-starter:4.1.1`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-starter/4.1.1/spring-boot-starter-4.1.1.pom)</sub>
-- `org.springframework.boot:spring-boot-tomcat:4.1.1`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-tomcat/4.1.1/spring-boot-tomcat-4.1.1.pom)</sub>
-- `org.springframework.boot:spring-boot-transaction:4.1.1`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-transaction/4.1.1/spring-boot-transaction-4.1.1.pom)</sub>
-- `org.springframework.boot:spring-boot-validation:4.1.1`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-validation/4.1.1/spring-boot-validation-4.1.1.pom)</sub>
-- `org.springframework.boot:spring-boot-web-server:4.1.1`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-web-server/4.1.1/spring-boot-web-server-4.1.1.pom)</sub>
-- `org.springframework.boot:spring-boot-webmvc:4.1.1`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot-webmvc/4.1.1/spring-boot-webmvc-4.1.1.pom)</sub>
-- `org.springframework.boot:spring-boot:4.1.1`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/boot/spring-boot/4.1.1/spring-boot-4.1.1.pom)</sub>
-- `org.springframework.data:spring-data-commons:4.1.1`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/data/build/spring-data-parent/4.1.1/spring-data-parent-4.1.1.pom)</sub>
-- `org.springframework.data:spring-data-jpa:4.1.1`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/data/build/spring-data-parent/4.1.1/spring-data-parent-4.1.1.pom)</sub>
-- `org.springframework.security:spring-security-config:7.1.1`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/security/spring-security-config/7.1.1/spring-security-config-7.1.1.pom)</sub>
-- `org.springframework.security:spring-security-core:7.1.1`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/security/spring-security-core/7.1.1/spring-security-core-7.1.1.pom)</sub>
-- `org.springframework.security:spring-security-crypto:7.1.1`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/security/spring-security-crypto/7.1.1/spring-security-crypto-7.1.1.pom)</sub>
-- `org.springframework.security:spring-security-oauth2-core:7.1.1`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/security/spring-security-oauth2-core/7.1.1/spring-security-oauth2-core-7.1.1.pom)</sub>
-- `org.springframework.security:spring-security-oauth2-jose:7.1.1`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/security/spring-security-oauth2-jose/7.1.1/spring-security-oauth2-jose-7.1.1.pom)</sub>
-- `org.springframework.security:spring-security-oauth2-resource-server:7.1.1`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/security/spring-security-oauth2-resource-server/7.1.1/spring-security-oauth2-resource-server-7.1.1.pom)</sub>
-- `org.springframework.security:spring-security-web:7.1.1`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/security/spring-security-web/7.1.1/spring-security-web-7.1.1.pom)</sub>
-- `org.springframework:spring-aop:7.0.9`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/spring-aop/7.0.9/spring-aop-7.0.9.pom)</sub>
-- `org.springframework:spring-aspects:7.0.9`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/spring-aspects/7.0.9/spring-aspects-7.0.9.pom)</sub>
-- `org.springframework:spring-beans:7.0.9`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/spring-beans/7.0.9/spring-beans-7.0.9.pom)</sub>
-- `org.springframework:spring-context:7.0.9`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/spring-context/7.0.9/spring-context-7.0.9.pom)</sub>
-- `org.springframework:spring-core:7.0.9`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/spring-core/7.0.9/spring-core-7.0.9.pom)</sub>
-- `org.springframework:spring-expression:7.0.9`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/spring-expression/7.0.9/spring-expression-7.0.9.pom)</sub>
-- `org.springframework:spring-jdbc:7.0.9`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/spring-jdbc/7.0.9/spring-jdbc-7.0.9.pom)</sub>
-- `org.springframework:spring-messaging:7.0.9`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/spring-messaging/7.0.9/spring-messaging-7.0.9.pom)</sub>
-- `org.springframework:spring-orm:7.0.9`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/spring-orm/7.0.9/spring-orm-7.0.9.pom)</sub>
-- `org.springframework:spring-tx:7.0.9`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/spring-tx/7.0.9/spring-tx-7.0.9.pom)</sub>
-- `org.springframework:spring-web:7.0.9`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/spring-web/7.0.9/spring-web-7.0.9.pom)</sub>
-- `org.springframework:spring-webmvc:7.0.9`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/springframework/spring-webmvc/7.0.9/spring-webmvc-7.0.9.pom)</sub>
-- `org.webjars:swagger-ui:5.32.14`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/webjars/swagger-ui/5.32.14/swagger-ui-5.32.14.pom)</sub>
-- `org.yaml:snakeyaml:2.6`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/yaml/snakeyaml/2.6/snakeyaml-2.6.pom)</sub>
-- `tools.jackson.core:jackson-core:3.2.4`  
-  <sub>[POM](https://repo1.maven.org/maven2/tools/jackson/core/jackson-core/3.2.4/jackson-core-3.2.4.pom)</sub>
-- `tools.jackson.core:jackson-databind:3.2.4`  
-  <sub>[POM](https://repo1.maven.org/maven2/tools/jackson/core/jackson-databind/3.2.4/jackson-databind-3.2.4.pom)</sub>
-- `tools.jackson.dataformat:jackson-dataformat-yaml:3.1.5`  
-  <sub>[POM](https://repo1.maven.org/maven2/tools/jackson/dataformat/jackson-dataformat-yaml/3.1.5/jackson-dataformat-yaml-3.1.5.pom)</sub>
+- `com.ethlo.time:itu`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/com.ethlo.time/itu)</sub>
+- `com.fasterxml.jackson.core:jackson-annotations`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/com.fasterxml.jackson.core/jackson-annotations)</sub>
+- `com.fasterxml.jackson.core:jackson-core`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/com.fasterxml.jackson.core/jackson-core)</sub>
+- `com.fasterxml.jackson.core:jackson-databind`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/com.fasterxml.jackson.core/jackson-databind)</sub>
+- `com.fasterxml.jackson.dataformat:jackson-dataformat-yaml`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/com.fasterxml.jackson.dataformat/jackson-dataformat-yaml)</sub>
+- `com.fasterxml.jackson.datatype:jackson-datatype-jsr310`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/com.fasterxml.jackson.datatype/jackson-datatype-jsr310)</sub>
+- `com.fasterxml:classmate`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/com.fasterxml/classmate)</sub>
+- `com.github.victools:jsonschema-generator`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/com.github.victools/jsonschema-generator)</sub>
+- `com.github.victools:jsonschema-module-jackson`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/com.github.victools/jsonschema-module-jackson)</sub>
+- `com.github.victools:jsonschema-module-swagger-2`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/com.github.victools/jsonschema-module-swagger-2)</sub>
+- `com.networknt:json-schema-validator`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/com.networknt/json-schema-validator)</sub>
+- `com.nimbusds:nimbus-jose-jwt`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/com.nimbusds/nimbus-jose-jwt)</sub>
+- `com.zaxxer:HikariCP`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/com.zaxxer/HikariCP)</sub>
+- `commons-logging:commons-logging`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/commons-logging/commons-logging)</sub>
+- `io.micrometer:context-propagation`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/io.micrometer/context-propagation)</sub>
+- `io.micrometer:micrometer-commons`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/io.micrometer/micrometer-commons)</sub>
+- `io.micrometer:micrometer-core`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/io.micrometer/micrometer-core)</sub>
+- `io.micrometer:micrometer-jakarta9`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/io.micrometer/micrometer-jakarta9)</sub>
+- `io.micrometer:micrometer-observation`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/io.micrometer/micrometer-observation)</sub>
+- `io.micrometer:micrometer-registry-prometheus`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/io.micrometer/micrometer-registry-prometheus)</sub>
+- `io.projectreactor:reactor-core`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/io.projectreactor/reactor-core)</sub>
+- `io.prometheus:prometheus-metrics-config`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/io.prometheus/prometheus-metrics-config)</sub>
+- `io.prometheus:prometheus-metrics-core`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/io.prometheus/prometheus-metrics-core)</sub>
+- `io.prometheus:prometheus-metrics-exposition-formats`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/io.prometheus/prometheus-metrics-exposition-formats)</sub>
+- `io.prometheus:prometheus-metrics-exposition-textformats`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/io.prometheus/prometheus-metrics-exposition-textformats)</sub>
+- `io.prometheus:prometheus-metrics-model`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/io.prometheus/prometheus-metrics-model)</sub>
+- `io.prometheus:prometheus-metrics-tracer-common`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/io.prometheus/prometheus-metrics-tracer-common)</sub>
+- `io.swagger.core.v3:swagger-annotations-jakarta`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/io.swagger.core.v3/swagger-annotations-jakarta)</sub>
+- `io.swagger.core.v3:swagger-core-jakarta`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/io.swagger.core.v3/swagger-core-jakarta)</sub>
+- `io.swagger.core.v3:swagger-models-jakarta`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/io.swagger.core.v3/swagger-models-jakarta)</sub>
+- `jakarta.inject:jakarta.inject-api`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/jakarta.inject/jakarta.inject-api)</sub>
+- `jakarta.validation:jakarta.validation-api`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/jakarta.validation/jakarta.validation-api)</sub>
+- `net.bytebuddy:byte-buddy`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/net.bytebuddy/byte-buddy)</sub>
+- `net.logstash.logback:logstash-logback-encoder` — elected, see above  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/net.logstash.logback/logstash-logback-encoder)</sub>
+- `org.apache.commons:commons-lang3`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.apache.commons/commons-lang3)</sub>
+- `org.apache.logging.log4j:log4j-api`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.apache.logging.log4j/log4j-api)</sub>
+- `org.apache.logging.log4j:log4j-to-slf4j`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.apache.logging.log4j/log4j-to-slf4j)</sub>
+- `org.apache.tomcat.embed:tomcat-embed-core`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.apache.tomcat.embed/tomcat-embed-core)</sub>
+- `org.apache.tomcat.embed:tomcat-embed-el`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.apache.tomcat.embed/tomcat-embed-el)</sub>
+- `org.apache.tomcat.embed:tomcat-embed-websocket`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.apache.tomcat.embed/tomcat-embed-websocket)</sub>
+- `org.hibernate.models:hibernate-models`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.hibernate.models/hibernate-models)</sub>
+- `org.hibernate.orm:hibernate-core`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.hibernate.orm/hibernate-core)</sub>
+- `org.hibernate.validator:hibernate-validator`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.hibernate.validator/hibernate-validator)</sub>
+- `org.jboss.logging:jboss-logging`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.jboss.logging/jboss-logging)</sub>
+- `org.jetbrains.kotlin:kotlin-reflect`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.jetbrains.kotlin/kotlin-reflect)</sub>
+- `org.jetbrains.kotlin:kotlin-stdlib`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.jetbrains.kotlin/kotlin-stdlib)</sub>
+- `org.jetbrains:annotations`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.jetbrains/annotations)</sub>
+- `org.jspecify:jspecify`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.jspecify/jspecify)</sub>
+- `org.snakeyaml:snakeyaml-engine`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.snakeyaml/snakeyaml-engine)</sub>
+- `org.springdoc:springdoc-openapi-starter-common`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.springdoc/springdoc-openapi-starter-common)</sub>
+- `org.springdoc:springdoc-openapi-starter-webmvc-api`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.springdoc/springdoc-openapi-starter-webmvc-api)</sub>
+- `org.springdoc:springdoc-openapi-starter-webmvc-ui`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.springdoc/springdoc-openapi-starter-webmvc-ui)</sub>
+- `org.springframework.ai:mcp-spring-webmvc`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.springframework.ai/mcp-spring-webmvc)</sub>
+- `org.springframework.ai:spring-ai-autoconfigure-mcp-server-common`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.springframework.ai/spring-ai-autoconfigure-mcp-server-common)</sub>
+- `org.springframework.ai:spring-ai-autoconfigure-mcp-server-webmvc`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.springframework.ai/spring-ai-autoconfigure-mcp-server-webmvc)</sub>
+- `org.springframework.ai:spring-ai-commons`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.springframework.ai/spring-ai-commons)</sub>
+- `org.springframework.ai:spring-ai-mcp`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.springframework.ai/spring-ai-mcp)</sub>
+- `org.springframework.ai:spring-ai-mcp-annotations`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.springframework.ai/spring-ai-mcp-annotations)</sub>
+- `org.springframework.ai:spring-ai-model`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.springframework.ai/spring-ai-model)</sub>
+- `org.springframework.ai:spring-ai-starter-mcp-server-webmvc`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.springframework.ai/spring-ai-starter-mcp-server-webmvc)</sub>
+- `org.springframework.ai:spring-ai-template-st`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.springframework.ai/spring-ai-template-st)</sub>
+- `org.springframework.boot:spring-boot`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.springframework.boot/spring-boot)</sub>
+- `org.springframework.boot:spring-boot-actuator`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.springframework.boot/spring-boot-actuator)</sub>
+- `org.springframework.boot:spring-boot-actuator-autoconfigure`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.springframework.boot/spring-boot-actuator-autoconfigure)</sub>
+- `org.springframework.boot:spring-boot-autoconfigure`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.springframework.boot/spring-boot-autoconfigure)</sub>
+- `org.springframework.boot:spring-boot-data-commons`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.springframework.boot/spring-boot-data-commons)</sub>
+- `org.springframework.boot:spring-boot-data-jpa`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.springframework.boot/spring-boot-data-jpa)</sub>
+- `org.springframework.boot:spring-boot-health`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.springframework.boot/spring-boot-health)</sub>
+- `org.springframework.boot:spring-boot-hibernate`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.springframework.boot/spring-boot-hibernate)</sub>
+- `org.springframework.boot:spring-boot-http-converter`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.springframework.boot/spring-boot-http-converter)</sub>
+- `org.springframework.boot:spring-boot-jackson`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.springframework.boot/spring-boot-jackson)</sub>
+- `org.springframework.boot:spring-boot-jdbc`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.springframework.boot/spring-boot-jdbc)</sub>
+- `org.springframework.boot:spring-boot-jpa`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.springframework.boot/spring-boot-jpa)</sub>
+- `org.springframework.boot:spring-boot-micrometer-metrics`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.springframework.boot/spring-boot-micrometer-metrics)</sub>
+- `org.springframework.boot:spring-boot-micrometer-observation`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.springframework.boot/spring-boot-micrometer-observation)</sub>
+- `org.springframework.boot:spring-boot-persistence`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.springframework.boot/spring-boot-persistence)</sub>
+- `org.springframework.boot:spring-boot-security`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.springframework.boot/spring-boot-security)</sub>
+- `org.springframework.boot:spring-boot-security-oauth2-resource-server`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.springframework.boot/spring-boot-security-oauth2-resource-server)</sub>
+- `org.springframework.boot:spring-boot-servlet`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.springframework.boot/spring-boot-servlet)</sub>
+- `org.springframework.boot:spring-boot-sql`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.springframework.boot/spring-boot-sql)</sub>
+- `org.springframework.boot:spring-boot-starter`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.springframework.boot/spring-boot-starter)</sub>
+- `org.springframework.boot:spring-boot-starter-actuator`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.springframework.boot/spring-boot-starter-actuator)</sub>
+- `org.springframework.boot:spring-boot-starter-data-jpa`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.springframework.boot/spring-boot-starter-data-jpa)</sub>
+- `org.springframework.boot:spring-boot-starter-jackson`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.springframework.boot/spring-boot-starter-jackson)</sub>
+- `org.springframework.boot:spring-boot-starter-jdbc`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.springframework.boot/spring-boot-starter-jdbc)</sub>
+- `org.springframework.boot:spring-boot-starter-logging`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.springframework.boot/spring-boot-starter-logging)</sub>
+- `org.springframework.boot:spring-boot-starter-micrometer-metrics`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.springframework.boot/spring-boot-starter-micrometer-metrics)</sub>
+- `org.springframework.boot:spring-boot-starter-oauth2-resource-server`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.springframework.boot/spring-boot-starter-oauth2-resource-server)</sub>
+- `org.springframework.boot:spring-boot-starter-security`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.springframework.boot/spring-boot-starter-security)</sub>
+- `org.springframework.boot:spring-boot-starter-tomcat`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.springframework.boot/spring-boot-starter-tomcat)</sub>
+- `org.springframework.boot:spring-boot-starter-tomcat-runtime`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.springframework.boot/spring-boot-starter-tomcat-runtime)</sub>
+- `org.springframework.boot:spring-boot-starter-validation`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.springframework.boot/spring-boot-starter-validation)</sub>
+- `org.springframework.boot:spring-boot-starter-web`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.springframework.boot/spring-boot-starter-web)</sub>
+- `org.springframework.boot:spring-boot-tomcat`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.springframework.boot/spring-boot-tomcat)</sub>
+- `org.springframework.boot:spring-boot-transaction`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.springframework.boot/spring-boot-transaction)</sub>
+- `org.springframework.boot:spring-boot-validation`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.springframework.boot/spring-boot-validation)</sub>
+- `org.springframework.boot:spring-boot-web-server`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.springframework.boot/spring-boot-web-server)</sub>
+- `org.springframework.boot:spring-boot-webmvc`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.springframework.boot/spring-boot-webmvc)</sub>
+- `org.springframework.data:spring-data-commons`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.springframework.data/spring-data-commons)</sub>
+- `org.springframework.data:spring-data-jpa`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.springframework.data/spring-data-jpa)</sub>
+- `org.springframework.security:spring-security-config`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.springframework.security/spring-security-config)</sub>
+- `org.springframework.security:spring-security-core`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.springframework.security/spring-security-core)</sub>
+- `org.springframework.security:spring-security-crypto`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.springframework.security/spring-security-crypto)</sub>
+- `org.springframework.security:spring-security-oauth2-core`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.springframework.security/spring-security-oauth2-core)</sub>
+- `org.springframework.security:spring-security-oauth2-jose`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.springframework.security/spring-security-oauth2-jose)</sub>
+- `org.springframework.security:spring-security-oauth2-resource-server`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.springframework.security/spring-security-oauth2-resource-server)</sub>
+- `org.springframework.security:spring-security-web`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.springframework.security/spring-security-web)</sub>
+- `org.springframework:spring-aop`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.springframework/spring-aop)</sub>
+- `org.springframework:spring-aspects`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.springframework/spring-aspects)</sub>
+- `org.springframework:spring-beans`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.springframework/spring-beans)</sub>
+- `org.springframework:spring-context`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.springframework/spring-context)</sub>
+- `org.springframework:spring-core`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.springframework/spring-core)</sub>
+- `org.springframework:spring-expression`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.springframework/spring-expression)</sub>
+- `org.springframework:spring-jdbc`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.springframework/spring-jdbc)</sub>
+- `org.springframework:spring-messaging`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.springframework/spring-messaging)</sub>
+- `org.springframework:spring-orm`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.springframework/spring-orm)</sub>
+- `org.springframework:spring-tx`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.springframework/spring-tx)</sub>
+- `org.springframework:spring-web`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.springframework/spring-web)</sub>
+- `org.springframework:spring-webmvc`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.springframework/spring-webmvc)</sub>
+- `org.webjars:swagger-ui`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.webjars/swagger-ui)</sub>
+- `org.yaml:snakeyaml`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.yaml/snakeyaml)</sub>
+- `tools.jackson.core:jackson-core`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/tools.jackson.core/jackson-core)</sub>
+- `tools.jackson.core:jackson-databind`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/tools.jackson.core/jackson-databind)</sub>
+- `tools.jackson.dataformat:jackson-dataformat-yaml`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/tools.jackson.dataformat/jackson-dataformat-yaml)</sub>
 
 ### EDL-1.0 (https://www.eclipse.org/org/documents/edl-v10.php)
 
-- `com.sun.istack:istack-commons-runtime:4.1.2`  
-  <sub>[POM](https://repo1.maven.org/maven2/com/sun/istack/istack-commons/4.1.2/istack-commons-4.1.2.pom)</sub>
-- `jakarta.activation:jakarta.activation-api:2.1.4`  
-  <sub>[POM](https://repo1.maven.org/maven2/jakarta/activation/jakarta.activation-api/2.1.4/jakarta.activation-api-2.1.4.pom)</sub>
-- `jakarta.persistence:jakarta.persistence-api:3.2.0` — elected, see above  
-  <sub>[POM](https://repo1.maven.org/maven2/jakarta/persistence/jakarta.persistence-api/3.2.0/jakarta.persistence-api-3.2.0.pom)</sub>
-- `jakarta.xml.bind:jakarta.xml.bind-api:4.0.5`  
-  <sub>[POM](https://repo1.maven.org/maven2/jakarta/xml/bind/jakarta.xml.bind-api-parent/4.0.5/jakarta.xml.bind-api-parent-4.0.5.pom)</sub>
-- `org.eclipse.angus:angus-activation:2.0.3`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/eclipse/angus/angus-activation-project/2.0.3/angus-activation-project-2.0.3.pom)</sub>
-- `org.glassfish.jaxb:jaxb-core:4.0.9`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/glassfish/jaxb/jaxb-parent/4.0.9/jaxb-parent-4.0.9.pom)</sub>
-- `org.glassfish.jaxb:jaxb-runtime:4.0.9`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/glassfish/jaxb/jaxb-parent/4.0.9/jaxb-parent-4.0.9.pom)</sub>
-- `org.glassfish.jaxb:txw2:4.0.9`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/glassfish/jaxb/jaxb-parent/4.0.9/jaxb-parent-4.0.9.pom)</sub>
+- `com.sun.istack:istack-commons-runtime`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/com.sun.istack/istack-commons-runtime)</sub>
+- `jakarta.activation:jakarta.activation-api`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/jakarta.activation/jakarta.activation-api)</sub>
+- `jakarta.persistence:jakarta.persistence-api` — elected, see above  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/jakarta.persistence/jakarta.persistence-api)</sub>
+- `jakarta.xml.bind:jakarta.xml.bind-api`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/jakarta.xml.bind/jakarta.xml.bind-api)</sub>
+- `org.eclipse.angus:angus-activation`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.eclipse.angus/angus-activation)</sub>
+- `org.glassfish.jaxb:jaxb-core`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.glassfish.jaxb/jaxb-core)</sub>
+- `org.glassfish.jaxb:jaxb-runtime`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.glassfish.jaxb/jaxb-runtime)</sub>
+- `org.glassfish.jaxb:txw2`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.glassfish.jaxb/txw2)</sub>
 
 ### MIT (https://opensource.org/license/mit)
 
-- `com.knuddels:jtokkit:1.1.0`  
-  <sub>[POM](https://repo1.maven.org/maven2/com/knuddels/jtokkit/1.1.0/jtokkit-1.1.0.pom)</sub>
-- `io.modelcontextprotocol.sdk:mcp-core:2.0.0`  
-  <sub>[POM](https://repo1.maven.org/maven2/io/modelcontextprotocol/sdk/mcp-core/2.0.0/mcp-core-2.0.0.pom)</sub>
-- `io.modelcontextprotocol.sdk:mcp-json-jackson3:2.0.0`  
-  <sub>[POM](https://repo1.maven.org/maven2/io/modelcontextprotocol/sdk/mcp-json-jackson3/2.0.0/mcp-json-jackson3-2.0.0.pom)</sub>
-- `io.modelcontextprotocol.sdk:mcp:2.0.0`  
-  <sub>[POM](https://repo1.maven.org/maven2/io/modelcontextprotocol/sdk/mcp/2.0.0/mcp-2.0.0.pom)</sub>
-- `org.checkerframework:checker-qual:3.55.1`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/checkerframework/checker-qual/3.55.1/checker-qual-3.55.1.pom)</sub>
-- `org.slf4j:jul-to-slf4j:2.0.18`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/slf4j/slf4j-bom/2.0.18/slf4j-bom-2.0.18.pom)</sub>
-- `org.slf4j:slf4j-api:2.0.18`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/slf4j/slf4j-bom/2.0.18/slf4j-bom-2.0.18.pom)</sub>
-- `org.webjars:webjars-locator-lite:1.1.4`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/webjars/webjars-locator-lite/1.1.4/webjars-locator-lite-1.1.4.pom)</sub>
+- `com.knuddels:jtokkit`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/com.knuddels/jtokkit)</sub>
+- `io.modelcontextprotocol.sdk:mcp`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/io.modelcontextprotocol.sdk/mcp)</sub>
+- `io.modelcontextprotocol.sdk:mcp-core`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/io.modelcontextprotocol.sdk/mcp-core)</sub>
+- `io.modelcontextprotocol.sdk:mcp-json-jackson3`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/io.modelcontextprotocol.sdk/mcp-json-jackson3)</sub>
+- `org.checkerframework:checker-qual`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.checkerframework/checker-qual)</sub>
+- `org.slf4j:jul-to-slf4j`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.slf4j/jul-to-slf4j)</sub>
+- `org.slf4j:slf4j-api`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.slf4j/slf4j-api)</sub>
+- `org.webjars:webjars-locator-lite`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.webjars/webjars-locator-lite)</sub>
 
 ### EPL-2.0 (https://www.eclipse.org/legal/epl-2.0/)
 
-- `ch.qos.logback:logback-classic:1.5.38` — elected, see above  
-  <sub>[POM](https://repo1.maven.org/maven2/ch/qos/logback/logback-parent/1.5.38/logback-parent-1.5.38.pom)</sub>
-- `ch.qos.logback:logback-core:1.5.38` — elected, see above  
-  <sub>[POM](https://repo1.maven.org/maven2/ch/qos/logback/logback-parent/1.5.38/logback-parent-1.5.38.pom)</sub>
-- `jakarta.annotation:jakarta.annotation-api:3.0.0` — elected, see above  
-  <sub>[POM](https://repo1.maven.org/maven2/jakarta/annotation/jakarta.annotation-api/3.0.0/jakarta.annotation-api-3.0.0.pom)</sub>
-- `jakarta.transaction:jakarta.transaction-api:2.0.1` — elected, see above  
-  <sub>[POM](https://repo1.maven.org/maven2/jakarta/transaction/jakarta.transaction-api/2.0.1/jakarta.transaction-api-2.0.1.pom)</sub>
-- `org.aspectj:aspectjweaver:1.9.25.1`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/aspectj/aspectjweaver/1.9.25.1/aspectjweaver-1.9.25.1.pom)</sub>
+- `ch.qos.logback:logback-classic` — elected, see above  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/ch.qos.logback/logback-classic)</sub>
+- `ch.qos.logback:logback-core` — elected, see above  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/ch.qos.logback/logback-core)</sub>
+- `jakarta.annotation:jakarta.annotation-api` — elected, see above  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/jakarta.annotation/jakarta.annotation-api)</sub>
+- `jakarta.transaction:jakarta.transaction-api` — elected, see above  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/jakarta.transaction/jakarta.transaction-api)</sub>
+- `org.aspectj:aspectjweaver`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.aspectj/aspectjweaver)</sub>
 
 ### BSD-3-Clause (https://opensource.org/license/bsd-3-clause)
 
-- `org.antlr:ST4:4.3.4` — see note above  
-  <sub>[POM](https://repo1.maven.org/maven2/org/antlr/ST4/4.3.4/ST4-4.3.4.pom)</sub>
-- `org.antlr:antlr-runtime:3.5.3` — see note above  
-  <sub>[POM](https://repo1.maven.org/maven2/org/antlr/antlr-master/3.5.3/antlr-master-3.5.3.pom)</sub>
-- `org.antlr:antlr4-runtime:4.13.2`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/antlr/antlr4-master/4.13.2/antlr4-master-4.13.2.pom)</sub>
+- `org.antlr:ST4` — see note above  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.antlr/ST4)</sub>
+- `org.antlr:antlr-runtime` — see note above  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.antlr/antlr-runtime)</sub>
+- `org.antlr:antlr4-runtime`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.antlr/antlr4-runtime)</sub>
 
 ### BSD-2-Clause (https://opensource.org/license/bsd-2-clause)
 
-- `org.hdrhistogram:HdrHistogram:2.2.2` — elected, see above  
-  <sub>[POM](https://repo1.maven.org/maven2/org/hdrhistogram/HdrHistogram/2.2.2/HdrHistogram-2.2.2.pom)</sub>
-- `org.postgresql:postgresql:42.7.13`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/postgresql/postgresql/42.7.13/postgresql-42.7.13.pom)</sub>
+- `org.hdrhistogram:HdrHistogram` — elected, see above  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.hdrhistogram/HdrHistogram)</sub>
+- `org.postgresql:postgresql`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.postgresql/postgresql)</sub>
 
 ### MIT-0 (https://opensource.org/license/mit-0)
 
-- `org.reactivestreams:reactive-streams:1.0.4`  
-  <sub>[POM](https://repo1.maven.org/maven2/org/reactivestreams/reactive-streams/1.0.4/reactive-streams-1.0.4.pom)</sub>
+- `org.reactivestreams:reactive-streams`  
+  <sub>[Maven Central](https://central.sonatype.com/artifact/org.reactivestreams/reactive-streams)</sub>
 
 ## Bundled NOTICE files (Apache-2.0 section 4(d))
 
-88 of the distributed artifacts bundle a `META-INF/NOTICE` file. Their contents are reproduced below, deduplicated to 31 distinct notices — several artifacts from the same project ship byte-identical text.
+87 of the distributed artifacts bundle a `META-INF/NOTICE` file. Their contents are reproduced below, deduplicated to 31 distinct notices — several artifacts from the same project ship byte-identical text.
 
 <details>
-<summary><code>com.fasterxml:classmate:1.7.3</code></summary>
+<summary><code>com.fasterxml:classmate</code></summary>
 
 ```text
 Java ClassMate library was originally written by Tatu Saloranta (tatu.saloranta@iki.fi)
@@ -412,12 +412,12 @@ Copyright 2007-, Tatu Saloranta (tatu.saloranta@iki.fi)
 </details>
 
 <details>
-<summary><code>com.fasterxml.jackson.core:jackson-annotations:2.22 (+1 more)</code></summary>
+<summary><code>com.fasterxml.jackson.core:jackson-annotations (+1 more)</code></summary>
 
 Applies to:
 
-- `com.fasterxml.jackson.core:jackson-annotations:2.22`
-- `com.fasterxml.jackson.core:jackson-databind:2.22.4`
+- `com.fasterxml.jackson.core:jackson-annotations`
+- `com.fasterxml.jackson.core:jackson-databind`
 
 ```text
 # Jackson JSON processor
@@ -446,7 +446,7 @@ from the source code management (SCM) system project uses.
 </details>
 
 <details>
-<summary><code>com.fasterxml.jackson.core:jackson-core:2.22.4</code></summary>
+<summary><code>com.fasterxml.jackson.core:jackson-core</code></summary>
 
 ```text
 # Jackson JSON processor
@@ -496,12 +496,12 @@ See Schubfach-LICENSE.
 </details>
 
 <details>
-<summary><code>com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.21.5 (+1 more)</code></summary>
+<summary><code>com.fasterxml.jackson.dataformat:jackson-dataformat-yaml (+1 more)</code></summary>
 
 Applies to:
 
-- `com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:2.21.5`
-- `tools.jackson.dataformat:jackson-dataformat-yaml:3.1.5`
+- `com.fasterxml.jackson.dataformat:jackson-dataformat-yaml`
+- `tools.jackson.dataformat:jackson-dataformat-yaml`
 
 ```text
 # Jackson JSON processor
@@ -530,7 +530,7 @@ from the source code management (SCM) system project uses.
 </details>
 
 <details>
-<summary><code>com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.21.5</code></summary>
+<summary><code>com.fasterxml.jackson.datatype:jackson-datatype-jsr310</code></summary>
 
 ```text
 # Jackson JSON processor
@@ -555,7 +555,7 @@ from the source code management (SCM) system project uses.
 </details>
 
 <details>
-<summary><code>commons-logging:commons-logging:1.3.6</code></summary>
+<summary><code>commons-logging:commons-logging</code></summary>
 
 ```text
 Apache Commons Logging
@@ -568,7 +568,7 @@ The Apache Software Foundation (https://www.apache.org/).
 </details>
 
 <details>
-<summary><code>io.micrometer:context-propagation:1.2.1</code></summary>
+<summary><code>io.micrometer:context-propagation</code></summary>
 
 ```text
 Micrometer Context Propagation
@@ -621,15 +621,15 @@ package in the Spring Framework library, distributed by VMware, Inc:
 </details>
 
 <details>
-<summary><code>io.micrometer:micrometer-commons:1.17.1 (+4 more)</code></summary>
+<summary><code>io.micrometer:micrometer-commons (+4 more)</code></summary>
 
 Applies to:
 
-- `io.micrometer:micrometer-commons:1.17.1`
-- `io.micrometer:micrometer-core:1.17.1`
-- `io.micrometer:micrometer-jakarta9:1.17.1`
-- `io.micrometer:micrometer-observation:1.17.1`
-- `io.micrometer:micrometer-registry-prometheus:1.17.1`
+- `io.micrometer:micrometer-commons`
+- `io.micrometer:micrometer-core`
+- `io.micrometer:micrometer-jakarta9`
+- `io.micrometer:micrometer-observation`
+- `io.micrometer:micrometer-registry-prometheus`
 
 ```text
 Micrometer
@@ -682,12 +682,7 @@ package in the Spring Framework library, distributed by VMware, Inc:
 </details>
 
 <details>
-<summary><code>io.swagger.core.v3:swagger-annotations-jakarta:2.2.38 (+1 more)</code></summary>
-
-Applies to:
-
-- `io.swagger.core.v3:swagger-annotations-jakarta:2.2.38`
-- `io.swagger.core.v3:swagger-annotations-jakarta:2.2.55`
+<summary><code>io.swagger.core.v3:swagger-annotations-jakarta</code></summary>
 
 ```text
 Swagger Core - swagger-annotations
@@ -699,7 +694,7 @@ Copy of the Apache 2.0 license can be found in `LICENSE` file.
 </details>
 
 <details>
-<summary><code>io.swagger.core.v3:swagger-core-jakarta:2.2.55</code></summary>
+<summary><code>io.swagger.core.v3:swagger-core-jakarta</code></summary>
 
 ```text
 Swagger Core - swagger-core
@@ -711,7 +706,7 @@ Copy of the Apache 2.0 license can be found in `LICENSE` file.
 </details>
 
 <details>
-<summary><code>io.swagger.core.v3:swagger-models-jakarta:2.2.55</code></summary>
+<summary><code>io.swagger.core.v3:swagger-models-jakarta</code></summary>
 
 ```text
 Swagger Core - swagger-models
@@ -723,7 +718,7 @@ Copy of the Apache 2.0 license can be found in `LICENSE` file.
 </details>
 
 <details>
-<summary><code>jakarta.activation:jakarta.activation-api:2.1.4</code></summary>
+<summary><code>jakarta.activation:jakarta.activation-api</code></summary>
 
 ```text
 # Notices for Jakarta Activation
@@ -822,7 +817,7 @@ permitted.
 </details>
 
 <details>
-<summary><code>jakarta.annotation:jakarta.annotation-api:3.0.0</code></summary>
+<summary><code>jakarta.annotation:jakarta.annotation-api</code></summary>
 
 ```text
 # Notices for Jakarta Annotations
@@ -872,7 +867,7 @@ permitted.
 </details>
 
 <details>
-<summary><code>jakarta.inject:jakarta.inject-api:2.0.1</code></summary>
+<summary><code>jakarta.inject:jakarta.inject-api</code></summary>
 
 ```text
 # Notices for Eclipse Jakarta Dependency Injection
@@ -921,7 +916,7 @@ None
 </details>
 
 <details>
-<summary><code>jakarta.persistence:jakarta.persistence-api:3.2.0</code></summary>
+<summary><code>jakarta.persistence:jakarta.persistence-api</code></summary>
 
 ```text
 [//]: # " Copyright (c) 2019, 2023 Oracle and/or its affiliates. All rights reserved. "
@@ -982,7 +977,7 @@ permitted.
 </details>
 
 <details>
-<summary><code>jakarta.transaction:jakarta.transaction-api:2.0.1</code></summary>
+<summary><code>jakarta.transaction:jakarta.transaction-api</code></summary>
 
 ```text
 # Notices for Jakarta Transactions
@@ -1038,7 +1033,7 @@ permitted.
 </details>
 
 <details>
-<summary><code>jakarta.xml.bind:jakarta.xml.bind-api:4.0.5</code></summary>
+<summary><code>jakarta.xml.bind:jakarta.xml.bind-api</code></summary>
 
 ```text
 [//]: # " Copyright (c) 2018, 2024 Oracle and/or its affiliates. All rights reserved. "
@@ -1093,7 +1088,7 @@ permitted.
 </details>
 
 <details>
-<summary><code>net.bytebuddy:byte-buddy:1.18.11</code></summary>
+<summary><code>net.bytebuddy:byte-buddy</code></summary>
 
 ```text
 Copyright 2014 - Present Rafael Winterhalter
@@ -1114,7 +1109,7 @@ limitations under the License.
 </details>
 
 <details>
-<summary><code>org.apache.commons:commons-lang3:3.20.0</code></summary>
+<summary><code>org.apache.commons:commons-lang3</code></summary>
 
 ```text
 Apache Commons Lang
@@ -1127,7 +1122,7 @@ The Apache Software Foundation (https://www.apache.org/).
 </details>
 
 <details>
-<summary><code>org.apache.logging.log4j:log4j-api:2.25.5</code></summary>
+<summary><code>org.apache.logging.log4j:log4j-api</code></summary>
 
 ```text
 Apache Log4j API
@@ -1141,7 +1136,7 @@ The Apache Software Foundation (http://www.apache.org/).
 </details>
 
 <details>
-<summary><code>org.apache.logging.log4j:log4j-to-slf4j:2.25.5</code></summary>
+<summary><code>org.apache.logging.log4j:log4j-to-slf4j</code></summary>
 
 ```text
 Log4j API to SLF4J Adapter
@@ -1155,7 +1150,7 @@ The Apache Software Foundation (http://www.apache.org/).
 </details>
 
 <details>
-<summary><code>org.apache.tomcat.embed:tomcat-embed-core:11.0.26</code></summary>
+<summary><code>org.apache.tomcat.embed:tomcat-embed-core</code></summary>
 
 ```text
 Apache Tomcat
@@ -1194,12 +1189,12 @@ http://www.oracle.com/webfolder/technetwork/jsc/xml/ns/javaee/index.html
 </details>
 
 <details>
-<summary><code>org.apache.tomcat.embed:tomcat-embed-el:11.0.26 (+1 more)</code></summary>
+<summary><code>org.apache.tomcat.embed:tomcat-embed-el (+1 more)</code></summary>
 
 Applies to:
 
-- `org.apache.tomcat.embed:tomcat-embed-el:11.0.26`
-- `org.apache.tomcat.embed:tomcat-embed-websocket:11.0.26`
+- `org.apache.tomcat.embed:tomcat-embed-el`
+- `org.apache.tomcat.embed:tomcat-embed-websocket`
 
 ```text
 Apache Tomcat
@@ -1212,7 +1207,7 @@ The Apache Software Foundation (http://www.apache.org/).
 </details>
 
 <details>
-<summary><code>org.eclipse.angus:angus-activation:2.0.3</code></summary>
+<summary><code>org.eclipse.angus:angus-activation</code></summary>
 
 ```text
 # Notices for Eclipse Angus
@@ -1265,13 +1260,13 @@ permitted.
 </details>
 
 <details>
-<summary><code>org.glassfish.jaxb:jaxb-core:4.0.9 (+2 more)</code></summary>
+<summary><code>org.glassfish.jaxb:jaxb-core (+2 more)</code></summary>
 
 Applies to:
 
-- `org.glassfish.jaxb:jaxb-core:4.0.9`
-- `org.glassfish.jaxb:jaxb-runtime:4.0.9`
-- `org.glassfish.jaxb:txw2:4.0.9`
+- `org.glassfish.jaxb:jaxb-core`
+- `org.glassfish.jaxb:jaxb-runtime`
+- `org.glassfish.jaxb:txw2`
 
 ```text
 # Notices for Eclipse Implementation of JAXB
@@ -1469,22 +1464,22 @@ permitted.
 </details>
 
 <details>
-<summary><code>org.springframework:spring-aop:7.0.9 (+11 more)</code></summary>
+<summary><code>org.springframework:spring-aop (+11 more)</code></summary>
 
 Applies to:
 
-- `org.springframework:spring-aop:7.0.9`
-- `org.springframework:spring-aspects:7.0.9`
-- `org.springframework:spring-beans:7.0.9`
-- `org.springframework:spring-context:7.0.9`
-- `org.springframework:spring-core:7.0.9`
-- `org.springframework:spring-expression:7.0.9`
-- `org.springframework:spring-jdbc:7.0.9`
-- `org.springframework:spring-messaging:7.0.9`
-- `org.springframework:spring-orm:7.0.9`
-- `org.springframework:spring-tx:7.0.9`
-- `org.springframework:spring-web:7.0.9`
-- `org.springframework:spring-webmvc:7.0.9`
+- `org.springframework:spring-aop`
+- `org.springframework:spring-aspects`
+- `org.springframework:spring-beans`
+- `org.springframework:spring-context`
+- `org.springframework:spring-core`
+- `org.springframework:spring-expression`
+- `org.springframework:spring-jdbc`
+- `org.springframework:spring-messaging`
+- `org.springframework:spring-orm`
+- `org.springframework:spring-tx`
+- `org.springframework:spring-web`
+- `org.springframework:spring-webmvc`
 
 ```text
 Spring Framework 7.0.9
@@ -1503,47 +1498,47 @@ subcomponent's license, as noted in the license.txt file.
 </details>
 
 <details>
-<summary><code>org.springframework.boot:spring-boot-actuator-autoconfigure:4.1.1 (+36 more)</code></summary>
+<summary><code>org.springframework.boot:spring-boot (+36 more)</code></summary>
 
 Applies to:
 
-- `org.springframework.boot:spring-boot-actuator-autoconfigure:4.1.1`
-- `org.springframework.boot:spring-boot-actuator:4.1.1`
-- `org.springframework.boot:spring-boot-autoconfigure:4.1.1`
-- `org.springframework.boot:spring-boot-data-commons:4.1.1`
-- `org.springframework.boot:spring-boot-data-jpa:4.1.1`
-- `org.springframework.boot:spring-boot-health:4.1.1`
-- `org.springframework.boot:spring-boot-hibernate:4.1.1`
-- `org.springframework.boot:spring-boot-http-converter:4.1.1`
-- `org.springframework.boot:spring-boot-jackson:4.1.1`
-- `org.springframework.boot:spring-boot-jdbc:4.1.1`
-- `org.springframework.boot:spring-boot-jpa:4.1.1`
-- `org.springframework.boot:spring-boot-micrometer-metrics:4.1.1`
-- `org.springframework.boot:spring-boot-micrometer-observation:4.1.1`
-- `org.springframework.boot:spring-boot-persistence:4.1.1`
-- `org.springframework.boot:spring-boot-security-oauth2-resource-server:4.1.1`
-- `org.springframework.boot:spring-boot-security:4.1.1`
-- `org.springframework.boot:spring-boot-servlet:4.1.1`
-- `org.springframework.boot:spring-boot-sql:4.1.1`
-- `org.springframework.boot:spring-boot-starter-actuator:4.1.1`
-- `org.springframework.boot:spring-boot-starter-data-jpa:4.1.1`
-- `org.springframework.boot:spring-boot-starter-jackson:4.1.1`
-- `org.springframework.boot:spring-boot-starter-jdbc:4.1.1`
-- `org.springframework.boot:spring-boot-starter-logging:4.1.1`
-- `org.springframework.boot:spring-boot-starter-micrometer-metrics:4.1.1`
-- `org.springframework.boot:spring-boot-starter-oauth2-resource-server:4.1.1`
-- `org.springframework.boot:spring-boot-starter-security:4.1.1`
-- `org.springframework.boot:spring-boot-starter-tomcat-runtime:4.1.1`
-- `org.springframework.boot:spring-boot-starter-tomcat:4.1.1`
-- `org.springframework.boot:spring-boot-starter-validation:4.1.1`
-- `org.springframework.boot:spring-boot-starter-web:4.1.1`
-- `org.springframework.boot:spring-boot-starter:4.1.1`
-- `org.springframework.boot:spring-boot-tomcat:4.1.1`
-- `org.springframework.boot:spring-boot-transaction:4.1.1`
-- `org.springframework.boot:spring-boot-validation:4.1.1`
-- `org.springframework.boot:spring-boot-web-server:4.1.1`
-- `org.springframework.boot:spring-boot-webmvc:4.1.1`
-- `org.springframework.boot:spring-boot:4.1.1`
+- `org.springframework.boot:spring-boot`
+- `org.springframework.boot:spring-boot-actuator`
+- `org.springframework.boot:spring-boot-actuator-autoconfigure`
+- `org.springframework.boot:spring-boot-autoconfigure`
+- `org.springframework.boot:spring-boot-data-commons`
+- `org.springframework.boot:spring-boot-data-jpa`
+- `org.springframework.boot:spring-boot-health`
+- `org.springframework.boot:spring-boot-hibernate`
+- `org.springframework.boot:spring-boot-http-converter`
+- `org.springframework.boot:spring-boot-jackson`
+- `org.springframework.boot:spring-boot-jdbc`
+- `org.springframework.boot:spring-boot-jpa`
+- `org.springframework.boot:spring-boot-micrometer-metrics`
+- `org.springframework.boot:spring-boot-micrometer-observation`
+- `org.springframework.boot:spring-boot-persistence`
+- `org.springframework.boot:spring-boot-security`
+- `org.springframework.boot:spring-boot-security-oauth2-resource-server`
+- `org.springframework.boot:spring-boot-servlet`
+- `org.springframework.boot:spring-boot-sql`
+- `org.springframework.boot:spring-boot-starter`
+- `org.springframework.boot:spring-boot-starter-actuator`
+- `org.springframework.boot:spring-boot-starter-data-jpa`
+- `org.springframework.boot:spring-boot-starter-jackson`
+- `org.springframework.boot:spring-boot-starter-jdbc`
+- `org.springframework.boot:spring-boot-starter-logging`
+- `org.springframework.boot:spring-boot-starter-micrometer-metrics`
+- `org.springframework.boot:spring-boot-starter-oauth2-resource-server`
+- `org.springframework.boot:spring-boot-starter-security`
+- `org.springframework.boot:spring-boot-starter-tomcat`
+- `org.springframework.boot:spring-boot-starter-tomcat-runtime`
+- `org.springframework.boot:spring-boot-starter-validation`
+- `org.springframework.boot:spring-boot-starter-web`
+- `org.springframework.boot:spring-boot-tomcat`
+- `org.springframework.boot:spring-boot-transaction`
+- `org.springframework.boot:spring-boot-validation`
+- `org.springframework.boot:spring-boot-web-server`
+- `org.springframework.boot:spring-boot-webmvc`
 
 ```text
 Spring Boot 4.1.1
@@ -1557,7 +1552,7 @@ the License.
 </details>
 
 <details>
-<summary><code>org.springframework.data:spring-data-commons:4.1.1</code></summary>
+<summary><code>org.springframework.data:spring-data-commons</code></summary>
 
 ```text
 Spring Data Commons 4.1.1 (2026.0.1)
@@ -1575,7 +1570,7 @@ conditions of the subcomponent's license, as noted in the LICENSE file.
 </details>
 
 <details>
-<summary><code>org.springframework.data:spring-data-jpa:4.1.1</code></summary>
+<summary><code>org.springframework.data:spring-data-jpa</code></summary>
 
 ```text
 Spring Data JPA 4.1.1 (2026.0.1)
@@ -1594,7 +1589,7 @@ subcomponent's license, as noted in the license.txt file.
 </details>
 
 <details>
-<summary><code>tools.jackson.core:jackson-core:3.2.4</code></summary>
+<summary><code>tools.jackson.core:jackson-core</code></summary>
 
 ```text
 # Jackson JSON processor
@@ -1644,7 +1639,7 @@ See Schubfach-LICENSE.
 </details>
 
 <details>
-<summary><code>tools.jackson.core:jackson-databind:3.2.4</code></summary>
+<summary><code>tools.jackson.core:jackson-databind</code></summary>
 
 ```text
 # Jackson JSON processor

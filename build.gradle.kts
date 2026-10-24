@@ -81,6 +81,18 @@ subprojects {
             dependency("com.fasterxml.jackson.core:jackson-databind:2.22.4")
             dependency("tools.jackson.core:jackson-core:3.2.4")
             dependency("tools.jackson.core:jackson-databind:3.2.4")
+            // Boot 4.1.1 manages jackson-dataformat-yaml at 3.1.5, so without
+            // this entry the yaml artifact stayed one minor behind core and
+            // databind — the exact partial bump the note above warns about,
+            // and it kept tools.jackson:jackson-bom:3.1.5 resolved in the
+            // graph. That BOM's own constraints are submitted to the GitHub
+            // dependency graph as tools.jackson.core:jackson-core:3.1.5 /
+            // jackson-databind:3.1.5 components that nothing actually
+            // resolves, which is where the Dependabot alerts no PR could ever
+            // close came from (#97/#101/#103/#128/#130/#134/#137, all
+            // dismissed as inaccurate on 2026-10-24). Pinning yaml to the
+            // same 3.2.4 train removes the 3.1.5 BOM from the graph entirely.
+            dependency("tools.jackson.dataformat:jackson-dataformat-yaml:3.2.4")
         }
     }
 

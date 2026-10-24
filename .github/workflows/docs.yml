@@ -60,8 +60,10 @@ jobs:
       - name: Make Gradle wrapper executable
         run: chmod +x gradlew
 
-      # Fails when a dependency bump leaves THIRD-PARTY-NOTICES.md describing
-      # a dependency graph that no longer ships. Attribution obligations are
-      # easy to satisfy once and then lose silently.
+      # Fails when THIRD-PARTY-NOTICES.md no longer describes the artifacts
+      # that ship. Compared at group:artifact, not group:artifact:version
+      # (ADR-022) — a routine version bump is not drift, an added or dropped
+      # artifact is. Attribution obligations are easy to satisfy once and
+      # then lose silently.
       - name: Check third-party notices for drift
         run: bash scripts/check-third-party-drift.sh
