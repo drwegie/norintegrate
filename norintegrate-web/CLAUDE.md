@@ -1,19 +1,21 @@
 # CLAUDE.md — norintegrate-web
 
-Next.js 15 frontend. Standalone Node.js project (not a Gradle module).
+Next.js frontend. Standalone Node.js project (not a Gradle module).
 
 ---
 
 ## Technology Stack
 
-| Component | Version | Notes |
-|-----------|---------|-------|
-| Next.js | 15 | App Router, standalone output |
-| React | 19 | Server Components + Client Components |
-| TypeScript | 5.x | Strict mode |
-| Tailwind CSS | 4.x | Utility-first, via `@tailwindcss/postcss` |
-| Auth.js | v5 | Google OAuth only (GitHub deferred — opaque tokens) |
-| Node.js | 22 LTS | See `.nvmrc` |
+| Component | Notes |
+|-----------|-------|
+| Next.js | App Router, standalone output |
+| React | Server Components + Client Components |
+| TypeScript | Strict mode |
+| Tailwind CSS | Utility-first, via `@tailwindcss/postcss` |
+| Auth.js | Google OAuth only (GitHub deferred — opaque tokens) |
+| Node.js | See `.nvmrc` |
+
+Versions are deliberately not listed here. `package.json` is the source of truth.
 
 ---
 
