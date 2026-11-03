@@ -1,9 +1,9 @@
 plugins {
-    id("org.springframework.boot") version "4.1.1" apply false
+    id("org.springframework.boot") version "4.1.2" apply false
     id("io.spring.dependency-management") version "1.1.7" apply false
-    id("com.diffplug.spotless") version "8.10.2" apply false
-    kotlin("jvm") version "2.4.20" apply false
-    kotlin("plugin.spring") version "2.4.20" apply false
+    id("com.diffplug.spotless") version "8.10.4" apply false
+    kotlin("jvm") version "2.4.21" apply false
+    kotlin("plugin.spring") version "2.4.21" apply false
 }
 
 allprojects {
@@ -48,15 +48,15 @@ subprojects {
 
     configure<io.spring.gradle.dependencymanagement.dsl.DependencyManagementExtension> {
         imports {
-            mavenBom("org.springframework.boot:spring-boot-dependencies:4.1.1")
+            mavenBom("org.springframework.boot:spring-boot-dependencies:4.1.2")
             mavenBom("org.testcontainers:testcontainers-bom:2.0.5")
-            mavenBom("org.springframework.ai:spring-ai-bom:2.0.1")
+            mavenBom("org.springframework.ai:spring-ai-bom:2.0.2")
         }
         dependencies {
-            dependency("org.postgresql:postgresql:42.7.13")
-            dependency("org.apache.tomcat.embed:tomcat-embed-core:11.0.26")
-            dependency("org.apache.tomcat.embed:tomcat-embed-el:11.0.26")
-            dependency("org.apache.tomcat.embed:tomcat-embed-websocket:11.0.26")
+            dependency("org.postgresql:postgresql:42.7.14")
+            dependency("org.apache.tomcat.embed:tomcat-embed-core:11.0.27")
+            dependency("org.apache.tomcat.embed:tomcat-embed-el:11.0.27")
+            dependency("org.apache.tomcat.embed:tomcat-embed-websocket:11.0.27")
             // Jackson 3 (tools.jackson) still compiles against the 2.x annotations
             // artifact, so both families move together. Importing the Jackson BOMs
             // does not work here — the Spring Boot plugin's own managed versions
@@ -74,8 +74,8 @@ subprojects {
             // string was left for Dependabot to match and it answered the Jackson
             // alerts with dependency_not_found instead of a security PR — while
             // the full-coordinate tomcat entries above did get one (#110).
-            dependency("org.apache.logging.log4j:log4j-api:2.25.5")
-            dependency("org.apache.logging.log4j:log4j-to-slf4j:2.25.5")
+            dependency("org.apache.logging.log4j:log4j-api:2.26.1")
+            dependency("org.apache.logging.log4j:log4j-to-slf4j:2.26.1")
             dependency("com.fasterxml.jackson.core:jackson-annotations:2.22")
             dependency("com.fasterxml.jackson.core:jackson-core:2.22.4")
             dependency("com.fasterxml.jackson.core:jackson-databind:2.22.4")
