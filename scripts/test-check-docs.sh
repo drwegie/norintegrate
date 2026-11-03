@@ -114,12 +114,6 @@ run_scenario() {
 # Previously found bugs / edge-case guards (NOR-19), each exercising a
 # distinct empty-value guard in check-docs.sh.
 
-# (a) A blank version cell must not silently pass version_prefix_match's
-# "empty claim" guard.
-mutate_a() {
-  sed_inplace 's/^\| Next\.js \| 15 \|/| Next.js |  |/' "$1/CLAUDE.md"
-}
-
 # (b) A shields.io badge message that's entirely a literal space ("_")
 # must truncate to "" in extract_badge_value and be treated as "badge not
 # found", not compared against anything.
@@ -143,10 +137,16 @@ mutate_2() {
   sed_inplace '/^\| \[ADR-019\]/d' "$1/README.md"
 }
 
-# (3) CLAUDE.md table claims a Spring Boot version that doesn't match
-# build.gradle.kts.
-mutate_3() {
-  sed_inplace 's/\| Spring Boot \| 4\.1\.1 \|/| Spring Boot | 4.0.x |/' "$1/CLAUDE.md"
+# (P) A patch bump of Kotlin and Spring Boot in build.gradle.kts (what a
+# Dependabot minor-and-patch PR does) must pass without any docs edit.
+mutate_p() {
+  sed_inplace 's/(kotlin\("jvm"\) version "[0-9]+\.[0-9]+)\.[0-9]+"/\1.99"/' "$1/build.gradle.kts"
+  sed_inplace 's/(id\("org\.springframework\.boot"\) version "[0-9]+\.[0-9]+)\.[0-9]+"/\1.99"/' "$1/build.gradle.kts"
+  # Expecting exit 0 means a no-op mutation would pass vacuously: abort loudly.
+  if [ "$(grep -cE 'version "[0-9]+\.[0-9]+\.99"' "$1/build.gradle.kts")" -ne 2 ]; then
+    echo "mutate_p: build.gradle.kts version patterns not found" >&2
+    exit 1
+  fi
 }
 
 # (4) A README link (outside the ADR index table, so this isolates Check 2)
@@ -178,9 +178,6 @@ mutate_m_nonmd() {
 run_scenario "baseline: unmodified copy passes" \
   0 ""
 
-run_scenario "(a) blank Next.js version cell in CLAUDE.md" \
-  1 mutate_a "CLAUDE.md claims Next.js"
-
 run_scenario "(b) blank Spring Boot badge message in README" \
   1 mutate_b "Spring Boot badge"
 
@@ -193,8 +190,8 @@ run_scenario "(1) CLAUDE.md ADR index missing ADR-017 and ADR-018" \
 run_scenario "(2) README ADR index missing ADR-019" \
   1 mutate_2 "README.md: ADR index is missing"
 
-run_scenario "(3) CLAUDE.md claims Spring Boot 4.0.x" \
-  1 mutate_3 "CLAUDE.md claims Spring Boot"
+run_scenario "(P) Kotlin and Spring Boot patch bump needs no docs edit" \
+  0 mutate_p
 
 run_scenario "(4) README link to nonexistent ADR file" \
   1 mutate_4 "does not resolve"

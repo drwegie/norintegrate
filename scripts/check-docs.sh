@@ -11,8 +11,9 @@
 #      target must not contain ")", a space, a "title" string, or the
 #      angle-bracket <...> form. Those parse as broken and fail loudly —
 #      the failure mode is a red CI run, never a silently shipped drift.
-#   3. Version claim consistency — the CLAUDE.md technology stack table
-#      matches the versions actually declared in the build files.
+#   3. Version claim consistency — the README.md badges match the versions
+#      actually declared in the build files. CLAUDE.md deliberately states
+#      no versions, so a patch bump never needs a docs edit.
 #   4. Merge conflict markers  — no tracked file contains an unresolved
 #      `<<<<<<<` / `=======` / `>>>>>>>` marker (a bad merge/rebase that
 #      slipped past review).
@@ -37,14 +38,6 @@ fail_count=0
 fail() {
   fail_count=$((fail_count + 1))
   echo "FAIL: $1"
-}
-
-# Portable whitespace trim (no external `trim` tool required).
-trim() {
-  local s="$1"
-  s="${s#"${s%%[![:space:]]*}"}"
-  s="${s%"${s##*[![:space:]]}"}"
-  printf '%s' "$s"
 }
 
 echo "== Check 1: ADR index completeness =="
@@ -123,20 +116,6 @@ done <<< "$MD_FILES"
 
 echo "== Check 3: version claim consistency =="
 
-# Extract the trimmed value of the 2nd column of a '| Label | value | ... |'
-# markdown table row. Returns empty string (and caller must handle it as a
-# FAIL) if the row isn't found at all — a missing row is not a silent pass.
-extract_col2() {
-  local label="$1" file="$2"
-  local row
-  row="$(grep -E "^\\| ${label} \\|" "$file" | head -1)"
-  [ -z "$row" ] && return 1
-  local raw
-  raw="$(echo "$row" | sed -E "s/^\\| ${label} \\|([^|]*)\\|.*/\\1/")"
-  trim "$raw"
-  return 0
-}
-
 # Shared prefix-compare helper: true if every dot-separated component of
 # $1 (the claim) matches the corresponding component of $2 (the actual
 # value), for as many components as the claim states. A claim of "15"
@@ -144,13 +123,13 @@ extract_col2() {
 # "4.0" asserts major+minor and FAILS against "4.1.0" (2nd component, 0 vs
 # 1, does not match). A naive "first character" or substring comparison
 # would let the latter case slip through silently; this must not. Used by
-# the Next.js table row and by every README badge below.
+# every README badge below.
 version_prefix_match() {
   local claim="$1" actual="$2"
   local claim_parts actual_parts i
   # An empty claim splits into zero components, so the loop below would never
-  # run and the function would report a match — a blank version cell, or a
-  # badge message that truncates to "", would pass silently. No legitimate
+  # run and the function would report a match — a badge message that
+  # truncates to "" would pass silently. No legitimate
   # call site passes an empty claim: treat "nothing to check" as a FAIL.
   [ -z "$claim" ] && return 1
   IFS='.' read -ra claim_parts <<< "$claim"
@@ -214,22 +193,11 @@ extract_badge_value_suffix() {
   return 0
 }
 
-# --- Java: table claims an exact major version; badge claims a prefix ---
+# --- Java: badge claims a prefix of JavaLanguageVersion.of(N) ---
 java_actual=""
 actual_line="$(grep -E 'JavaLanguageVersion\.of\([0-9]+\)' build.gradle.kts || true)"
 if [ -n "$actual_line" ]; then
   java_actual="$(echo "$actual_line" | sed -E 's/.*JavaLanguageVersion\.of\(([0-9]+)\).*/\1/')"
-fi
-
-if claim="$(extract_col2 'Java' CLAUDE.md)"; then
-  claim_major="$(echo "$claim" | grep -oE '^[0-9]+')"
-  if [ -z "$java_actual" ]; then
-    fail "build.gradle.kts: JavaLanguageVersion.of(...) not found — cannot verify the CLAUDE.md Java version claim ('$claim')"
-  elif [ "$claim_major" != "$java_actual" ]; then
-    fail "CLAUDE.md claims Java $claim, but build.gradle.kts declares JavaLanguageVersion.of($java_actual)"
-  fi
-else
-  fail "CLAUDE.md: technology stack table has no 'Java' row — cannot verify version claim"
 fi
 
 if badge_claim="$(extract_badge_value 'Java' README.md)"; then
@@ -242,23 +210,12 @@ else
   fail "README.md: Java badge (img.shields.io/badge/Java-...) not found — cannot verify version claim"
 fi
 
-# --- Kotlin: table claims an exact version, compared against
-# kotlin("jvm") version "X"; badge claims a prefix (module-scoped label,
-# see extract_badge_value_suffix above) ---
+# --- Kotlin: badge claims a prefix of kotlin("jvm") version "X"
+# (module-scoped label, see extract_badge_value_suffix above) ---
 kotlin_actual=""
 actual_line="$(grep -E 'kotlin\("jvm"\) version "[0-9][^"]*"' build.gradle.kts || true)"
 if [ -n "$actual_line" ]; then
   kotlin_actual="$(echo "$actual_line" | sed -E 's/.*kotlin\("jvm"\) version "([^"]*)".*/\1/')"
-fi
-
-if claim="$(extract_col2 'Kotlin' CLAUDE.md)"; then
-  if [ -z "$kotlin_actual" ]; then
-    fail 'build.gradle.kts: kotlin("jvm") version "..." not found — cannot verify the CLAUDE.md Kotlin version claim'
-  elif [ "$claim" != "$kotlin_actual" ]; then
-    fail "CLAUDE.md claims Kotlin $claim, but build.gradle.kts declares kotlin(\"jvm\") version \"$kotlin_actual\""
-  fi
-else
-  fail "CLAUDE.md: technology stack table has no 'Kotlin' row — cannot verify version claim"
 fi
 
 if badge_claim="$(extract_badge_value_suffix 'Kotlin' README.md)"; then
@@ -271,21 +228,11 @@ else
   fail "README.md: Kotlin badge (img.shields.io/badge/...-Kotlin_...) not found — cannot verify version claim"
 fi
 
-# --- Spring Boot: table claims an exact version; badge claims a prefix ---
+# --- Spring Boot: badge claims a prefix of the plugin version ---
 springboot_actual=""
 actual_line="$(grep -E 'id\("org\.springframework\.boot"\) version "[0-9][^"]*"' build.gradle.kts || true)"
 if [ -n "$actual_line" ]; then
   springboot_actual="$(echo "$actual_line" | sed -E 's/.*id\("org\.springframework\.boot"\) version "([^"]*)".*/\1/')"
-fi
-
-if claim="$(extract_col2 'Spring Boot' CLAUDE.md)"; then
-  if [ -z "$springboot_actual" ]; then
-    fail 'build.gradle.kts: id("org.springframework.boot") version "..." not found — cannot verify the CLAUDE.md Spring Boot version claim'
-  elif [ "$claim" != "$springboot_actual" ]; then
-    fail "CLAUDE.md claims Spring Boot $claim, but build.gradle.kts declares org.springframework.boot version \"$springboot_actual\""
-  fi
-else
-  fail "CLAUDE.md: technology stack table has no 'Spring Boot' row — cannot verify version claim"
 fi
 
 if badge_claim="$(extract_badge_value 'Spring_Boot' README.md)"; then
@@ -298,8 +245,8 @@ else
   fail "README.md: Spring Boot badge (img.shields.io/badge/Spring_Boot-...) not found — cannot verify version claim"
 fi
 
-# --- Next.js: both the table and the badge state a version PREFIX (e.g.
-# "15"), not an exact version — package.json pins a full semver range
+# --- Next.js: the badge states a version PREFIX (e.g. "15"), not an
+# exact version — package.json pins a full semver range
 # (e.g. "^15.5.21"). See version_prefix_match above for the comparison
 # rule.
 nextjs_actual=""
@@ -307,16 +254,6 @@ actual_raw="$(grep -E '"next": *"[^"]*"' norintegrate-web/package.json | head -1
 if [ -n "$actual_raw" ]; then
   nextjs_actual="${actual_raw#^}"
   nextjs_actual="${nextjs_actual#\~}"
-fi
-
-if claim="$(extract_col2 'Next\.js' CLAUDE.md)"; then
-  if [ -z "$nextjs_actual" ]; then
-    fail "norintegrate-web/package.json: \"next\" dependency not found — cannot verify the CLAUDE.md Next.js version claim ('$claim')"
-  elif ! version_prefix_match "$claim" "$nextjs_actual"; then
-    fail "CLAUDE.md claims Next.js $claim, but norintegrate-web/package.json declares \"next\": \"$actual_raw\""
-  fi
-else
-  fail "CLAUDE.md: technology stack table has no 'Next.js' row — cannot verify version claim"
 fi
 
 if badge_claim="$(extract_badge_value 'Next\.js' README.md)"; then

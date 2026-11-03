@@ -14,18 +14,20 @@ Backend modules share domain logic through a common library.
 
 ## Technology Stack (Non-Negotiable)
 
-| Component | Version | Notes |
-|-----------|---------|-------|
-| Java | 25 (LTS) | Use records, pattern matching, text blocks, var — common / api |
-| Kotlin | 2.4.20 | norintegrate-mcp only (ADR-019) |
-| Spring Boot | 4.1.1 | Spring Framework 7 base. Declared in root `build.gradle.kts` |
-| Spring AI | Latest stable | MCP server integration |
-| Spring Security | OAuth 2.0 | Google provider |
-| PostgreSQL | 18+ | Only database |
-| Gradle | Kotlin DSL | Multi-project build; norintegrate-common/api are Java, norintegrate-mcp is Kotlin |
-| Next.js | 15 | App Router, TypeScript, Tailwind CSS 4 |
-| Docker | Multi-stage | One Dockerfile per deployable module |
-| GitHub Actions | Path-filtered per module | Except `security-scan.yml` and `docs.yml`, which run on every push |
+| Component | Notes |
+|-----------|-------|
+| Java | Use records, pattern matching, text blocks, var — common / api |
+| Kotlin | norintegrate-mcp only (ADR-019) |
+| Spring Boot | Migration from Spring 3 explained in ADR-002 |
+| Spring AI | MCP server integration; track the latest stable release |
+| Spring Security | OAuth 2.0, Google provider |
+| PostgreSQL | Only database |
+| Gradle | Kotlin DSL multi-project build; norintegrate-common/api are Java, norintegrate-mcp is Kotlin |
+| Next.js | App Router, TypeScript, Tailwind CSS |
+| Docker | Multi-stage, one Dockerfile per deployable module |
+| GitHub Actions | Path-filtered per module, except `security-scan.yml` and `docs.yml`, which run on every push |
+
+Versions are deliberately not listed here. `build.gradle.kts` and `norintegrate-web/package.json` are the source of truth; the README badges are checked against them by `scripts/check-docs.sh`.
 
 ---
 
