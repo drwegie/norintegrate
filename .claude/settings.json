@@ -10,7 +10,8 @@
       "Bash(scripts/check-third-party-drift.sh*)",
       "Bash(scripts/check-third-party-notices-web-drift.sh*)",
       "Bash(scripts/check-third-party-notices-web-build.sh*)",
-      "Bash(git fetch *)",
+      "Bash(git fetch)",
+      "Bash(git fetch origin)",
       "Bash(git switch *)",
       "Bash(npm run lint)",
       "Bash(npm test)",
@@ -37,7 +38,12 @@
       "Bash(rm -r *)",
       "Bash(chmod*)",
       "Bash(curl*)",
-      "Bash(wget*)"
+      "Bash(wget*)",
+      "Bash(git switch *--discard-changes*)",
+      "Bash(git switch *--force*)",
+      "Bash(git switch -f*)",
+      "Bash(git switch * -f*)",
+      "Bash(git switch -C *)"
     ]
   },
   "hooks": {
