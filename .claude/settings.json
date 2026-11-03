@@ -5,7 +5,18 @@
       "Bash(git add *)",
       "Bash(git commit *)",
       "Bash(mkdir -p *)",
-      "Bash(java -version)"
+      "Bash(java -version)",
+      "Bash(scripts/check-docs.sh*)",
+      "Bash(scripts/check-third-party-drift.sh*)",
+      "Bash(scripts/check-third-party-notices-web-drift.sh*)",
+      "Bash(scripts/check-third-party-notices-web-build.sh*)",
+      "Bash(git fetch *)",
+      "Bash(git switch *)",
+      "Bash(npm run lint)",
+      "Bash(npm test)",
+      "Bash(npm run build)",
+      "mcp__terminal__read_terminal",
+      "mcp__ccd_pr__get_status"
     ],
     "ask": [
       "Edit(CLAUDE.md)",
