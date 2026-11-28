@@ -234,6 +234,7 @@ No version column, on purpose (ADR-022): the attribution an MIT/ISC/BSD/Apache-2
 | `@swc/helpers` | Apache-2.0 | 강동윤 (Kang Dong-yoon) <kdy1997.dev@gmail.com> (npm package.json `author`) |
 | `@swc/types` | Apache-2.0 | 강동윤 (Kang Dong-yoon) <kdy1997.dev@gmail.com> (npm package.json `author`) |
 | `@types/react` | MIT | Copyright (c) Microsoft Corporation. |
+| `baseline-browser-mapping` | Apache-2.0 | UNVERIFIED |
 | `caniuse-lite` | CC-BY-4.0 | Ben Briggs <beneb.info@gmail.com> (npm package.json `author`) |
 | `client-only` | MIT | UNVERIFIED |
 | `csstype` | MIT | Copyright (c) 2017-2018 Fredrik Nicol |
@@ -263,13 +264,13 @@ No version column, on purpose (ADR-022): the attribution an MIT/ISC/BSD/Apache-2
 | `typescript` | Apache-2.0 | Microsoft Corp. (npm package.json `author`) |
 | `use-intl` | MIT | Copyright (c) 2024 Jan Amann |
 
-1 of 51 entries are `UNVERIFIED` (no LICENSE file present locally and no npm author/maintainer metadata found).
+2 of 52 entries are `UNVERIFIED` (no LICENSE file present locally and no npm author/maintainer metadata found).
 
 - `client-only`: UNVERIFIED — no `author` field in package.json, no bundled LICENSE file; registry `maintainers` reflects only the publishing npm account (sebmarkbage), not an asserted copyright holder; upstream request to add a LICENSE file was closed "not planned" (facebook/react#27242, verified 2026-09-23)
 
 ### Apache-2.0 NOTICE reproduction
 
-Of the Apache-2.0 packages above, only `typescript` bundles a `NOTICE`-equivalent file with its published npm package (`node_modules/typescript/ThirdPartyNoticeText.txt`, the npm-distributed form of the `NOTICE.txt` published at https://github.com/microsoft/TypeScript). Per Apache-2.0 §4(d), its content is reproduced verbatim below. The other Apache-2.0 packages (`@img/sharp-linux-arm`, `@img/sharp-linux-arm64`, `@img/sharp-linux-ppc64`, `@img/sharp-linux-riscv64`, `@img/sharp-linux-s390x`, `@img/sharp-linux-x64`, `@img/sharp-linuxmusl-arm64`, `@img/sharp-linuxmusl-x64`, `@img/sharp-webcontainers-wasm32`, `@swc/counter`, `@swc/helpers`, `@swc/types`, `detect-libc`, `sharp`) do not bundle a `NOTICE` file, so §4(d) imposes no additional-notice obligation for them.
+Of the Apache-2.0 packages above, only `typescript` bundles a `NOTICE`-equivalent file with its published npm package (`node_modules/typescript/ThirdPartyNoticeText.txt`, the npm-distributed form of the `NOTICE.txt` published at https://github.com/microsoft/TypeScript). Per Apache-2.0 §4(d), its content is reproduced verbatim below. The other Apache-2.0 packages (`@img/sharp-linux-arm`, `@img/sharp-linux-arm64`, `@img/sharp-linux-ppc64`, `@img/sharp-linux-riscv64`, `@img/sharp-linux-s390x`, `@img/sharp-linux-x64`, `@img/sharp-linuxmusl-arm64`, `@img/sharp-linuxmusl-x64`, `@img/sharp-webcontainers-wasm32`, `@swc/counter`, `@swc/helpers`, `@swc/types`, `baseline-browser-mapping`, `detect-libc`, `sharp`) do not bundle a `NOTICE` file, so §4(d) imposes no additional-notice obligation for them.
 
 <details>
 <summary><code>typescript — ThirdPartyNoticeText.txt</code></summary>
@@ -1174,7 +1175,7 @@ USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 The list below is what `scripts/check-third-party-notices-web-drift.sh` compares against `norintegrate-web/package-lock.json` (permissive side). Every non-dev, non-excluded package (SUPERSET, see above), `name<TAB>license`, one per line — no version, for the reason given under "Entries" above.
 
-- Generated/verified: 2026-10-24
+- Generated/verified: 2026-11-28
 - Platform used for the exclusion pass: `linux`/musl (fixed — matches `docker/web.Dockerfile`'s `node:24-alpine`, independent of the host this was generated on)
 - Host this file was generated on (copyright-line lookups only): `darwin`/`arm64`
 
@@ -1202,6 +1203,7 @@ The list below is what `scripts/check-third-party-notices-web-drift.sh` compares
 @swc/helpers	Apache-2.0
 @swc/types	Apache-2.0
 @types/react	MIT
+baseline-browser-mapping	Apache-2.0
 caniuse-lite	CC-BY-4.0
 client-only	MIT
 csstype	MIT

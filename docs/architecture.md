@@ -12,7 +12,7 @@ graph LR
     AI["AI Agent<br/>(MCP Client)"]
 
     subgraph NorIntegrate
-        Web["norintegrate-web<br/>Next.js 15<br/>:3000"]
+        Web["norintegrate-web<br/>Next.js 16<br/>:3000"]
         API["norintegrate-api<br/>Spring Boot 4<br/>:8080"]
         MCP["norintegrate-mcp<br/>Spring Boot 4<br/>:8081"]
         DB[("PostgreSQL 18<br/>7 tables")]

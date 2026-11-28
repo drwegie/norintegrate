@@ -1,6 +1,6 @@
 # norintegrate-web
 
-Next.js 15 frontend for NorIntegrate — helps immigrants navigate the settlement process in Norway.
+Next.js 16 frontend for NorIntegrate — helps immigrants navigate the settlement process in Norway.
 
 ## Quick Start
 
