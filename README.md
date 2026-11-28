@@ -4,7 +4,7 @@
 ![Java 25](https://img.shields.io/badge/Java-25_LTS-orange)
 ![Kotlin 2.4](https://img.shields.io/badge/norintegrate--mcp-Kotlin_2.4-7F52FF)
 ![Spring Boot 4.1](https://img.shields.io/badge/Spring_Boot-4.1-green)
-![Next.js 15](https://img.shields.io/badge/Next.js-15-black)
+![Next.js 16](https://img.shields.io/badge/Next.js-16-black)
 
 A platform that helps immigrants navigate the settlement process in Norway. Provides a REST API for human users, an MCP server for AI agents, and a Next.js frontend with i18n support (English/Norwegian). All backend modules share domain logic through a common library.
 
@@ -29,7 +29,7 @@ norintegrate/
 ├── norintegrate-common/   ← Shared domain: entities, services, repositories (library)
 ├── norintegrate-api/      ← REST API (port 8080) — OAuth 2.0 + Swagger UI
 ├── norintegrate-mcp/      ← MCP server for AI agents (port 8081) — Kotlin
-├── norintegrate-web/      ← Next.js 15 frontend (port 3000) — Auth.js + next-intl
+├── norintegrate-web/      ← Next.js 16 frontend (port 3000) — Auth.js + next-intl
 └── docs/                  ← ADRs, OpenAPI spec, schema, seed data
 ```
 
